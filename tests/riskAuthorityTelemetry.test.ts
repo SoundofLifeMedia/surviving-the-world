@@ -342,14 +342,17 @@ describe('Autofix Hooks', () => {
   let autofix: AutofixHooks;
 
   beforeEach(() => {
+    jest.useFakeTimers();
     autofix = new AutofixHooks();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 
   // Feature: risk-authority-telemetry, Property 13: Excessive spawning throttle
   test('Property 13: Excessive spawning triggers throttle', () => {
-    // Use a fresh autofix instance to avoid timer leaks
-    const testAutofix = new AutofixHooks();
-    
     const report: AnomalyReport = {
       id: 'test-anomaly',
       type: 'EXCESSIVE_SPAWNING',
@@ -360,10 +363,14 @@ describe('Autofix Hooks', () => {
       description: 'Test excessive spawning'
     };
 
-    const result = testAutofix.trigger(report);
+    const result = autofix.trigger(report);
     expect(result.success).toBe(true);
     expect(result.actionTaken).toBe('throttle_spawning');
-    expect(testAutofix.isSpawnThrottleActive()).toBe(true);
+    expect(autofix.isSpawnThrottleActive()).toBe(true);
+    
+    // Fast-forward timers to clear the throttle
+    jest.advanceTimersByTime(5000);
+    expect(autofix.isSpawnThrottleActive()).toBe(false);
   });
 
   // Feature: risk-authority-telemetry, Property 14: Stuck AI reset

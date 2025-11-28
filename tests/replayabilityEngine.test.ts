@@ -122,7 +122,7 @@ describe('ReplayabilityEngine Property Tests', () => {
     fc.assert(
       fc.property(
         fc.integer({ min: 1, max: 1000000 }),
-        fc.float({ min: 0.5, max: 2.0 }),
+        fc.double({ min: 0.5, max: 2.0, noNaN: true }),
         (seed, difficulty) => {
           const engine = new ReplayabilityEngine(seed);
           const squad = engine.generateProceduralSquad('test_region', difficulty);
