@@ -1,0 +1,17 @@
+{
+  "id": "bow_wood",
+  "name": "Wooden Bow",
+  "type": "weapon_ranged",
+  "weight": 1.5,
+  "durability": 60,
+  "stackable": false,
+  "traits": ["ranged", "wood"],
+  "stats": {
+    "damage": 18,
+    "attack_speed": 0.8,
+    "range": 30
+  },
+  "requirements": {
+    "skill_combat": 1
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "shield_wood",
+  "name": "Wooden Shield",
+  "type": "shield",
+  "weight": 4.0,
+  "durability": 80,
+  "stackable": false,
+  "traits": ["wooden", "defensive"],
+  "stats": {
+    "block_chance": 0.4,
+    "block_damage_reduction": 0.6
+  },
+  "requirements": {}
+}

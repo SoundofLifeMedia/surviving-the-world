@@ -1,0 +1,12 @@
+{
+  "id": "arrow",
+  "name": "Arrow",
+  "type": "ammo",
+  "weight": 0.05,
+  "durability": 100,
+  "stackable": true,
+  "traits": ["ammo", "sharp"],
+  "stats": {
+    "damage_bonus": 5
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "mercenary_band",
+  "name": "The Iron Wolves",
+  "type": "mercenary_company",
+  "base_alignment": "opportunistic",
+  "resources": {
+    "food": 300,
+    "gold": 200,
+    "manpower": 80
+  },
+  "attitudeToPlayer": 0.0,
+  "relations": {
+    "kingdom_north": -0.2,
+    "church_order": -0.4
+  },
+  "ai_personality": {
+    "aggression": 0.8,
+    "risk_aversion": 0.2,
+    "diplomacy": 0.2,
+    "honor": 0.3
+  },
+  "goals": [
+    "acquire_gold",
+    "expand_territory",
+    "raid_weak_targets"
+  ]
+}

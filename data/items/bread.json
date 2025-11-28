@@ -1,0 +1,13 @@
+{
+  "id": "bread",
+  "name": "Bread",
+  "type": "consumable_food",
+  "weight": 0.3,
+  "durability": 50,
+  "stackable": true,
+  "traits": ["food", "perishable"],
+  "stats": {
+    "hunger_restore": 25,
+    "morale_restore": 5
+  }
+}

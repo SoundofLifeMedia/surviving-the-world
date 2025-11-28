@@ -1,0 +1,15 @@
+{
+  "id": "cooked_meat",
+  "name": "Cooked Meat",
+  "type": "consumable",
+  "weight": 0.8,
+  "durability": 100,
+  "stackable": true,
+  "maxStack": 20,
+  "traits": ["cooked"],
+  "stats": {
+    "hunger_restore": 35,
+    "morale_restore": 5
+  },
+  "requirements": {}
+}

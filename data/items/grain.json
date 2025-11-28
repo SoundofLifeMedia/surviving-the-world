@@ -1,0 +1,12 @@
+{
+  "id": "grain",
+  "name": "Grain",
+  "type": "resource_food",
+  "weight": 0.5,
+  "durability": 100,
+  "stackable": true,
+  "traits": ["food", "perishable"],
+  "stats": {
+    "hunger_restore": 10
+  }
+}

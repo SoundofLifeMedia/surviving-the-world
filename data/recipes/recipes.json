@@ -1,0 +1,130 @@
+{
+  "recipes": [
+    {
+      "id": "bread",
+      "name": "Bread",
+      "inputs": [{"itemId": "grain", "quantity": 2}, {"itemId": "water", "quantity": 1}],
+      "outputs": [{"itemId": "bread", "quantity": 1}],
+      "craftTimeSeconds": 60,
+      "requiresStation": "oven_basic",
+      "unlockedBy": null
+    },
+    {
+      "id": "bandage",
+      "name": "Bandage",
+      "inputs": [{"itemId": "cloth", "quantity": 1}, {"itemId": "herbs", "quantity": 1}],
+      "outputs": [{"itemId": "bandage", "quantity": 2}],
+      "craftTimeSeconds": 30,
+      "requiresStation": null,
+      "unlockedBy": null
+    },
+    {
+      "id": "cooked_meat",
+      "name": "Cooked Meat",
+      "inputs": [{"itemId": "meat", "quantity": 1}],
+      "outputs": [{"itemId": "cooked_meat", "quantity": 1}],
+      "craftTimeSeconds": 45,
+      "requiresStation": "campfire",
+      "unlockedBy": null
+    },
+    {
+      "id": "iron_ingot",
+      "name": "Iron Ingot",
+      "inputs": [{"itemId": "iron_ore", "quantity": 2}],
+      "outputs": [{"itemId": "iron_ingot", "quantity": 1}],
+      "craftTimeSeconds": 120,
+      "requiresStation": "forge",
+      "unlockedBy": "ironworking"
+    },
+    {
+      "id": "iron_sword",
+      "name": "Iron Sword",
+      "inputs": [{"itemId": "iron_ingot", "quantity": 3}, {"itemId": "wood", "quantity": 1}],
+      "outputs": [{"itemId": "sword_iron", "quantity": 1}],
+      "craftTimeSeconds": 180,
+      "requiresStation": "forge",
+      "unlockedBy": "ironworking"
+    },
+    {
+      "id": "leather_armor",
+      "name": "Leather Armor",
+      "inputs": [{"itemId": "leather", "quantity": 5}, {"itemId": "cloth", "quantity": 2}],
+      "outputs": [{"itemId": "leather_armor", "quantity": 1}],
+      "craftTimeSeconds": 240,
+      "requiresStation": null,
+      "unlockedBy": "leatherworking"
+    },
+    {
+      "id": "chainmail",
+      "name": "Chainmail Armor",
+      "inputs": [{"itemId": "iron_ingot", "quantity": 8}],
+      "outputs": [{"itemId": "chainmail", "quantity": 1}],
+      "craftTimeSeconds": 600,
+      "requiresStation": "forge",
+      "unlockedBy": "ironworking"
+    },
+    {
+      "id": "wooden_bow",
+      "name": "Wooden Bow",
+      "inputs": [{"itemId": "wood", "quantity": 3}, {"itemId": "rope", "quantity": 1}],
+      "outputs": [{"itemId": "bow_wood", "quantity": 1}],
+      "craftTimeSeconds": 120,
+      "requiresStation": null,
+      "unlockedBy": "woodworking"
+    },
+    {
+      "id": "arrows",
+      "name": "Arrows",
+      "inputs": [{"itemId": "wood", "quantity": 1}, {"itemId": "iron_ingot", "quantity": 1}],
+      "outputs": [{"itemId": "arrow", "quantity": 10}],
+      "craftTimeSeconds": 60,
+      "requiresStation": null,
+      "unlockedBy": "archery"
+    },
+    {
+      "id": "wooden_shield",
+      "name": "Wooden Shield",
+      "inputs": [{"itemId": "wood", "quantity": 5}, {"itemId": "rope", "quantity": 2}],
+      "outputs": [{"itemId": "shield_wood", "quantity": 1}],
+      "craftTimeSeconds": 150,
+      "requiresStation": null,
+      "unlockedBy": "woodworking"
+    },
+    {
+      "id": "iron_shield",
+      "name": "Iron Shield",
+      "inputs": [{"itemId": "iron_ingot", "quantity": 4}, {"itemId": "wood", "quantity": 2}],
+      "outputs": [{"itemId": "shield_iron", "quantity": 1}],
+      "craftTimeSeconds": 240,
+      "requiresStation": "forge",
+      "unlockedBy": "ironworking"
+    },
+    {
+      "id": "iron_helmet",
+      "name": "Iron Helmet",
+      "inputs": [{"itemId": "iron_ingot", "quantity": 3}],
+      "outputs": [{"itemId": "iron_helmet", "quantity": 1}],
+      "craftTimeSeconds": 180,
+      "requiresStation": "forge",
+      "unlockedBy": "ironworking"
+    },
+    {
+      "id": "rope",
+      "name": "Rope",
+      "inputs": [{"itemId": "cloth", "quantity": 3}],
+      "outputs": [{"itemId": "rope", "quantity": 2}],
+      "craftTimeSeconds": 45,
+      "requiresStation": null,
+      "unlockedBy": null
+    },
+    {
+      "id": "torch",
+      "name": "Torch",
+      "inputs": [{"itemId": "wood", "quantity": 1}, {"itemId": "cloth", "quantity": 1}],
+      "outputs": [{"itemId": "torch", "quantity": 2}],
+      "craftTimeSeconds": 20,
+      "requiresStation": null,
+      "unlockedBy": null
+    }
+  ]
+}

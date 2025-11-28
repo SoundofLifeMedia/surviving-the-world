@@ -1,0 +1,21 @@
+{
+  "id": "healer",
+  "name": "Village Healer",
+  "role": "healer",
+  "faction": "church_order",
+  "personality": {
+    "aggression": 0.1,
+    "altruism": 0.9,
+    "greed": 0.1,
+    "curiosity": 0.7,
+    "lawfulness": 0.6
+  },
+  "schedule": [
+    {"time": 6, "activity": "wake_up", "location": "church"},
+    {"time": 7, "activity": "work", "location": "infirmary"},
+    {"time": 12, "activity": "eat", "location": "church"},
+    {"time": 13, "activity": "work", "location": "infirmary"},
+    {"time": 17, "activity": "gather", "location": "forest"},
+    {"time": 20, "activity": "sleep", "location": "church"}
+  ]
+}

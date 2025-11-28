@@ -1,0 +1,16 @@
+{
+  "id": "shield_iron",
+  "name": "Iron Shield",
+  "type": "shield",
+  "weight": 6.0,
+  "durability": 150,
+  "stackable": false,
+  "traits": ["metal", "defensive", "heavy"],
+  "stats": {
+    "block_chance": 0.5,
+    "block_damage_reduction": 0.8
+  },
+  "requirements": {
+    "tech": "ironworking"
+  }
+}

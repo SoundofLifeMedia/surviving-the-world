@@ -1,0 +1,21 @@
+{
+  "id": "merchant",
+  "name": "Traveling Merchant",
+  "role": "merchant",
+  "faction": "neutral",
+  "personality": {
+    "aggression": 0.1,
+    "altruism": 0.3,
+    "greed": 0.8,
+    "curiosity": 0.6,
+    "lawfulness": 0.5
+  },
+  "schedule": [
+    {"time": 7, "activity": "wake_up", "location": "inn"},
+    {"time": 8, "activity": "work", "location": "market"},
+    {"time": 12, "activity": "eat", "location": "tavern"},
+    {"time": 13, "activity": "work", "location": "market"},
+    {"time": 18, "activity": "socialize", "location": "tavern"},
+    {"time": 21, "activity": "sleep", "location": "inn"}
+  ]
+}

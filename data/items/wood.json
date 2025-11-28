@@ -1,0 +1,12 @@
+{
+  "id": "wood",
+  "name": "Wood",
+  "type": "resource",
+  "weight": 1.5,
+  "durability": -1,
+  "stackable": true,
+  "maxStack": 50,
+  "traits": ["flammable", "construction"],
+  "stats": {},
+  "requirements": {}
+}

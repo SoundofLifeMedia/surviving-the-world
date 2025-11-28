@@ -1,0 +1,73 @@
+{
+  "biomes": [
+    {
+      "id": "farmland",
+      "name": "Farmland",
+      "description": "Fertile agricultural land with villages and farms",
+      "climate": "temperate",
+      "threats": ["bandits", "wolves"],
+      "resources": ["grain", "water", "herbs"],
+      "modifiers": {
+        "food_production": 1.5,
+        "disease_risk": 0.3,
+        "travel_speed": 1.0
+      }
+    },
+    {
+      "id": "forest",
+      "name": "Dense Forest",
+      "description": "Thick woodland with abundant wildlife and resources",
+      "climate": "temperate",
+      "threats": ["wolves", "bears", "bandits"],
+      "resources": ["wood", "herbs", "meat", "berries"],
+      "modifiers": {
+        "food_production": 0.8,
+        "disease_risk": 0.4,
+        "travel_speed": 0.7,
+        "ambush_risk": 0.5
+      }
+    },
+    {
+      "id": "mountains",
+      "name": "Mountain Range",
+      "description": "Rugged terrain with valuable ore deposits",
+      "climate": "cold",
+      "threats": ["wolves", "bandits", "cold"],
+      "resources": ["stone", "iron_ore", "herbs"],
+      "modifiers": {
+        "food_production": 0.3,
+        "disease_risk": 0.2,
+        "travel_speed": 0.5,
+        "cold_damage": 0.3
+      }
+    },
+    {
+      "id": "swamp",
+      "name": "Swampland",
+      "description": "Treacherous wetlands with hidden dangers",
+      "climate": "humid",
+      "threats": ["disease", "bandits", "wildlife"],
+      "resources": ["herbs", "water"],
+      "modifiers": {
+        "food_production": 0.4,
+        "disease_risk": 0.8,
+        "travel_speed": 0.4,
+        "infection_risk": 0.5
+      }
+    },
+    {
+      "id": "plains",
+      "name": "Open Plains",
+      "description": "Wide open grasslands with good visibility",
+      "climate": "temperate",
+      "threats": ["bandits", "raiders"],
+      "resources": ["grain", "water"],
+      "modifiers": {
+        "food_production": 1.2,
+        "disease_risk": 0.2,
+        "travel_speed": 1.2,
+        "ambush_risk": 0.1
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "meat",
+  "name": "Raw Meat",
+  "type": "consumable",
+  "weight": 1.0,
+  "durability": 50,
+  "stackable": true,
+  "maxStack": 20,
+  "traits": ["perishable", "raw"],
+  "stats": {
+    "hunger_restore": 15,
+    "infection_risk": 0.2
+  },
+  "requirements": {}
+}

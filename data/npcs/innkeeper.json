@@ -1,0 +1,20 @@
+{
+  "id": "innkeeper",
+  "name": "Innkeeper",
+  "role": "innkeeper",
+  "faction": "neutral",
+  "personality": {
+    "aggression": 0.2,
+    "altruism": 0.6,
+    "greed": 0.5,
+    "curiosity": 0.7,
+    "lawfulness": 0.5
+  },
+  "schedule": [
+    {"time": 8, "activity": "wake_up", "location": "inn"},
+    {"time": 9, "activity": "work", "location": "tavern"},
+    {"time": 14, "activity": "eat", "location": "tavern"},
+    {"time": 15, "activity": "work", "location": "tavern"},
+    {"time": 23, "activity": "sleep", "location": "inn"}
+  ]
+}

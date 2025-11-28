@@ -1,0 +1,12 @@
+{
+  "id": "rope",
+  "name": "Rope",
+  "type": "resource",
+  "weight": 0.5,
+  "durability": -1,
+  "stackable": true,
+  "maxStack": 30,
+  "traits": ["construction"],
+  "stats": {},
+  "requirements": {}
+}

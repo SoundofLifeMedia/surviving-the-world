@@ -1,0 +1,22 @@
+{
+  "id": "npc_farmer_01",
+  "name": "Mara the Farmer",
+  "factionId": "kingdom_north",
+  "role": "farmer",
+  "stats": {
+    "strength": 3,
+    "dexterity": 4,
+    "intelligence": 5
+  },
+  "needs": {
+    "hunger": 0.8,
+    "thirst": 0.9,
+    "morale": 0.6
+  },
+  "personality": {
+    "aggression": 0.2,
+    "altruism": 0.7,
+    "curiosity": 0.4,
+    "lawfulness": 0.5
+  }
+}

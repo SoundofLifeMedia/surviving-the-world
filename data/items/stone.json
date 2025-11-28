@@ -1,0 +1,12 @@
+{
+  "id": "stone",
+  "name": "Stone",
+  "type": "resource",
+  "weight": 2.5,
+  "durability": -1,
+  "stackable": true,
+  "maxStack": 40,
+  "traits": ["heavy", "construction"],
+  "stats": {},
+  "requirements": {}
+}

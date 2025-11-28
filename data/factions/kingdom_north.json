@@ -1,0 +1,27 @@
+{
+  "id": "kingdom_north",
+  "name": "Kingdom of the North",
+  "type": "feudal_state",
+  "base_alignment": "authoritarian",
+  "resources": {
+    "food": 1000,
+    "gold": 500,
+    "manpower": 200
+  },
+  "attitudeToPlayer": 0.1,
+  "relations": {
+    "church_order": 0.3,
+    "mercenary_band": -0.2
+  },
+  "ai_personality": {
+    "aggression": 0.6,
+    "risk_aversion": 0.3,
+    "diplomacy": 0.4,
+    "honor": 0.7
+  },
+  "goals": [
+    "maintain_territory",
+    "suppress_revolt",
+    "secure_food_supply"
+  ]
+}

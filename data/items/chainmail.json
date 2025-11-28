@@ -1,0 +1,17 @@
+{
+  "id": "chainmail",
+  "name": "Chainmail Armor",
+  "type": "armor_body",
+  "weight": 12.0,
+  "durability": 200,
+  "stackable": false,
+  "traits": ["metal", "protective", "heavy"],
+  "stats": {
+    "armor": 35,
+    "movement_penalty": 0.1
+  },
+  "requirements": {
+    "tech": "ironworking",
+    "skill_combat": 3
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "techs": [
+    {
+      "id": "basic_survival",
+      "name": "Basic Survival",
+      "description": "Fundamental survival techniques",
+      "category": "survival",
+      "era": "global",
+      "tier": 1,
+      "requirements": [],
+      "benefits": [
+        {"type": "unlock_recipe", "id": "campfire"},
+        {"type": "unlock_recipe", "id": "basic_shelter"}
+      ],
+      "researchTime": 0,
+      "researchCost": []
+    },
+    {
+      "id": "foraging",
+      "name": "Foraging",
+      "description": "Identify edible plants and herbs",
+      "category": "survival",
+      "era": "global",
+      "tier": 1,
+      "requirements": [{"type": "tech", "id": "basic_survival"}],
+      "benefits": [
+        {"type": "unlock_action", "id": "forage"},
+        {"type": "stat_bonus", "id": "forage_yield", "value": 0.2}
+      ],
+      "researchTime": 2,
+      "researchCost": []
+    },
+    {
+      "id": "hunting",
+      "name": "Hunting",
+      "description": "Track and hunt animals",
+      "category": "survival",
+      "era": "global",
+      "tier": 1,
+      "requirements": [{"type": "tech", "id": "basic_survival"}],
+      "benefits": [
+        {"type": "unlock_action", "id": "hunt"},
+        {"type": "unlock_recipe", "id": "snare_trap"}
+      ],
+      "researchTime": 3,
+      "researchCost": []
+    },
+    {
+      "id": "basic_crafting",
+      "name": "Basic Crafting",
+      "description": "Create simple tools and items",
+      "category": "crafting",
+      "era": "global",
+      "tier": 1,
+      "requirements": [],
+      "benefits": [
+        {"type": "unlock_recipe", "id": "stone_knife"},
+        {"type": "unlock_recipe", "id": "wooden_club"}
+      ],
+      "researchTime": 0,
+      "researchCost": []
+    },
+    {
+      "id": "woodworking",
+      "name": "Woodworking",
+      "description": "Work with wood to create structures and tools",
+      "category": "crafting",
+      "era": "global",
+      "tier": 2,
+      "requirements": [{"type": "tech", "id": "basic_crafting"}],
+      "benefits": [
+        {"type": "unlock_recipe", "id": "wooden_bow"},
+        {"type": "unlock_recipe", "id": "wooden_shield"},
+        {"type": "unlock_building", "id": "wooden_wall"}
+      ],
+      "researchTime": 4,
+      "researchCost": [{"resource": "wood", "amount": 20}]
+    },
+    {
+      "id": "leatherworking",
+      "name": "Leatherworking",
+      "description": "Process hides into leather goods",
+      "category": "crafting",
+      "era": "global",
+      "tier": 2,
+      "requirements": [{"type": "tech", "id": "hunting"}],
+      "benefits": [
+        {"type": "unlock_recipe", "id": "leather_armor"},
+        {"type": "unlock_recipe", "id": "leather_bag"}
+      ],
+      "researchTime": 5,
+      "researchCost": [{"resource": "hide", "amount": 10}]
+    },
+    {
+      "id": "ironworking",
+      "name": "Ironworking",
+      "description": "Smelt and forge iron",
+      "category": "economy",
+      "era": "global",
+      "tier": 2,
+      "requirements": [{"type": "tech", "id": "basic_crafting"}],
+      "benefits": [
+        {"type": "unlock_building", "id": "forge"},
+        {"type": "unlock_recipe", "id": "iron_sword"},
+        {"type": "unlock_recipe", "id": "iron_tools"}
+      ],
+      "researchTime": 10,
+      "researchCost": [{"resource": "iron_ore", "amount": 30}]
+    },
+    {
+      "id": "basic_construction",
+      "name": "Basic Construction",
+      "description": "Build simple structures",
+      "category": "building",
+      "era": "global",
+      "tier": 1,
+      "requirements": [{"type": "tech", "id": "woodworking"}],
+      "benefits": [
+        {"type": "unlock_building", "id": "wooden_hut"},
+        {"type": "unlock_building", "id": "storage_shed"}
+      ],
+      "researchTime": 5,
+      "researchCost": [{"resource": "wood", "amount": 30}]
+    },
+    {
+      "id": "masonry",
+      "name": "Masonry",
+      "description": "Work with stone for durable construction",
+      "category": "building",
+      "era": "global",
+      "tier": 2,
+      "requirements": [{"type": "tech", "id": "basic_construction"}],
+      "benefits": [
+        {"type": "unlock_building", "id": "stone_house"},
+        {"type": "unlock_building", "id": "stone_wall"}
+      ],
+      "researchTime": 8,
+      "researchCost": [{"resource": "stone", "amount": 50}]
+    },
+    {
+      "id": "fortification",
+      "name": "Fortification",
+      "description": "Build defensive structures",
+      "category": "building",
+      "era": "late_medieval",
+      "tier": 3,
+      "requirements": [{"type": "tech", "id": "masonry"}],
+      "benefits": [
+        {"type": "unlock_building", "id": "watchtower"},
+        {"type": "unlock_building", "id": "gate"},
+        {"type": "stat_bonus", "id": "defense_bonus", "value": 0.3}
+      ],
+      "researchTime": 12,
+      "researchCost": [{"resource": "stone", "amount": 100}, {"resource": "iron", "amount": 20}]
+    },
+    {
+      "id": "archery",
+      "name": "Archery",
+      "description": "Use bows effectively",
+      "category": "combat",
+      "era": "global",
+      "tier": 2,
+      "requirements": [{"type": "tech", "id": "woodworking"}],
+      "benefits": [
+        {"type": "unlock_item", "id": "bow_wood"},
+        {"type": "stat_bonus", "id": "ranged_accuracy", "value": 0.15}
+      ],
+      "researchTime": 6,
+      "researchCost": []
+    },
+    {
+      "id": "swordsmanship",
+      "name": "Swordsmanship",
+      "description": "Master the art of the blade",
+      "category": "combat",
+      "era": "late_medieval",
+      "tier": 3,
+      "requirements": [{"type": "tech", "id": "ironworking"}],
+      "benefits": [
+        {"type": "stat_bonus", "id": "melee_damage", "value": 0.25},
+        {"type": "unlock_action", "id": "parry"}
+      ],
+      "researchTime": 10,
+      "researchCost": []
+    }
+  ]
+}

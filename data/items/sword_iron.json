@@ -1,0 +1,18 @@
+{
+  "id": "sword_iron",
+  "name": "Iron Sword",
+  "type": "weapon_melee",
+  "weight": 3.5,
+  "durability": 100,
+  "stackable": false,
+  "traits": ["sharp", "metal"],
+  "stats": {
+    "damage": 25,
+    "attack_speed": 1.2,
+    "range": 1.5
+  },
+  "requirements": {
+    "tech": "ironworking",
+    "skill_combat": 2
+  }
+}

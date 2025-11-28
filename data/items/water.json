@@ -1,0 +1,12 @@
+{
+  "id": "water",
+  "name": "Water",
+  "type": "consumable_drink",
+  "weight": 1.0,
+  "durability": 100,
+  "stackable": true,
+  "traits": ["drink"],
+  "stats": {
+    "thirst_restore": 30
+  }
+}

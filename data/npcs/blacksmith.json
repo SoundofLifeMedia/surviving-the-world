@@ -1,0 +1,21 @@
+{
+  "id": "blacksmith",
+  "name": "Village Blacksmith",
+  "role": "blacksmith",
+  "faction": "kingdom_north",
+  "personality": {
+    "aggression": 0.3,
+    "altruism": 0.5,
+    "greed": 0.4,
+    "curiosity": 0.3,
+    "lawfulness": 0.7
+  },
+  "schedule": [
+    {"time": 5, "activity": "wake_up", "location": "home"},
+    {"time": 6, "activity": "work", "location": "forge"},
+    {"time": 12, "activity": "eat", "location": "home"},
+    {"time": 13, "activity": "work", "location": "forge"},
+    {"time": 19, "activity": "socialize", "location": "tavern"},
+    {"time": 22, "activity": "sleep", "location": "home"}
+  ]
+}

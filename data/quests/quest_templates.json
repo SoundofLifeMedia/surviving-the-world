@@ -1,0 +1,76 @@
+{
+  "templates": [
+    {
+      "id": "fetch_food_for_famine",
+      "type": "template",
+      "name": "Famine Relief",
+      "triggers": ["famine_risk > 0.5", "dayCount > 3"],
+      "roles": {"quest_giver": "village_elder", "target_region": "food_surplus"},
+      "steps": ["talk_to_quest_giver", "travel_to_target_region", "acquire_food", "return_to_village"],
+      "outcomes": {
+        "success": {"worldEffects": ["region.food_stock += 100"], "rewards": {"gold": 50, "reputation": 10}},
+        "failure": {"worldEffects": ["famine_deaths += 20"], "penalties": {"reputation": -20}}
+      }
+    },
+    {
+      "id": "bandit_camp_raid",
+      "type": "template",
+      "name": "Clear the Bandit Camp",
+      "triggers": ["threat_level > 0.4", "bandit_camp_active"],
+      "roles": {"quest_giver": "guard_captain", "target_location": "bandit_camp"},
+      "steps": ["talk_to_quest_giver", "travel_to_bandit_camp", "defeat_bandits", "return_to_captain"],
+      "outcomes": {
+        "success": {"worldEffects": ["threat_level -= 0.2", "bandit_camp_active = false"], "rewards": {"gold": 100, "reputation": 15, "item": "sword_iron"}},
+        "failure": {"worldEffects": ["threat_level += 0.1"], "penalties": {"reputation": -10}}
+      }
+    },
+    {
+      "id": "escort_merchant",
+      "type": "template",
+      "name": "Merchant Escort",
+      "triggers": ["trade_route_active", "dayCount > 5"],
+      "roles": {"quest_giver": "merchant", "destination": "nearby_town"},
+      "steps": ["talk_to_merchant", "escort_to_destination", "protect_from_ambush", "arrive_safely"],
+      "outcomes": {
+        "success": {"worldEffects": ["trade_route_reputation += 0.1"], "rewards": {"gold": 75, "reputation": 8}},
+        "failure": {"worldEffects": ["merchant_death"], "penalties": {"reputation": -15, "gold": -25}}
+      }
+    },
+    {
+      "id": "gather_herbs",
+      "type": "template",
+      "name": "Herb Gathering",
+      "triggers": ["healer_needs_herbs", "dayCount > 2"],
+      "roles": {"quest_giver": "healer", "gather_location": "forest"},
+      "steps": ["talk_to_healer", "travel_to_forest", "gather_herbs", "return_to_healer"],
+      "outcomes": {
+        "success": {"worldEffects": ["healer_supplies += 20"], "rewards": {"gold": 25, "item": "bandage", "item_count": 5}},
+        "failure": {"worldEffects": [], "penalties": {"reputation": -5}}
+      }
+    },
+    {
+      "id": "deliver_message",
+      "type": "template",
+      "name": "Urgent Message",
+      "triggers": ["faction_war_imminent", "dayCount > 7"],
+      "roles": {"quest_giver": "faction_leader", "recipient": "allied_faction_leader"},
+      "steps": ["receive_message", "travel_to_allied_territory", "deliver_message", "return_with_response"],
+      "outcomes": {
+        "success": {"worldEffects": ["alliance_strengthened"], "rewards": {"gold": 60, "reputation": 12}},
+        "failure": {"worldEffects": ["alliance_weakened"], "penalties": {"reputation": -20}}
+      }
+    },
+    {
+      "id": "investigate_ruins",
+      "type": "template",
+      "name": "Ancient Ruins",
+      "triggers": ["ruins_discovered", "dayCount > 10"],
+      "roles": {"quest_giver": "scholar", "target_location": "ancient_ruins"},
+      "steps": ["talk_to_scholar", "travel_to_ruins", "explore_ruins", "retrieve_artifact", "return_to_scholar"],
+      "outcomes": {
+        "success": {"worldEffects": ["tech_progress += 0.1"], "rewards": {"gold": 150, "reputation": 20, "tech_unlock": "ancient_knowledge"}},
+        "failure": {"worldEffects": [], "penalties": {"health": -30}}
+      }
+    }
+  ]
+}

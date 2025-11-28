@@ -1,0 +1,12 @@
+{
+  "id": "herbs",
+  "name": "Medicinal Herbs",
+  "type": "resource_medical",
+  "weight": 0.2,
+  "durability": 80,
+  "stackable": true,
+  "traits": ["medical", "perishable"],
+  "stats": {
+    "healing": 10
+  }
+}

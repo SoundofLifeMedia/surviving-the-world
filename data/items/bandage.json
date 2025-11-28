@@ -1,0 +1,13 @@
+{
+  "id": "bandage",
+  "name": "Bandage",
+  "type": "consumable_medical",
+  "weight": 0.1,
+  "durability": 100,
+  "stackable": true,
+  "traits": ["medical"],
+  "stats": {
+    "healing": 20,
+    "stop_bleeding": 1
+  }
+}

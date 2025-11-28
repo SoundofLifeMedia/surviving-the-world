@@ -1,0 +1,21 @@
+{
+  "id": "guard",
+  "name": "Town Guard",
+  "role": "guard",
+  "faction": "kingdom_north",
+  "personality": {
+    "aggression": 0.5,
+    "altruism": 0.4,
+    "greed": 0.3,
+    "curiosity": 0.2,
+    "lawfulness": 0.9
+  },
+  "schedule": [
+    {"time": 6, "activity": "wake_up", "location": "barracks"},
+    {"time": 7, "activity": "patrol", "location": "gate"},
+    {"time": 12, "activity": "eat", "location": "tavern"},
+    {"time": 13, "activity": "patrol", "location": "market"},
+    {"time": 18, "activity": "patrol", "location": "gate"},
+    {"time": 22, "activity": "sleep", "location": "barracks"}
+  ]
+}

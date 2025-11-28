@@ -1,0 +1,16 @@
+{
+  "id": "iron_helmet",
+  "name": "Iron Helmet",
+  "type": "armor_head",
+  "weight": 3.0,
+  "durability": 150,
+  "stackable": false,
+  "traits": ["metal", "protective"],
+  "stats": {
+    "armor": 15,
+    "head_protection": 0.8
+  },
+  "requirements": {
+    "tech": "ironworking"
+  }
+}

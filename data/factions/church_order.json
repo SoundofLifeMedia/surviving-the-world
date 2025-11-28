@@ -1,0 +1,27 @@
+{
+  "id": "church_order",
+  "name": "Holy Order of the Faith",
+  "type": "religious_order",
+  "base_alignment": "theocratic",
+  "resources": {
+    "food": 600,
+    "gold": 800,
+    "manpower": 100
+  },
+  "attitudeToPlayer": 0.2,
+  "relations": {
+    "kingdom_north": 0.3,
+    "mercenary_band": -0.4
+  },
+  "ai_personality": {
+    "aggression": 0.3,
+    "risk_aversion": 0.6,
+    "diplomacy": 0.7,
+    "honor": 0.9
+  },
+  "goals": [
+    "spread_faith",
+    "protect_faithful",
+    "accumulate_wealth"
+  ]
+}

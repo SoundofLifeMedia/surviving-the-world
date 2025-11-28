@@ -1,0 +1,12 @@
+{
+  "id": "iron_ore",
+  "name": "Iron Ore",
+  "type": "resource",
+  "weight": 3.0,
+  "durability": -1,
+  "stackable": true,
+  "maxStack": 50,
+  "traits": ["ore", "heavy"],
+  "stats": {},
+  "requirements": {}
+}

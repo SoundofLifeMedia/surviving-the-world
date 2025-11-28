@@ -1,0 +1,12 @@
+{
+  "id": "plow",
+  "name": "Iron Plow",
+  "type": "tool_farming",
+  "weight": 15.0,
+  "durability": 150,
+  "stackable": false,
+  "traits": ["tool", "metal"],
+  "stats": {
+    "farming_efficiency": 2.0
+  }
+}

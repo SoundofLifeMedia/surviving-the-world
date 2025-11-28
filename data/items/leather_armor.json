@@ -1,0 +1,13 @@
+{
+  "id": "leather_armor",
+  "name": "Leather Armor",
+  "type": "armor_body",
+  "weight": 8.0,
+  "durability": 80,
+  "stackable": false,
+  "traits": ["armor", "leather"],
+  "stats": {
+    "armor": 15,
+    "movement_penalty": 0.05
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "late_medieval",
+  "name": "Late Medieval Collapse",
+  "timeframe": "1350-1450",
+  "base_tech_tier": 3,
+  "factions": ["kingdom_north", "church_order", "mercenary_band"],
+  "biomes": ["farmland", "forest", "village", "castle", "trade_routes"],
+  "global_modifiers": {
+    "disease_risk": 0.7,
+    "war_frequency": 0.5,
+    "famine_risk": 0.6
+  },
+  "available_items": [
+    "grain",
+    "bread",
+    "water",
+    "sword_iron",
+    "bow_wood",
+    "arrow",
+    "leather_armor",
+    "plow",
+    "herbs",
+    "bandage"
+  ],
+  "available_crafting_recipes": [
+    "bread",
+    "soup",
+    "bandage",
+    "basic_armor_repair"
+  ],
+  "era_events": [
+    "plague_outbreak",
+    "harvest_failure",
+    "tax_revolt"
+  ]
+}

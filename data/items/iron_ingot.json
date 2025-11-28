@@ -1,0 +1,12 @@
+{
+  "id": "iron_ingot",
+  "name": "Iron Ingot",
+  "type": "resource",
+  "weight": 2.0,
+  "durability": -1,
+  "stackable": true,
+  "maxStack": 30,
+  "traits": ["metal", "refined"],
+  "stats": {},
+  "requirements": {}
+}
