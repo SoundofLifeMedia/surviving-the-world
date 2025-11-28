@@ -1,14 +1,16 @@
 {
   "name": "surviving-the-world",
-  "version": "0.1.0",
-  "description": "AAA-caliber era-agnostic survival simulation game",
+  "version": "0.2.0",
+  "description": "AAA-caliber GTA-style open-world survival action game",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/index.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "db:init": "ts-node scripts/initDatabase.ts",
+    "db:check": "ts-node -e \"require('./src/db/neonClient').checkConnection().then(console.log)\""
   },
   "keywords": [
     "survival",
@@ -30,6 +32,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
     "fast-check": "^3.15.0"
   }
 }

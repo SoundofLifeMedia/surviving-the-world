@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surviving The World™ - Executive Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Segoe UI', system-ui, sans-serif; 
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+    
+    /* Login Screen */
+    #login-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+    #login-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .login-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 20px;
+      padding: 50px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .login-box h1 {
+      color: #ffd700;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .login-box .subtitle {
+      color: #888;
+      margin-bottom: 30px;
+    }
+    .login-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255,215,0,0.2);
+      border-top-color: #ffd700;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .login-status {
+      color: #4ecdc4;
+      font-size: 1.1em;
+    }
+    .login-user {
+      background: rgba(255,215,0,0.1);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 10px;
+      padding: 15px 30px;
+      margin-top: 20px;
+      display: inline-block;
+    }
+    .login-user .role { color: #ffd700; font-weight: bold; }
+    .login-user .name { color: #fff; font-size: 1.3em; }
+    
+    /* Header */
+    header {
+      background: rgba(0,0,0,0.3);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,215,0,0.2);
+    }
+    .logo {
+      color: #ffd700;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #000;
+    }
+    .user-name { color: #fff; }
+    .user-role { color: #ffd700; font-size: 0.85em; }
+    
+    /* Main Content */
+    main { padding: 20px; }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    .panel {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 25px;
+      backdrop-filter: blur(10px);
+    }
+    .panel.highlight {
+      border-color: rgba(255,215,0,0.3);
+      box-shadow: 0 0 30px rgba(255,215,0,0.1);
+    }
+    .panel h2 {
+      color: #4ecdc4;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Stats */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #ffd700;
+    }
+    .stat-label {
+      color: #888;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    .stat-change {
+      font-size: 0.85em;
+      margin-top: 5px;
+    }
+    .stat-change.positive { color: #4ecdc4; }
+    .stat-change.negative { color: #ff6b6b; }
+    
+    /* Player Stats Bars */
+    .player-stat {
+      margin: 15px 0;
+    }
+    .player-stat-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .player-stat-bar {
+      height: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .player-stat-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+    .health .player-stat-fill { background: linear-gradient(90deg, #ff6b6b, #ee5a5a); }
+    .stamina .player-stat-fill { background: linear-gradient(90deg, #4ecdc4, #44a08d); }
+    .hunger .player-stat-fill { background: linear-gradient(90deg, #f9ca24, #f0932b); }
+    .thirst .player-stat-fill { background: linear-gradient(90deg, #74b9ff, #0984e3); }
+    .morale .player-stat-fill { background: linear-gradient(90deg, #a29bfe, #6c5ce7); }
+    
+    /* Action Buttons */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .action-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.95em;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    .action-btn.danger { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); }
+    .action-btn.success { background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); }
+    .action-btn.warning { background: linear-gradient(135deg, #f9ca24 0%, #f0932b 100%); }
+    
+    /* Event Log */
+    .event-log {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .event-entry {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.9em;
+    }
+    .event-entry .time { color: #666; }
+    .event-entry.combat { border-left: 3px solid #ff6b6b; }
+    .event-entry.trade { border-left: 3px solid #4ecdc4; }
+    .event-entry.faction { border-left: 3px solid #f9ca24; }
+    .event-entry.system { border-left: 3px solid #667eea; }
+    
+    /* Faction Heat */
+    .faction-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 15px 0;
+    }
+    .faction-name { width: 120px; }
+    .faction-bar {
+      flex: 1;
+      height: 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .faction-fill {
+      height: 100%;
+      transition: width 0.5s;
+    }
+    .faction-tier {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75em;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .tier-calm { background: #4ecdc4; color: #000; }
+    .tier-alert { background: #f9ca24; color: #000; }
+    .tier-hunting { background: #ff8c00; color: #fff; }
+    .tier-war { background: #ff6b6b; color: #fff; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    /* World Map Mini */
+    .world-map {
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+    .map-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .map-dot.player { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+    .map-dot.enemy { background: #ff6b6b; }
+    .map-dot.npc { background: #4ecdc4; }
+    
+    /* Simulation Report Link */
+    .report-link {
+      display: block;
+      background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,140,0,0.1));
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-decoration: none;
+      color: #fff;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+    .report-link:hover {
+      background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,140,0,0.2));
+      transform: translateY(-2px);
+    }
+    .report-link h3 { color: #ffd700; margin-bottom: 5px; }
+    .report-link p { color: #888; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <!-- Auto-Login Screen -->
+  <div id="login-screen">
+    <div class="login-box">
+      <h1>⚔️ Surviving The World™</h1>
+      <p class="subtitle">Executive Preview Build v0.9.2</p>
+      <div class="login-spinner"></div>
+      <p class="login-status" id="login-status">Authenticating...</p>
+      <div class="login-user" id="login-user" style="display: none;">
+        <div class="role">EXECUTIVE ACCESS</div>
+        <div class="name">Welcome, CEO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" style="display: none;">
+    <header>
+      <div class="logo">⚔️ Surviving The World™</div>
+      <div class="user-info">
+        <div>
+          <div class="user-name">CEO</div>
+          <div class="user-role">Executive Access</div>
+        </div>
+        <div class="user-avatar">CEO</div>
+      </div>
+    </header>
+    
+    <main>
+      <div class="dashboard-grid">
+        <!-- Key Metrics -->
+        <div class="panel highlight">
+          <h2>📊 Key Metrics</h2>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="metric-survival">65%</div>
+              <div class="stat-label">Survival Rate</div>
+              <div class="stat-change positive">↑ 5% from last build</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="metric-battles">1,964</div>
+              <div class="stat-label">Battles Simulated</div>
+              <div class="stat-change positive">50.8% win rate</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="metric-trades">1,737</div>
+              <div class="stat-label">Trades Executed</div>
+              <div class="stat-change negative">559 supply issues</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="metric-hours">64.8K</div>
+              <div class="stat-label">Hours Tested</div>
+              <div class="stat-change positive">100 users × 1000h</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Player Stats -->
+        <div class="panel">
+          <h2>👤 Player Status</h2>
+          <div class="player-stat health">
+            <div class="player-stat-header">
+              <span>❤️ Health</span>
+              <span id="health-val">100</span>
+            </div>
+            <div class="player-stat-bar">
+              <div class="player-stat-fill" id="health-bar" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="player-stat stamina">
+            <div class="player-stat-header">
+              <span>⚡ Stamina</span>
+              <span id="stamina-val">100</span>
+            </div>
+            <div class="player-stat-bar">
+              <div class="player-stat-fill" id="stamina-bar" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="player-stat hunger">
+            <div class="player-stat-header">
+              <span>🍖 Hunger</span>
+              <span id="hunger-val">80</span>
+            </div>
+            <div class="player-stat-bar">
+              <div class="player-stat-fill" id="hunger-bar" style="width: 80%"></div>
+            </div>
+          </div>
+          <div class="player-stat thirst">
+            <div class="player-stat-header">
+              <span>💧 Thirst</span>
+              <span id="thirst-val">75</span>
+            </div>
+            <div class="player-stat-bar">
+              <div class="player-stat-fill" id="thirst-bar" style="width: 75%"></div>
+            </div>
+          </div>
+          <div class="player-stat morale">
+            <div class="player-stat-header">
+              <span>😊 Morale</span>
+              <span id="morale-val">90</span>
+            </div>
+            <div class="player-stat-bar">
+              <div class="player-stat-fill" id="morale-bar" style="width: 90%"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="panel">
+          <h2>🎮 Game Actions</h2>
+          <div class="action-grid">
+            <button class="action-btn" onclick="spawnEnemy()">🎯 Spawn Enemy</button>
+            <button class="action-btn" onclick="spawnSquad()">👥 Spawn Squad</button>
+            <button class="action-btn danger" onclick="simulateCombat()">⚔️ Combat</button>
+            <button class="action-btn warning" onclick="triggerHostileAction()">🔥 Hostile Act</button>
+            <button class="action-btn success" onclick="trade()">💰 Trade</button>
+            <button class="action-btn success" onclick="eat()">🍖 Eat Food</button>
+            <button class="action-btn" onclick="drink()">💧 Drink Water</button>
+            <button class="action-btn" onclick="rest()">😴 Rest</button>
+          </div>
+        </div>
+        
+        <!-- Faction Heat -->
+        <div class="panel">
+          <h2>🏰 Faction Relations</h2>
+          <div class="faction-row">
+            <span class="faction-name">Kingdom North</span>
+            <div class="faction-bar">
+              <div class="faction-fill" id="kingdom-heat" style="width: 0%; background: linear-gradient(90deg, #4ecdc4, #ff6b6b)"></div>
+            </div>
+            <span class="faction-tier tier-calm" id="kingdom-tier">CALM</span>
+          </div>
+          <div class="faction-row">
+            <span class="faction-name">Church Order</span>
+            <div class="faction-bar">
+              <div class="faction-fill" id="church-heat" style="width: 0%; background: linear-gradient(90deg, #4ecdc4, #ff6b6b)"></div>
+            </div>
+            <span class="faction-tier tier-calm" id="church-tier">CALM</span>
+          </div>
+          <div class="faction-row">
+            <span class="faction-name">Mercenaries</span>
+            <div class="faction-bar">
+              <div class="faction-fill" id="merc-heat" style="width: 0%; background: linear-gradient(90deg, #4ecdc4, #ff6b6b)"></div>
+            </div>
+            <span class="faction-tier tier-calm" id="merc-tier">CALM</span>
+          </div>
+          <div class="faction-row">
+            <span class="faction-name">Bandits</span>
+            <div class="faction-bar">
+              <div class="faction-fill" id="bandit-heat" style="width: 20%; background: linear-gradient(90deg, #4ecdc4, #ff6b6b)"></div>
+            </div>
+            <span class="faction-tier tier-calm" id="bandit-tier">CALM</span>
+          </div>
+        </div>
+        
+        <!-- World Map -->
+        <div class="panel">
+          <h2>🗺️ World Map</h2>
+          <div class="world-map" id="world-map">
+            <div class="map-dot player" style="left: 50%; top: 50%"></div>
+          </div>
+        </div>
+        
+        <!-- Event Log -->
+        <div class="panel">
+          <h2>📜 Event Log</h2>
+          <div class="event-log" id="event-log"></div>
+        </div>
+      </div>
+      
+      <!-- Simulation Report -->
+      <div style="max-width: 1600px; margin: 20px auto;">
+        <a href="../SIMULATION_REPORT.md" class="report-link" target="_blank">
+          <h3>📊 View Full Simulation Report</h3>
+          <p>100 Users × 1000 Hours - Balance Analysis & Recommendations</p>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Game State
+    const state = {
+      player: { health: 100, stamina: 100, hunger: 80, thirst: 75, morale: 90 },
+      gold: 150,
+      enemies: [],
+      factionHeat: { kingdom: 0, church: 0, merc: 0, bandit: 20 },
+      inventory: { bread: 5, water: 3, bandage: 2 }
+    };
+    
+    // Auto-login sequence
+    async function autoLogin() {
+      const statusEl = document.getElementById('login-status');
+      const userEl = document.getElementById('login-user');
+      
+      await delay(800);
+      statusEl.textContent = 'Verifying credentials...';
+      
+      await delay(600);
+      statusEl.textContent = 'Loading game systems...';
+      
+      await delay(500);
+      statusEl.textContent = 'Initializing world state...';
+      
+      await delay(400);
+      statusEl.textContent = 'Access granted!';
+      statusEl.style.color = '#4ecdc4';
+      userEl.style.display = 'block';
+      
+      await delay(1000);
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app').style.display = 'block';
+      
+      logEvent('system', '🎮 Game initialized - Welcome, CEO!');
+      logEvent('system', '📊 Simulation data loaded: 100 users × 1000 hours');
+    }
+    
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    // Event logging
+    function logEvent(type, message) {
+      const log = document.getElementById('event-log');
+      const entry = document.createElement('div');
+      entry.className = `event-entry ${type}`;
+      entry.innerHTML = `<span class="time">[${new Date().toLocaleTimeString()}]</span> ${message}`;
+      log.insertBefore(entry, log.firstChild);
+      if (log.children.length > 30) log.removeChild(log.lastChild);
+    }
+    
+    // Game Actions
+    function spawnEnemy() {
+      const factions = ['Kingdom Guard', 'Church Knight', 'Mercenary', 'Bandit'];
+      const faction = factions[Math.floor(Math.random() * factions.length)];
+      state.enemies.push({ faction, health: 100 });
+      logEvent('combat', `🎯 ${faction} appeared! (${state.enemies.length} enemies)`);
+      updateMap();
+    }
+    
+    function spawnSquad() {
+      for (let i = 0; i < 5; i++) spawnEnemy();
+      logEvent('combat', '👥 Enemy squad spawned!');
+    }
+    
+    function simulateCombat() {
+      if (state.enemies.length === 0) {
+        logEvent('combat', '⚠️ No enemies to fight!');
+        return;
+      }
+      
+      const enemy = state.enemies[0];
+      const playerDamage = 15 + Math.floor(Math.random() * 20);
+      const enemyDamage = 5 + Math.floor(Math.random() * 15);
+      
+      enemy.health -= playerDamage;
+      state.player.health = Math.max(0, state.player.health - enemyDamage);
+      state.player.stamina = Math.max(0, state.player.stamina - 10);
+      
+      if (enemy.health <= 0) {
+        state.enemies.shift();
+        state.gold += 10 + Math.floor(Math.random() * 20);
+        logEvent('combat', `⚔️ Defeated ${enemy.faction}! +${10} gold`);
+      } else {
+        logEvent('combat', `⚔️ Fighting ${enemy.faction}: dealt ${playerDamage}, took ${enemyDamage}`);
+      }
+      
+      updateUI();
+    }
+    
+    function triggerHostileAction() {
+      const factions = ['kingdom', 'church', 'merc', 'bandit'];
+      const faction = factions[Math.floor(Math.random() * factions.length)];
+      const increase = 15 + Math.floor(Math.random() * 10);
+      
+      state.factionHeat[faction] = Math.min(100, state.factionHeat[faction] + increase);
+      logEvent('faction', `🔥 Hostile action! ${faction} heat +${increase}`);
+      updateUI();
+    }
+    
+    function trade() {
+      if (state.gold >= 10) {
+        state.gold -= 10;
+        state.inventory.bread += 2;
+        state.inventory.water += 2;
+        logEvent('trade', '💰 Traded: -10 gold, +2 bread, +2 water');
+      } else {
+        logEvent('trade', '⚠️ Not enough gold!');
+      }
+      updateUI();
+    }
+    
+    function eat() {
+      if (state.inventory.bread > 0) {
+        state.inventory.bread--;
+        state.player.hunger = Math.min(100, state.player.hunger + 30);
+        logEvent('system', '🍖 Ate bread: +30 hunger');
+      } else {
+        logEvent('system', '⚠️ No food!');
+      }
+      updateUI();
+    }
+    
+    function drink() {
+      if (state.inventory.water > 0) {
+        state.inventory.water--;
+        state.player.thirst = Math.min(100, state.player.thirst + 40);
+        logEvent('system', '💧 Drank water: +40 thirst');
+      } else {
+        logEvent('system', '⚠️ No water!');
+      }
+      updateUI();
+    }
+    
+    function rest() {
+      state.player.stamina = Math.min(100, state.player.stamina + 30);
+      state.player.morale = Math.min(100, state.player.morale + 10);
+      logEvent('system', '😴 Rested: +30 stamina, +10 morale');
+      updateUI();
+    }
+    
+    // UI Updates
+    function updateUI() {
+      // Player stats
+      ['health', 'stamina', 'hunger', 'thirst', 'morale'].forEach(stat => {
+        const val = Math.max(0, Math.min(100, state.player[stat]));
+        document.getElementById(`${stat}-val`).textContent = val.toFixed(0);
+        document.getElementById(`${stat}-bar`).style.width = `${val}%`;
+      });
+      
+      // Faction heat
+      const factionMap = { kingdom: 'kingdom', church: 'church', merc: 'merc', bandit: 'bandit' };
+      for (const [key, id] of Object.entries(factionMap)) {
+        const heat = state.factionHeat[key];
+        document.getElementById(`${id}-heat`).style.width = `${heat}%`;
+        
+        const tierEl = document.getElementById(`${id}-tier`);
+        let tier = 'CALM', tierClass = 'tier-calm';
+        if (heat >= 80) { tier = 'WAR'; tierClass = 'tier-war'; }
+        else if (heat >= 50) { tier = 'HUNTING'; tierClass = 'tier-hunting'; }
+        else if (heat >= 25) { tier = 'ALERT'; tierClass = 'tier-alert'; }
+        
+        tierEl.textContent = tier;
+        tierEl.className = `faction-tier ${tierClass}`;
+      }
+    }
+    
+    function updateMap() {
+      const map = document.getElementById('world-map');
+      // Clear old enemy dots
+      map.querySelectorAll('.map-dot.enemy').forEach(d => d.remove());
+      
+      // Add enemy dots
+      state.enemies.forEach(() => {
+        const dot = document.createElement('div');
+        dot.className = 'map-dot enemy';
+        dot.style.left = `${20 + Math.random() * 60}%`;
+        dot.style.top = `${20 + Math.random() * 60}%`;
+        map.appendChild(dot);
+      });
+    }
+    
+    // Game loop - decay stats over time
+    setInterval(() => {
+      state.player.hunger = Math.max(0, state.player.hunger - 0.3);
+      state.player.thirst = Math.max(0, state.player.thirst - 0.4);
+      state.player.stamina = Math.min(100, state.player.stamina + 0.5);
+      
+      // Heat decay
+      for (const faction of ['kingdom', 'church', 'merc', 'bandit']) {
+        state.factionHeat[faction] = Math.max(0, state.factionHeat[faction] - 0.1);
+      }
+      
+      updateUI();
+    }, 1000);
+    
+    // Start auto-login
+    autoLogin();
+  </script>
+</body>
+</html>
