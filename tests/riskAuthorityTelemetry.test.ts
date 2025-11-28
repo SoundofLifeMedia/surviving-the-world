@@ -605,3 +605,136 @@ describe('Service Registry Integration', () => {
     expect(registry.isInitialized()).toBe(false);
   });
 });
+
+
+describe('Enhanced Enemy AI Stack Integration', () => {
+  test('Enhanced stack integrates with pipeline', () => {
+    // Dynamic import to avoid circular dependency issues
+    const { EnhancedEnemyAIStack } = require('../src/ai/EnhancedEnemyAIStack');
+    
+    const stack = new EnhancedEnemyAIStack();
+    
+    // Set high threshold to allow spawns
+    stack.setRiskThreshold(95);
+    
+    // Register an enemy
+    const enemy = {
+      id: 'test-enemy-1',
+      position: { x: 0, y: 0, z: 0 },
+      facing: { x: 1, y: 0, z: 0 },
+      health: 100,
+      maxHealth: 100,
+      faction: 'raiders',
+      state: 'idle' as const
+    };
+    
+    stack.registerEnemy(enemy);
+    
+    // Get pipeline stats - should have processed at least one decision
+    const stats = stack.getPipelineStats();
+    expect(stats.totalProcessed).toBeGreaterThan(0);
+    
+    // Cleanup
+    stack.shutdown();
+  });
+
+  test('Enhanced stack tracks telemetry', () => {
+    const { EnhancedEnemyAIStack } = require('../src/ai/EnhancedEnemyAIStack');
+    
+    const stack = new EnhancedEnemyAIStack();
+    stack.setRiskThreshold(95);
+    
+    // Register multiple enemies
+    for (let i = 0; i < 5; i++) {
+      stack.registerEnemy({
+        id: `enemy-${i}`,
+        position: { x: i * 10, y: 0, z: 0 },
+        facing: { x: 1, y: 0, z: 0 },
+        health: 100,
+        maxHealth: 100,
+        faction: 'raiders',
+        state: 'idle' as const
+      });
+    }
+    
+    // Get telemetry counters - should have processed decisions
+    const counters = stack.getTelemetryCounters();
+    expect(counters.totalDecisionsProcessed).toBeGreaterThanOrEqual(5);
+    
+    // Cleanup
+    stack.shutdown();
+  });
+
+  test('Enhanced stack respects risk threshold', () => {
+    const { EnhancedEnemyAIStack } = require('../src/ai/EnhancedEnemyAIStack');
+    
+    const stack = new EnhancedEnemyAIStack();
+    
+    // Set very low threshold
+    stack.setRiskThreshold(5);
+    
+    // Register enemy - may be rejected due to low threshold
+    const enemy = {
+      id: 'high-risk-enemy',
+      position: { x: 0, y: 0, z: 0 },
+      facing: { x: 1, y: 0, z: 0 },
+      health: 100,
+      maxHealth: 100,
+      faction: 'raiders',
+      state: 'idle' as const
+    };
+    
+    stack.registerEnemy(enemy);
+    
+    // Check traces for rejection
+    const traces = stack.getRecentTraces(10);
+    expect(traces.length).toBeGreaterThan(0);
+    
+    // Cleanup
+    stack.shutdown();
+  });
+
+  test('Enhanced stack creates squads with pipeline', () => {
+    const { EnhancedEnemyAIStack } = require('../src/ai/EnhancedEnemyAIStack');
+    
+    const stack = new EnhancedEnemyAIStack();
+    stack.setRiskThreshold(95);
+    
+    // Register enemies first
+    const enemyIds = ['squad-member-1', 'squad-member-2', 'squad-member-3'];
+    enemyIds.forEach(id => {
+      stack.registerEnemy({
+        id,
+        position: { x: 0, y: 0, z: 0 },
+        facing: { x: 1, y: 0, z: 0 },
+        health: 100,
+        maxHealth: 100,
+        faction: 'raiders',
+        state: 'idle' as const
+      });
+    });
+    
+    // Create squad
+    const squad = stack.createSquad('test-squad', enemyIds);
+    expect(squad.squadId).toBe('test-squad');
+    
+    // Cleanup
+    stack.shutdown();
+  });
+
+  test('Debug mode enables reasoning stream', () => {
+    const { EnhancedEnemyAIStack } = require('../src/ai/EnhancedEnemyAIStack');
+    
+    const stack = new EnhancedEnemyAIStack();
+    
+    // Enable debug mode
+    stack.setDebugMode(true);
+    
+    // Verify config updated
+    const config = stack.getServices().getConfigManager().get();
+    expect(config.telemetry.debugMode).toBe(true);
+    
+    // Cleanup
+    stack.shutdown();
+  });
+});

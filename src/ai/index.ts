@@ -19,6 +19,10 @@ export { RiskAssessmentService } from './RiskAssessmentService';
 export { AuthorityValidator } from './AuthorityValidator';
 export { AIDecisionPipeline } from './AIDecisionPipeline';
 
+// Enhanced AI Stack with full pipeline integration
+export { EnhancedEnemyAIStack, createEnhancedAIStack } from './EnhancedEnemyAIStack';
+export type { EnhancedAIUpdateResult } from './EnhancedEnemyAIStack';
+
 // Re-export types for convenience
 export type {
   Vector3,
