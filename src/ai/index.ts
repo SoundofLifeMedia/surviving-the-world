@@ -14,6 +14,11 @@ export * from './MicroAgentSystem';
 export * from './EnemyCoordinatorAgent';
 export * from './EnemyAIStack';
 
+// Risk Assessment + Authority Validator + Pipeline
+export { RiskAssessmentService } from './RiskAssessmentService';
+export { AuthorityValidator } from './AuthorityValidator';
+export { AIDecisionPipeline } from './AIDecisionPipeline';
+
 // Re-export types for convenience
 export type {
   Vector3,
