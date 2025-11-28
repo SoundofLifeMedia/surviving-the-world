@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surviving The World™ - 3D Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; background: #000; font-family: 'Segoe UI', sans-serif; }
+    #game-container { width: 100vw; height: 100vh; }
+    #hud { position: fixed; top: 20px; left: 20px; color: #fff; z-index: 100; }
+    .hud-bar { width: 200px; height: 20px; background: rgba(0,0,0,0.5); border-radius: 10px; margin: 5px 0; overflow: hidden; }
+    .hud-fill { height: 100%; transition: width 0.3s; }
+    .health-fill { background: linear-gradient(90deg, #ff4444, #ff6666); }
+    .stamina-fill { background: linear-gradient(90deg, #44ff44, #66ff66); }
+    .hud-label { font-size: 12px; margin-bottom: 2px; text-shadow: 1px 1px 2px #000; }
+    #minimap { position: fixed; bottom: 20px; right: 20px; width: 150px; height: 150px; 
+      background: rgba(0,0,0,0.7); border: 2px solid #ffd700; border-radius: 50%; z-index: 100; }
+    #controls-hint { position: fixed; bottom: 20px; left: 20px; color: #fff; font-size: 14px;
+      background: rgba(0,0,0,0.7); padding: 15px; border-radius: 10px; z-index: 100; }
+    #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a1a;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 1000; }
+    #loading h1 { color: #ffd700; font-size: 3em; margin-bottom: 20px; }
+    #loading p { color: #888; }
+    .spinner { width: 50px; height: 50px; border: 4px solid #333; border-top-color: #ffd700;
+      border-radius: 50%; animation: spin 1s linear infinite; margin: 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="loading"><h1>⚔️ Surviving The World™</h1><div class="spinner"></div><p id="load-status">Loading game...</p></div>
+  <div id="game-container"></div>
+  <div id="hud">
+    <div class="hud-label">❤️ Health</div>
+    <div class="hud-bar"><div class="hud-fill health-fill" id="health-bar" style="width:100%"></div></div>
+    <div class="hud-label">⚡ Stamina</div>
+    <div class="hud-bar"><div class="hud-fill stamina-fill" id="stamina-bar" style="width:100%"></div></div>
+    <div style="margin-top:15px;font-size:14px;">
+      <div>🎮 <span id="fps">60</span> FPS</div>
+      <div>📍 Position: <span id="pos">0, 0</span></div>
+    </div>
+  </div>
+  <div id="minimap"><canvas id="minimap-canvas" width="150" height="150"></canvas></div>
+  <div id="controls-hint">
+    <strong>🎮 Controls</strong><br>
+    WASD / Left Stick - Move<br>
+    Mouse / Right Stick - Look<br>
+    Shift / L3 - Sprint<br>
+    Space / A - Jump<br>
+    E / X - Interact<br>
+    Click to start
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
