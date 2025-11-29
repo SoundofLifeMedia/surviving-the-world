@@ -111,6 +111,10 @@ let day = 1, gameTime = 6;
 let heat = { kingdom: 0, bandits: 25 };
 let isLocked = false;
 let sun, sunTarget;
+let groundMesh, raycaster;
+let playerVelocityY = 0;
+const GRAVITY = 25;
+const GROUND_OFFSET = 0;
 
 const CHARS = [
   { name: 'Warrior', color: 0xe74c3c, hp: 150, spd: 5, dmg: 25, armor: 0.3 },
@@ -252,10 +256,13 @@ function createGround() {
     flatShading: false
   });
   
-  const ground = new THREE.Mesh(groundGeo, groundMat);
-  ground.rotation.x = -Math.PI / 2;
-  ground.receiveShadow = true;
-  scene.add(ground);
+  groundMesh = new THREE.Mesh(groundGeo, groundMat);
+  groundMesh.rotation.x = -Math.PI / 2;
+  groundMesh.receiveShadow = true;
+  scene.add(groundMesh);
+  
+  // Initialize raycaster for ground collision
+  raycaster = new THREE.Raycaster();
   
   // Dirt paths
   createPath(0, 0, 800, 18);
@@ -614,7 +621,8 @@ function createPlayer() {
   });
   
   player = group;
-  player.position.set(0, 0, 0);
+  // Initial position will be corrected in first frame by ground collision
+  player.position.set(0, 5, 0);
   scene.add(player);
 }
 
@@ -835,6 +843,16 @@ function handleAttack() {
   }
 }
 
+// Get ground height at position using raycasting
+function getGroundHeight(x, z) {
+  raycaster.set(new THREE.Vector3(x, 100, z), new THREE.Vector3(0, -1, 0));
+  const intersects = raycaster.intersectObject(groundMesh);
+  if (intersects.length > 0) {
+    return intersects[0].point.y;
+  }
+  return 0;
+}
+
 function gameLoop() {
   requestAnimationFrame(gameLoop);
   const dt = Math.min(clock.getDelta(), 0.05);
@@ -864,6 +882,20 @@ function gameLoop() {
   player.position.z = Math.max(-380, Math.min(380, player.position.z));
   player.rotation.y = playerYaw;
   
+  // Ground collision - keep player on terrain
+  const groundY = getGroundHeight(player.position.x, player.position.z);
+  const targetY = groundY + GROUND_OFFSET;
+  
+  // Apply gravity and ground collision
+  playerVelocityY -= GRAVITY * dt;
+  player.position.y += playerVelocityY * dt;
+  
+  // Snap to ground if below or close to it
+  if (player.position.y <= targetY) {
+    player.position.y = targetY;
+    playerVelocityY = 0;
+  }
+  
   // Camera
   const camDist = 5;
   const camHeight = 2.5;
@@ -879,18 +911,21 @@ function gameLoop() {
   // Enemy AI
   updateEnemies(dt);
   
-  // Animate NPCs
+  // Animate NPCs and keep on ground
   npcs.forEach(npc => {
+    const groundY = getGroundHeight(npc.position.x, npc.position.z);
+    npc.position.y = groundY;
     if (npc.userData.indicator) {
       npc.userData.indicator.rotation.y += dt * 2;
       npc.userData.indicator.position.y = 2.2 + Math.sin(Date.now() * 0.004) * 0.15;
     }
   });
   
-  // Animate items
+  // Animate items and keep above ground
   items.forEach(item => {
     if (!item.userData.collected) {
-      item.position.y = 0.6 + Math.sin(Date.now() * 0.003 + item.position.x) * 0.2;
+      const groundY = getGroundHeight(item.position.x, item.position.z);
+      item.position.y = groundY + 0.6 + Math.sin(Date.now() * 0.003 + item.position.x) * 0.2;
       item.rotation.y += dt * 2;
       item.rotation.x += dt * 0.8;
     }
@@ -911,7 +946,9 @@ function gameLoop() {
     log('You have fallen! Respawning...', 'combat');
     hp = maxHp;
     stamina = 100;
-    player.position.set(0, 0, 0);
+    const spawnGroundY = getGroundHeight(0, 0);
+    player.position.set(0, spawnGroundY + GROUND_OFFSET, 0);
+    playerVelocityY = 0;
   }
   
   composer.render();
@@ -954,6 +991,10 @@ function updateEnemies(dt) {
       if (Math.abs(enemy.position.x) > 120) data.vx *= -1;
       if (Math.abs(enemy.position.z) > 120) data.vz *= -1;
     }
+    
+    // Keep enemy on ground
+    const groundY = getGroundHeight(enemy.position.x, enemy.position.z);
+    enemy.position.y = groundY;
   });
 }
 
