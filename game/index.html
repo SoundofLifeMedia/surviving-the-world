@@ -6,16 +6,15 @@
 <title>Surviving The World™ - AAA Medieval Survival</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a15;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;color:#fff}
+body{background:#000;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;color:#fff}
 #menu{position:fixed;inset:0;background:linear-gradient(135deg,#0a0a15 0%,#1a1a2e 50%,#0a0a15 100%);
 display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
 .logo{font-size:3.5em;color:#ffd700;text-shadow:0 0 40px rgba(255,215,0,0.6),0 4px 8px rgba(0,0,0,0.8);margin-bottom:10px;font-weight:bold}
 .subtitle{color:#888;margin-bottom:40px;letter-spacing:3px;font-size:14px}
 .chars{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:900px}
-.char{width:150px;padding:25px 15px;background:linear-gradient(180deg,#1a1a2e,#12121f);border:2px solid #333;border-radius:15px;
-cursor:pointer;text-align:center;transition:all .3s ease}
+.char{width:150px;padding:25px 15px;background:linear-gradient(180deg,#1a1a2e,#12121f);border:2px solid #333;border-radius:15px;cursor:pointer;text-align:center;transition:all .3s ease}
 .char:hover{border-color:#ffd700;transform:translateY(-8px);box-shadow:0 15px 40px rgba(255,215,0,0.3)}
-.char img{width:60px;height:60px;margin-bottom:12px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.5))}
+.char .icon{font-size:48px;margin-bottom:12px}
 .char .name{font-weight:bold;font-size:16px;margin-bottom:8px;color:#fff}
 .char .stats{color:#888;font-size:11px;line-height:1.4}
 .hint{color:#555;margin-top:40px;font-size:12px}
@@ -23,44 +22,46 @@ cursor:pointer;text-align:center;transition:all .3s ease}
 #gameCanvas{width:100%;height:100%;display:block}
 #hud{position:fixed;top:20px;left:20px;z-index:100}
 .stat{margin-bottom:10px;display:flex;align-items:center;gap:10px}
-.stat-icon{font-size:18px}
-.stat-bar{width:160px;height:18px;background:rgba(0,0,0,0.6);border-radius:9px;overflow:hidden;border:1px solid #333}
-.stat-fill{height:100%;border-radius:8px;transition:width .3s}
-.hp-fill{background:linear-gradient(90deg,#8B0000,#e74c3c)}
-.st-fill{background:linear-gradient(90deg,#1a5f2a,#2ecc71)}
-.hu-fill{background:linear-gradient(90deg,#8B4513,#e67e22)}
-.stat-text{font-size:11px;color:#aaa;min-width:50px}
-#info{position:fixed;top:20px;right:20px;text-align:right;z-index:100}
-#day{font-size:20px;color:#ffd700;font-weight:bold;text-shadow:0 2px 4px rgba(0,0,0,0.5)}
-#weather{font-size:13px;color:#aaa;margin-top:5px}
-#heat{margin-top:15px;font-size:12px}
-.heat-row{margin:5px 0;display:flex;align-items:center;justify-content:flex-end;gap:8px}
-.heat-tag{padding:4px 12px;border-radius:12px;font-size:11px;font-weight:bold}
-.calm{background:#27ae60;color:#fff}.alert{background:#f39c12;color:#000}.hunting{background:#e74c3c;color:#fff}
-#minimap{position:fixed;bottom:20px;right:20px;width:180px;height:180px;background:rgba(0,0,0,0.8);border:3px solid #ffd700;border-radius:10px;z-index:100}
-#log{position:fixed;bottom:20px;left:20px;width:320px;max-height:180px;background:rgba(0,0,0,0.8);border-radius:10px;padding:12px;z-index:100;overflow-y:auto}
-#log-title{color:#ffd700;margin-bottom:8px;font-weight:bold;font-size:13px}
-.log-entry{padding:4px 0;border-bottom:1px solid #222;color:#aaa;font-size:12px}
-.log-combat{color:#e74c3c}.log-quest{color:#ffd700}.log-ai{color:#3498db}.log-system{color:#2ecc71}
-#controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:10px 25px;border-radius:25px;z-index:100;font-size:12px;color:#666}
-#crosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;z-index:100;pointer-events:none;opacity:0.5}
-#crosshair::before,#crosshair::after{content:'';position:absolute;background:#fff}
-#crosshair::before{width:2px;height:20px;left:9px}
-#crosshair::after{width:20px;height:2px;top:9px}
+.stat-icon{font-size:18px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
+.stat-bar{width:180px;height:20px;background:rgba(0,0,0,0.7);border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,0.2);box-shadow:inset 0 2px 4px rgba(0,0,0,0.5)}
+.stat-fill{height:100%;border-radius:8px;transition:width .3s;box-shadow:0 0 10px currentColor}
+.hp-fill{background:linear-gradient(90deg,#8B0000,#dc3545,#ff6b6b);color:#ff6b6b}
+.st-fill{background:linear-gradient(90deg,#0d5016,#28a745,#5dd879);color:#5dd879}
+.hu-fill{background:linear-gradient(90deg,#8B4513,#fd7e14,#ffc107);color:#ffc107}
+.stat-text{font-size:12px;color:#fff;min-width:60px;text-shadow:0 1px 2px rgba(0,0,0,0.8)}
+#info{position:fixed;top:20px;right:20px;text-align:right;z-index:100;background:rgba(0,0,0,0.5);padding:15px;border-radius:10px;border:1px solid rgba(255,255,255,0.1)}
+#day{font-size:22px;color:#ffd700;font-weight:bold;text-shadow:0 2px 4px rgba(0,0,0,0.5)}
+#weather{font-size:14px;color:#ccc;margin-top:5px}
+#heat{margin-top:12px;font-size:12px}
+.heat-row{margin:6px 0;display:flex;align-items:center;justify-content:flex-end;gap:10px}
+.heat-tag{padding:5px 14px;border-radius:15px;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px}
+.calm{background:linear-gradient(135deg,#1a5f2a,#28a745);color:#fff;box-shadow:0 0 10px rgba(40,167,69,0.5)}
+.alert{background:linear-gradient(135deg,#c77600,#fd7e14);color:#fff;box-shadow:0 0 10px rgba(253,126,20,0.5)}
+.hunting{background:linear-gradient(135deg,#8B0000,#dc3545);color:#fff;box-shadow:0 0 10px rgba(220,53,69,0.5)}
+#minimap{position:fixed;bottom:20px;right:20px;width:200px;height:200px;background:rgba(0,0,0,0.8);border:3px solid #ffd700;border-radius:50%;z-index:100;box-shadow:0 0 20px rgba(255,215,0,0.3)}
+#log{position:fixed;bottom:20px;left:20px;width:350px;max-height:200px;background:rgba(0,0,0,0.8);border-radius:12px;padding:15px;z-index:100;overflow-y:auto;border:1px solid rgba(255,255,255,0.1)}
+#log-title{color:#ffd700;margin-bottom:10px;font-weight:bold;font-size:14px;text-transform:uppercase;letter-spacing:1px}
+.log-entry{padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.1);color:#aaa;font-size:12px}
+.log-combat{color:#ff6b6b}.log-quest{color:#ffd700}.log-ai{color:#5bc0de}.log-system{color:#5dd879}
+#controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:12px 30px;border-radius:30px;z-index:100;font-size:12px;color:#888;border:1px solid rgba(255,255,255,0.1)}
+#crosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:100;pointer-events:none}
+#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(255,255,255,0.5)}
+#crosshair::before{width:2px;height:24px;left:11px;top:0}
+#crosshair::after{width:24px;height:2px;top:11px;left:0}
 </style>
 </head>
 <body>
 <div id="menu">
 <div class="logo">⚔️ SURVIVING THE WORLD™</div>
-<div class="subtitle">AAA MEDIEVAL SURVIVAL EXPERIENCE</div>
+<div class="subtitle">NEXT-GEN MEDIEVAL SURVIVAL</div>
 <div class="chars">
-<div class="char" onclick="startGame(0)"><img src="https://em-content.zobj.net/source/twitter/376/crossed-swords_2694-fe0f.png" alt="Warrior"><div class="name">Warrior</div><div class="stats">HP: 150 | DMG: 25<br>Speed: 5 | Armor: High</div></div>
-<div class="char" onclick="startGame(1)"><img src="https://em-content.zobj.net/source/twitter/376/bow-and-arrow_1f3f9.png" alt="Ranger"><div class="name">Ranger</div><div class="stats">HP: 100 | DMG: 20<br>Speed: 7 | Perception+</div></div>
-<div class="char" onclick="startGame(2)"><img src="https://em-content.zobj.net/source/twitter/376/ninja_1f977.png" alt="Assassin"><div class="name">Assassin</div><div class="stats">HP: 80 | DMG: 35<br>Speed: 9 | Stealth+</div></div>
-<div class="char" onclick="startGame(3)"><img src="https://em-content.zobj.net/source/twitter/376/shield_1f6e1-fe0f.png" alt="Tank"><div class="name">Tank</div><div class="stats">HP: 200 | DMG: 15<br>Speed: 4 | Armor: Max</div></div>
-<div class="char" onclick="startGame(4)"><img src="https://em-content.zobj.net/source/twitter/376/mage_1f9d9.png" alt="Survivor"><div class="name">Survivor</div><div class="stats">HP: 120 | DMG: 18<br>Speed: 5 | Hunger-</div></div>
+<div class="char" onclick="startGame(0)"><div class="icon">⚔️</div><div class="name">Warrior</div><div class="stats">HP: 150 | DMG: 25<br>Speed: 5 | Armor: High</div></div>
+<div class="char" onclick="startGame(1)"><div class="icon">🏹</div><div class="name">Ranger</div><div class="stats">HP: 100 | DMG: 20<br>Speed: 7 | Perception+</div></div>
+<div class="char" onclick="startGame(2)"><div class="icon">🗡️</div><div class="name">Assassin</div><div class="stats">HP: 80 | DMG: 35<br>Speed: 9 | Stealth+</div></div>
+<div class="char" onclick="startGame(3)"><div class="icon">🛡️</div><div class="name">Tank</div><div class="stats">HP: 200 | DMG: 15<br>Speed: 4 | Armor: Max</div></div>
+<div class="char" onclick="startGame(4)"><div class="icon">🧙</div><div class="name">Survivor</div><div class="stats">HP: 120 | DMG: 18<br>Speed: 5 | Hunger-</div></div>
 </div>
-<div class="hint">WASD = Move | Mouse = Look | SHIFT = Run | E = Interact | Q = Attack | Click to Start</div>
+<div class="hint">WASD = Move | Mouse = Look | SHIFT = Sprint | E = Interact | Q = Attack</div>
 </div>
 <div id="game">
 <canvas id="gameCanvas"></canvas>
@@ -78,23 +79,38 @@ cursor:pointer;text-align:center;transition:all .3s ease}
 <div class="heat-row">Bandits <span class="heat-tag alert" id="h-bandits">ALERT</span></div>
 </div>
 </div>
-<canvas id="minimap" width="180" height="180"></canvas>
-<div id="log"><div id="log-title">📜 ADVENTURE LOG</div><div id="log-entries"></div></div>
-<div id="controls">WASD Move | Mouse Look | SHIFT Sprint | E Interact | Q Attack | ESC Menu</div>
+<canvas id="minimap" width="200" height="200"></canvas>
+<div id="log"><div id="log-title">📜 Adventure Log</div><div id="log-entries"></div></div>
+<div id="controls">WASD Move | Mouse Look | SHIFT Sprint | E Interact | Q Attack</div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
+
 // ═══════════════════════════════════════════════════════════════
-// SURVIVING THE WORLD™ - AAA GAME ENGINE
+// SURVIVING THE WORLD™ - AAA NEXT-GEN ENGINE
 // ═══════════════════════════════════════════════════════════════
 
-let scene, camera, renderer, clock;
+let scene, camera, renderer, composer, clock;
 let player, playerYaw = 0, playerPitch = 0;
 let keys = {}, enemies = [], npcs = [], items = [], buildings = [];
 let hp = 100, maxHp = 100, stamina = 100, hunger = 80;
 let day = 1, gameTime = 6;
 let heat = { kingdom: 0, bandits: 25 };
 let isLocked = false;
+let sun, sunTarget;
 
 const CHARS = [
   { name: 'Warrior', color: 0xe74c3c, hp: 150, spd: 5, dmg: 25, armor: 0.3 },
@@ -117,184 +133,319 @@ window.startGame = function(i) {
 function initGame() {
   const canvas = document.getElementById('gameCanvas');
   
-  // Scene with sky gradient
+  // Scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x87CEEB);
-  scene.fog = new THREE.FogExp2(0x87CEEB, 0.003);
+  
+  // Skybox gradient
+  const skyGeo = new THREE.SphereGeometry(500, 32, 32);
+  const skyMat = new THREE.ShaderMaterial({
+    uniforms: {
+      topColor: { value: new THREE.Color(0x0077ff) },
+      bottomColor: { value: new THREE.Color(0xffffff) },
+      offset: { value: 20 },
+      exponent: { value: 0.6 }
+    },
+    vertexShader: `
+      varying vec3 vWorldPosition;
+      void main() {
+        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+        vWorldPosition = worldPosition.xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 topColor;
+      uniform vec3 bottomColor;
+      uniform float offset;
+      uniform float exponent;
+      varying vec3 vWorldPosition;
+      void main() {
+        float h = normalize(vWorldPosition + offset).y;
+        gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
+      }
+    `,
+    side: THREE.BackSide
+  });
+  scene.add(new THREE.Mesh(skyGeo, skyMat));
+  
+  scene.fog = new THREE.FogExp2(0x88bbee, 0.0015);
   
   // Camera
-  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
   
-  // Renderer with high quality
+  // Renderer - Maximum quality
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.2;
+  renderer.toneMappingExposure = 1.0;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
   
-  // Lighting - AAA quality
-  const ambient = new THREE.AmbientLight(0x404080, 0.4);
+  // Post-processing
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  
+  const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.3, 0.4, 0.85);
+  composer.addPass(bloomPass);
+  
+  const smaaPass = new SMAAPass(window.innerWidth, window.innerHeight);
+  composer.addPass(smaaPass);
+  
+  // Lighting - Cinematic quality
+  const ambient = new THREE.AmbientLight(0x404060, 0.3);
   scene.add(ambient);
   
-  const sun = new THREE.DirectionalLight(0xffffcc, 1.2);
-  sun.position.set(100, 150, 50);
+  sun = new THREE.DirectionalLight(0xffffee, 2.0);
+  sun.position.set(80, 120, 60);
   sun.castShadow = true;
-  sun.shadow.mapSize.width = 2048;
-  sun.shadow.mapSize.height = 2048;
+  sun.shadow.mapSize.width = 4096;
+  sun.shadow.mapSize.height = 4096;
   sun.shadow.camera.near = 10;
-  sun.shadow.camera.far = 500;
+  sun.shadow.camera.far = 400;
   sun.shadow.camera.left = -150;
   sun.shadow.camera.right = 150;
   sun.shadow.camera.top = 150;
   sun.shadow.camera.bottom = -150;
   sun.shadow.bias = -0.0001;
+  sun.shadow.normalBias = 0.02;
   scene.add(sun);
   
-  const hemi = new THREE.HemisphereLight(0x87CEEB, 0x3d6b2e, 0.6);
+  sunTarget = new THREE.Object3D();
+  scene.add(sunTarget);
+  sun.target = sunTarget;
+  
+  const hemi = new THREE.HemisphereLight(0x87CEEB, 0x3d5c2e, 0.5);
   scene.add(hemi);
+  
+  // Ground with detail
+  createGround();
+  createWorld();
+  createPlayer();
+  setupControls(canvas);
+  
+  clock = new THREE.Clock();
+  log('Welcome, ' + cfg.name + '! Your adventure begins...', 'system');
+  
+  gameLoop();
+}
 
-  // Ground with texture
-  const groundGeo = new THREE.PlaneGeometry(600, 600, 50, 50);
-  const groundMat = new THREE.MeshStandardMaterial({ 
-    color: 0x3d6b2e, 
+
+function createGround() {
+  // Main terrain
+  const groundGeo = new THREE.PlaneGeometry(800, 800, 128, 128);
+  
+  // Add height variation
+  const vertices = groundGeo.attributes.position.array;
+  for (let i = 0; i < vertices.length; i += 3) {
+    const x = vertices[i];
+    const y = vertices[i + 1];
+    vertices[i + 2] = Math.sin(x * 0.02) * Math.cos(y * 0.02) * 2 + Math.random() * 0.3;
+  }
+  groundGeo.computeVertexNormals();
+  
+  const groundMat = new THREE.MeshStandardMaterial({
+    color: 0x4a7c3f,
     roughness: 0.9,
-    metalness: 0.0
+    metalness: 0.0,
+    flatShading: false
   });
+  
   const ground = new THREE.Mesh(groundGeo, groundMat);
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   scene.add(ground);
   
-  // Main roads
-  createRoad(0, 0, 600, 15);
-  createRoad(0, 0, 15, 600);
-  createRoad(-100, 100, 200, 10);
-  createRoad(100, -100, 10, 200);
+  // Dirt paths
+  createPath(0, 0, 800, 18);
+  createPath(0, 0, 18, 800);
+  createPath(-120, 120, 250, 12);
+  createPath(120, -120, 12, 250);
+}
+
+function createPath(x, z, w, d) {
+  const geo = new THREE.PlaneGeometry(w, d);
+  const mat = new THREE.MeshStandardMaterial({ 
+    color: 0x8B7355, 
+    roughness: 0.95,
+    metalness: 0.0
+  });
+  const path = new THREE.Mesh(geo, mat);
+  path.rotation.x = -Math.PI / 2;
+  path.position.set(x, 0.05, z);
+  path.receiveShadow = true;
+  scene.add(path);
+}
+
+function createWorld() {
+  // Village buildings - detailed
+  createDetailedBuilding(-70, -70, 30, 22, 30, 0x8B4513, 'The Golden Tavern', 'tavern');
+  createDetailedBuilding(80, -60, 35, 26, 35, 0x4a4a4a, 'Ironforge Smithy', 'smithy');
+  createDetailedBuilding(-90, 70, 50, 45, 45, 0x3d4f5f, 'Castle Keep', 'castle');
+  createDetailedBuilding(100, 80, 28, 18, 28, 0x8B7355, 'Market Hall', 'market');
+  createDetailedBuilding(0, -140, 30, 35, 40, 0x5a5a6a, 'Church of Light', 'church');
   
-  // Village buildings
-  createBuilding(-60, -60, 25, 20, 25, 0x8B4513, 'The Golden Tavern');
-  createBuilding(70, -50, 30, 24, 30, 0x4a4a4a, 'Ironforge Smithy');
-  createBuilding(-80, 60, 40, 35, 35, 0x2c3e50, 'Castle Keep');
-  createBuilding(90, 70, 22, 16, 22, 0x8B7355, 'Market Square');
-  createBuilding(0, -120, 25, 22, 30, 0x4a4a4a, 'Church of Light');
+  // Village houses
+  const housePositions = [
+    [-140, -40], [140, -30], [-50, 140], [50, -180], [-180, 0],
+    [180, 40], [-30, 180], [160, 160], [-160, -140], [0, 80]
+  ];
+  housePositions.forEach(([hx, hz]) => {
+    createDetailedBuilding(hx, hz, 16 + Math.random() * 8, 14 + Math.random() * 4, 16 + Math.random() * 8, 0x6d5c4a, 'Village House', 'house');
+  });
   
-  // Houses
-  for (let i = 0; i < 12; i++) {
-    const x = (Math.random() - 0.5) * 400;
-    const z = (Math.random() - 0.5) * 400;
-    if (Math.abs(x) > 50 || Math.abs(z) > 50) {
-      createBuilding(x, z, 14 + Math.random() * 6, 12 + Math.random() * 4, 14 + Math.random() * 6, 0x654321, 'Village House');
+  // Dense forest
+  for (let i = 0; i < 150; i++) {
+    const x = (Math.random() - 0.5) * 700;
+    const z = (Math.random() - 0.5) * 700;
+    if (Math.abs(x) > 45 || Math.abs(z) > 45) {
+      createDetailedTree(x, z);
     }
   }
   
-  // Forest
-  for (let i = 0; i < 100; i++) {
-    const x = (Math.random() - 0.5) * 500;
-    const z = (Math.random() - 0.5) * 500;
-    if (Math.abs(x) > 35 || Math.abs(z) > 35) {
-      createTree(x, z);
-    }
-  }
-  
-  // Rocks
-  for (let i = 0; i < 40; i++) {
-    const x = (Math.random() - 0.5) * 500;
-    const z = (Math.random() - 0.5) * 500;
+  // Rocks and boulders
+  for (let i = 0; i < 60; i++) {
+    const x = (Math.random() - 0.5) * 600;
+    const z = (Math.random() - 0.5) * 600;
     createRock(x, z);
   }
   
-  // Player character
-  createPlayer();
+  // Grass patches
+  for (let i = 0; i < 200; i++) {
+    const x = (Math.random() - 0.5) * 600;
+    const z = (Math.random() - 0.5) * 600;
+    createGrass(x, z);
+  }
   
-  // Enemies with AI
+  // Enemies
   const enemyTypes = [
     { name: 'Bandit Scout', color: 0x8B0000, hp: 50, dmg: 8, spd: 4, hostile: true },
-    { name: 'Bandit Raider', color: 0xB22222, hp: 80, dmg: 12, spd: 3, hostile: true },
+    { name: 'Bandit Raider', color: 0xB22222, hp: 80, dmg: 12, spd: 3.5, hostile: true },
     { name: 'Kingdom Guard', color: 0x4169E1, hp: 100, dmg: 10, spd: 3, hostile: false },
-    { name: 'Wild Wolf', color: 0x555555, hp: 40, dmg: 15, spd: 6, hostile: true }
+    { name: 'Wild Wolf', color: 0x444444, hp: 40, dmg: 15, spd: 6, hostile: true }
   ];
   
-  for (let i = 0; i < 15; i++) {
-    const x = (Math.random() - 0.5) * 350;
-    const z = (Math.random() - 0.5) * 350;
-    if (Math.abs(x) > 40 || Math.abs(z) > 40) {
-      const type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
-      createEnemy(x, z, type);
+  for (let i = 0; i < 20; i++) {
+    const x = (Math.random() - 0.5) * 450;
+    const z = (Math.random() - 0.5) * 450;
+    if (Math.abs(x) > 50 || Math.abs(z) > 50) {
+      createEnemy(x, z, enemyTypes[Math.floor(Math.random() * enemyTypes.length)]);
     }
   }
   
   // NPCs
-  createNPC(-55, -55, 'Merchant Aldric', 0xDAA520, 'trade');
-  createNPC(75, -45, 'Blacksmith Gorn', 0x708090, 'craft');
-  createNPC(-75, 65, 'Lord Commander', 0x9370DB, 'quest');
-  createNPC(0, -115, 'Healer Miriam', 0x98FB98, 'heal');
-  createNPC(95, 75, 'Trader Marcus', 0xDEB887, 'trade');
+  createNPC(-65, -65, 'Merchant Aldric', 0xDAA520, 'trade');
+  createNPC(85, -55, 'Blacksmith Gorn', 0x708090, 'craft');
+  createNPC(-85, 75, 'Lord Commander', 0x9370DB, 'quest');
+  createNPC(5, -135, 'Healer Miriam', 0x98FB98, 'heal');
+  createNPC(105, 85, 'Trader Marcus', 0xDEB887, 'trade');
   
-  // Collectible items
-  for (let i = 0; i < 30; i++) {
-    const x = (Math.random() - 0.5) * 400;
-    const z = (Math.random() - 0.5) * 400;
+  // Items
+  for (let i = 0; i < 40; i++) {
+    const x = (Math.random() - 0.5) * 500;
+    const z = (Math.random() - 0.5) * 500;
     createItem(x, z);
   }
-  
-  // Controls
-  setupControls(canvas);
-  
-  clock = new THREE.Clock();
-  log('Welcome, ' + cfg.name + '! Your adventure begins...', 'system');
-  log('Explore the village, talk to NPCs, survive!', 'system');
-  
-  gameLoop();
 }
 
-function createRoad(x, z, w, d) {
-  const geo = new THREE.PlaneGeometry(w, d);
-  const mat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.95 });
-  const road = new THREE.Mesh(geo, mat);
-  road.rotation.x = -Math.PI / 2;
-  road.position.set(x, 0.02, z);
-  road.receiveShadow = true;
-  scene.add(road);
-}
 
-function createBuilding(x, z, w, h, d, color, name) {
+function createDetailedBuilding(x, z, w, h, d, color, name, type) {
   const group = new THREE.Group();
   
-  // Main structure
+  // Foundation
+  const foundGeo = new THREE.BoxGeometry(w + 2, 1, d + 2);
+  const foundMat = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.9 });
+  const foundation = new THREE.Mesh(foundGeo, foundMat);
+  foundation.position.y = 0.5;
+  foundation.castShadow = true;
+  foundation.receiveShadow = true;
+  group.add(foundation);
+  
+  // Main structure with texture-like appearance
   const bodyGeo = new THREE.BoxGeometry(w, h, d);
-  const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.8 });
+  const bodyMat = new THREE.MeshStandardMaterial({ 
+    color: color, 
+    roughness: 0.85,
+    metalness: 0.05
+  });
   const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.y = h / 2;
+  body.position.y = h / 2 + 1;
   body.castShadow = true;
   body.receiveShadow = true;
   group.add(body);
   
+  // Timber frame details
+  const timberMat = new THREE.MeshStandardMaterial({ color: 0x3d2817, roughness: 0.9 });
+  
+  // Vertical beams
+  [-1, 1].forEach(side => {
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(0.8, h, 0.8), timberMat);
+    beam.position.set(side * (w/2 - 0.4), h/2 + 1, d/2 - 0.4);
+    beam.castShadow = true;
+    group.add(beam);
+    
+    const beam2 = new THREE.Mesh(new THREE.BoxGeometry(0.8, h, 0.8), timberMat);
+    beam2.position.set(side * (w/2 - 0.4), h/2 + 1, -d/2 + 0.4);
+    beam2.castShadow = true;
+    group.add(beam2);
+  });
+  
+  // Horizontal beam
+  const hBeam = new THREE.Mesh(new THREE.BoxGeometry(w, 0.6, 0.6), timberMat);
+  hBeam.position.set(0, h * 0.6 + 1, d/2);
+  group.add(hBeam);
+  
   // Roof
-  const roofGeo = new THREE.ConeGeometry(Math.max(w, d) * 0.75, h * 0.4, 4);
-  const roofMat = new THREE.MeshStandardMaterial({ color: 0x8B0000, roughness: 0.7 });
+  const roofHeight = h * 0.5;
+  const roofGeo = new THREE.ConeGeometry(Math.max(w, d) * 0.8, roofHeight, 4);
+  const roofMat = new THREE.MeshStandardMaterial({ 
+    color: type === 'castle' ? 0x2c3e50 : 0x8B0000, 
+    roughness: 0.7 
+  });
   const roof = new THREE.Mesh(roofGeo, roofMat);
-  roof.position.y = h + h * 0.2;
+  roof.position.y = h + roofHeight/2 + 1;
   roof.rotation.y = Math.PI / 4;
   roof.castShadow = true;
   group.add(roof);
   
   // Door
-  const doorGeo = new THREE.BoxGeometry(w * 0.2, h * 0.4, 0.3);
-  const doorMat = new THREE.MeshStandardMaterial({ color: 0x3d2817 });
+  const doorGeo = new THREE.BoxGeometry(w * 0.18, h * 0.45, 0.4);
+  const doorMat = new THREE.MeshStandardMaterial({ color: 0x2d1f14, roughness: 0.8 });
   const door = new THREE.Mesh(doorGeo, doorMat);
-  door.position.set(0, h * 0.2, d / 2 + 0.1);
+  door.position.set(0, h * 0.225 + 1, d/2 + 0.15);
   group.add(door);
   
-  // Windows
-  const winGeo = new THREE.BoxGeometry(w * 0.15, h * 0.15, 0.2);
-  const winMat = new THREE.MeshStandardMaterial({ color: 0x87CEEB, emissive: 0x222244, emissiveIntensity: 0.3 });
+  // Door frame
+  const frameMat = new THREE.MeshStandardMaterial({ color: 0x1a1108, roughness: 0.9 });
+  const frameTop = new THREE.Mesh(new THREE.BoxGeometry(w * 0.22, 0.3, 0.5), frameMat);
+  frameTop.position.set(0, h * 0.45 + 1.15, d/2 + 0.2);
+  group.add(frameTop);
+  
+  // Windows with glow
+  const winMat = new THREE.MeshStandardMaterial({ 
+    color: 0xffeebb, 
+    emissive: 0xffaa44,
+    emissiveIntensity: 0.3,
+    roughness: 0.3
+  });
+  
   [-1, 1].forEach(side => {
-    const win = new THREE.Mesh(winGeo, winMat);
-    win.position.set(side * w * 0.3, h * 0.6, d / 2 + 0.1);
+    const win = new THREE.Mesh(new THREE.BoxGeometry(w * 0.12, h * 0.15, 0.3), winMat);
+    win.position.set(side * w * 0.3, h * 0.65 + 1, d/2 + 0.1);
     group.add(win);
   });
+  
+  // Chimney for tavern/houses
+  if (type === 'tavern' || type === 'house') {
+    const chimney = new THREE.Mesh(
+      new THREE.BoxGeometry(2, 8, 2),
+      new THREE.MeshStandardMaterial({ color: 0x4a4a4a, roughness: 0.9 })
+    );
+    chimney.position.set(w * 0.3, h + 4, -d * 0.3);
+    chimney.castShadow = true;
+    group.add(chimney);
+  }
   
   group.position.set(x, 0, z);
   group.userData = { type: 'building', name };
@@ -302,27 +453,73 @@ function createBuilding(x, z, w, h, d, color, name) {
   buildings.push(group);
 }
 
-function createTree(x, z) {
+function createDetailedTree(x, z) {
   const group = new THREE.Group();
-  const scale = 0.8 + Math.random() * 0.6;
+  const scale = 0.7 + Math.random() * 0.8;
+  const treeType = Math.random();
   
-  // Trunk
-  const trunkGeo = new THREE.CylinderGeometry(0.3 * scale, 0.5 * scale, 5 * scale, 8);
-  const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a3728, roughness: 0.9 });
+  // Trunk with bark texture effect
+  const trunkGeo = new THREE.CylinderGeometry(0.4 * scale, 0.6 * scale, 6 * scale, 12);
+  const trunkMat = new THREE.MeshStandardMaterial({ 
+    color: 0x4a3520, 
+    roughness: 0.95,
+    metalness: 0.0
+  });
   const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-  trunk.position.y = 2.5 * scale;
+  trunk.position.y = 3 * scale;
   trunk.castShadow = true;
+  trunk.receiveShadow = true;
   group.add(trunk);
   
-  // Foliage layers
-  const colors = [0x228B22, 0x2d8f2d, 0x1e7a1e];
+  // Branches
   for (let i = 0; i < 3; i++) {
-    const foliageGeo = new THREE.SphereGeometry((3 - i * 0.5) * scale, 8, 6);
-    const foliageMat = new THREE.MeshStandardMaterial({ color: colors[i], roughness: 0.8 });
-    const foliage = new THREE.Mesh(foliageGeo, foliageMat);
-    foliage.position.y = (5 + i * 1.5) * scale;
-    foliage.castShadow = true;
-    group.add(foliage);
+    const branch = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.1 * scale, 0.15 * scale, 2 * scale, 6),
+      trunkMat
+    );
+    branch.position.set(
+      Math.cos(i * 2.1) * 0.8 * scale,
+      (4 + i) * scale,
+      Math.sin(i * 2.1) * 0.8 * scale
+    );
+    branch.rotation.z = Math.PI / 4;
+    branch.rotation.y = i * 2.1;
+    group.add(branch);
+  }
+  
+  // Foliage - multiple layers for volume
+  const foliageColors = [0x2d5a27, 0x3d7a37, 0x4d8a47];
+  
+  if (treeType < 0.7) {
+    // Deciduous tree
+    for (let i = 0; i < 4; i++) {
+      const foliageGeo = new THREE.SphereGeometry((3.5 - i * 0.4) * scale, 10, 8);
+      const foliageMat = new THREE.MeshStandardMaterial({ 
+        color: foliageColors[i % 3], 
+        roughness: 0.8 
+      });
+      const foliage = new THREE.Mesh(foliageGeo, foliageMat);
+      foliage.position.set(
+        Math.cos(i * 1.5) * 0.5 * scale,
+        (6 + i * 1.2) * scale,
+        Math.sin(i * 1.5) * 0.5 * scale
+      );
+      foliage.castShadow = true;
+      group.add(foliage);
+    }
+  } else {
+    // Pine tree
+    for (let i = 0; i < 5; i++) {
+      const coneGeo = new THREE.ConeGeometry((3 - i * 0.4) * scale, 3 * scale, 8);
+      const coneMat = new THREE.MeshStandardMaterial({ 
+        color: 0x1a4a1a, 
+        roughness: 0.85 
+      });
+      const cone = new THREE.Mesh(coneGeo, coneMat);
+      cone.position.y = (4 + i * 2) * scale;
+      cone.castShadow = true;
+      group.add(cone);
+    }
   }
   
   group.position.set(x, 0, z);
@@ -330,34 +527,91 @@ function createTree(x, z) {
 }
 
 function createRock(x, z) {
-  const size = 0.5 + Math.random() * 2;
-  const geo = new THREE.DodecahedronGeometry(size, 0);
-  const mat = new THREE.MeshStandardMaterial({ color: 0x666666, roughness: 0.95 });
+  const size = 0.8 + Math.random() * 2.5;
+  const geo = new THREE.DodecahedronGeometry(size, 1);
+  
+  // Deform for natural look
+  const vertices = geo.attributes.position.array;
+  for (let i = 0; i < vertices.length; i += 3) {
+    vertices[i] += (Math.random() - 0.5) * 0.3;
+    vertices[i + 1] += (Math.random() - 0.5) * 0.3;
+    vertices[i + 2] += (Math.random() - 0.5) * 0.3;
+  }
+  geo.computeVertexNormals();
+  
+  const mat = new THREE.MeshStandardMaterial({ 
+    color: 0x6a6a6a, 
+    roughness: 0.95,
+    metalness: 0.1
+  });
   const rock = new THREE.Mesh(geo, mat);
-  rock.position.set(x, size * 0.4, z);
+  rock.position.set(x, size * 0.3, z);
   rock.rotation.set(Math.random(), Math.random(), Math.random());
   rock.castShadow = true;
+  rock.receiveShadow = true;
   scene.add(rock);
 }
+
+function createGrass(x, z) {
+  const group = new THREE.Group();
+  const grassMat = new THREE.MeshStandardMaterial({ 
+    color: 0x4a8a3a, 
+    roughness: 0.9,
+    side: THREE.DoubleSide
+  });
+  
+  for (let i = 0; i < 5; i++) {
+    const blade = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.1, 0.5 + Math.random() * 0.3),
+      grassMat
+    );
+    blade.position.set(
+      (Math.random() - 0.5) * 0.5,
+      0.25,
+      (Math.random() - 0.5) * 0.5
+    );
+    blade.rotation.y = Math.random() * Math.PI;
+    blade.rotation.x = -0.1 + Math.random() * 0.2;
+    group.add(blade);
+  }
+  
+  group.position.set(x, 0, z);
+  scene.add(group);
+}
+
 
 function createPlayer() {
   const group = new THREE.Group();
   
-  // Body (cylinder instead of capsule for compatibility)
-  const bodyGeo = new THREE.CylinderGeometry(0.35, 0.4, 1.4, 12);
-  const bodyMat = new THREE.MeshStandardMaterial({ color: cfg.color, roughness: 0.6 });
+  // Body
+  const bodyGeo = new THREE.CylinderGeometry(0.35, 0.4, 1.4, 16);
+  const bodyMat = new THREE.MeshStandardMaterial({ 
+    color: cfg.color, 
+    roughness: 0.5,
+    metalness: 0.2
+  });
   const body = new THREE.Mesh(bodyGeo, bodyMat);
   body.position.y = 0.7;
   body.castShadow = true;
   group.add(body);
   
   // Head
-  const headGeo = new THREE.SphereGeometry(0.25, 12, 8);
-  const headMat = new THREE.MeshStandardMaterial({ color: 0xffdbac, roughness: 0.7 });
+  const headGeo = new THREE.SphereGeometry(0.28, 16, 12);
+  const headMat = new THREE.MeshStandardMaterial({ color: 0xffdbac, roughness: 0.6 });
   const head = new THREE.Mesh(headGeo, headMat);
-  head.position.y = 1.6;
+  head.position.y = 1.65;
   head.castShadow = true;
   group.add(head);
+  
+  // Arms
+  const armMat = new THREE.MeshStandardMaterial({ color: cfg.color, roughness: 0.5 });
+  [-1, 1].forEach(side => {
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.8, 8), armMat);
+    arm.position.set(side * 0.45, 0.9, 0);
+    arm.rotation.z = side * 0.2;
+    arm.castShadow = true;
+    group.add(arm);
+  });
   
   player = group;
   player.position.set(0, 0, 0);
@@ -368,32 +622,42 @@ function createEnemy(x, z, type) {
   const group = new THREE.Group();
   
   // Body
-  const bodyGeo = new THREE.CylinderGeometry(0.35, 0.4, 1.2, 8);
-  const bodyMat = new THREE.MeshStandardMaterial({ color: type.color, roughness: 0.7 });
+  const bodyGeo = new THREE.CylinderGeometry(0.35, 0.42, 1.3, 12);
+  const bodyMat = new THREE.MeshStandardMaterial({ 
+    color: type.color, 
+    roughness: 0.6,
+    metalness: 0.1
+  });
   const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.y = 0.6;
+  body.position.y = 0.65;
   body.castShadow = true;
   group.add(body);
   
   // Head
-  const headGeo = new THREE.SphereGeometry(0.22, 8, 6);
-  const headMat = new THREE.MeshStandardMaterial({ color: type.hostile ? 0x8B0000 : 0x4169E1, roughness: 0.7 });
+  const headGeo = new THREE.SphereGeometry(0.24, 12, 10);
+  const headMat = new THREE.MeshStandardMaterial({ 
+    color: type.hostile ? 0x6a3030 : 0x4a5a7a, 
+    roughness: 0.6 
+  });
   const head = new THREE.Mesh(headGeo, headMat);
-  head.position.y = 1.4;
+  head.position.y = 1.45;
+  head.castShadow = true;
   group.add(head);
   
-  // Health bar background
-  const hpBgGeo = new THREE.PlaneGeometry(1.2, 0.12);
-  const hpBgMat = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide });
+  // Health bar
+  const hpBgGeo = new THREE.PlaneGeometry(1.4, 0.15);
+  const hpBgMat = new THREE.MeshBasicMaterial({ color: 0x222222, side: THREE.DoubleSide });
   const hpBg = new THREE.Mesh(hpBgGeo, hpBgMat);
-  hpBg.position.y = 2;
+  hpBg.position.y = 2.1;
   group.add(hpBg);
   
-  // Health bar fill
-  const hpGeo = new THREE.PlaneGeometry(1.18, 0.1);
-  const hpMat = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+  const hpGeo = new THREE.PlaneGeometry(1.35, 0.12);
+  const hpMat = new THREE.MeshBasicMaterial({ 
+    color: type.hostile ? 0xff3333 : 0x3388ff, 
+    side: THREE.DoubleSide 
+  });
   const hpBar = new THREE.Mesh(hpGeo, hpMat);
-  hpBar.position.y = 2;
+  hpBar.position.y = 2.1;
   hpBar.position.z = 0.01;
   group.add(hpBar);
   
@@ -406,7 +670,6 @@ function createEnemy(x, z, type) {
     state: 'patrol',
     vx: (Math.random() - 0.5) * 2,
     vz: (Math.random() - 0.5) * 2,
-    alertLevel: 0,
     hpBar: hpBar
   };
   
@@ -418,27 +681,38 @@ function createNPC(x, z, name, color, role) {
   const group = new THREE.Group();
   
   // Body
-  const bodyGeo = new THREE.CylinderGeometry(0.3, 0.35, 1.3, 10);
-  const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.6 });
+  const bodyGeo = new THREE.CylinderGeometry(0.32, 0.38, 1.35, 14);
+  const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.1 });
   const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.y = 0.65;
+  body.position.y = 0.68;
   body.castShadow = true;
   group.add(body);
   
   // Head
-  const headGeo = new THREE.SphereGeometry(0.2, 10, 8);
-  const headMat = new THREE.MeshStandardMaterial({ color: 0xffdbac, roughness: 0.7 });
+  const headGeo = new THREE.SphereGeometry(0.22, 14, 10);
+  const headMat = new THREE.MeshStandardMaterial({ color: 0xffdbac, roughness: 0.6 });
   const head = new THREE.Mesh(headGeo, headMat);
-  head.position.y = 1.5;
+  head.position.y = 1.55;
+  head.castShadow = true;
   group.add(head);
   
-  // Quest indicator
-  const indGeo = new THREE.OctahedronGeometry(0.15, 0);
-  const indMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  // Quest indicator with glow
+  const indGeo = new THREE.OctahedronGeometry(0.18, 0);
+  const indMat = new THREE.MeshStandardMaterial({ 
+    color: 0xffff00, 
+    emissive: 0xffaa00,
+    emissiveIntensity: 0.8,
+    roughness: 0.3
+  });
   const indicator = new THREE.Mesh(indGeo, indMat);
-  indicator.position.y = 2;
+  indicator.position.y = 2.2;
   group.add(indicator);
   group.userData.indicator = indicator;
+  
+  // Point light for NPC
+  const light = new THREE.PointLight(0xffaa44, 0.5, 5);
+  light.position.y = 2;
+  group.add(light);
   
   group.position.set(x, 0, z);
   group.userData.type = 'npc';
@@ -451,28 +725,36 @@ function createNPC(x, z, name, color, role) {
 
 function createItem(x, z) {
   const types = [
-    { name: 'Apple', color: 0xff0000, effect: 'hunger', value: 15, emissive: 0x330000 },
-    { name: 'Bread', color: 0xdaa520, effect: 'hunger', value: 25, emissive: 0x332200 },
-    { name: 'Health Potion', color: 0xff00ff, effect: 'health', value: 40, emissive: 0x330033 },
-    { name: 'Gold Coin', color: 0xffd700, effect: 'gold', value: 10, emissive: 0x333300 },
-    { name: 'Iron Sword', color: 0xc0c0c0, effect: 'weapon', value: 5, emissive: 0x222222 }
+    { name: 'Apple', color: 0xff2222, effect: 'hunger', value: 15, emissive: 0x440000 },
+    { name: 'Bread', color: 0xdaa520, effect: 'hunger', value: 25, emissive: 0x442200 },
+    { name: 'Health Potion', color: 0xff44ff, effect: 'health', value: 40, emissive: 0x440044 },
+    { name: 'Gold Coin', color: 0xffd700, effect: 'gold', value: 10, emissive: 0x444400 },
+    { name: 'Iron Sword', color: 0xcccccc, effect: 'weapon', value: 5, emissive: 0x333333 }
   ];
   const type = types[Math.floor(Math.random() * types.length)];
   
-  const geo = new THREE.OctahedronGeometry(0.3, 0);
+  const geo = new THREE.OctahedronGeometry(0.35, 0);
   const mat = new THREE.MeshStandardMaterial({ 
     color: type.color, 
     emissive: type.emissive,
-    emissiveIntensity: 0.5,
-    roughness: 0.3,
-    metalness: 0.5
+    emissiveIntensity: 0.6,
+    roughness: 0.2,
+    metalness: 0.6
   });
   const item = new THREE.Mesh(geo, mat);
-  item.position.set(x, 0.5, z);
+  item.position.set(x, 0.6, z);
+  item.castShadow = true;
   item.userData = { type: 'item', itemType: type, collected: false };
+  
+  // Glow light
+  const glow = new THREE.PointLight(type.color, 0.4, 3);
+  glow.position.y = 0;
+  item.add(glow);
+  
   scene.add(item);
   items.push(item);
 }
+
 
 function setupControls(canvas) {
   document.addEventListener('keydown', e => { 
@@ -485,15 +767,12 @@ function setupControls(canvas) {
   document.addEventListener('mousemove', e => {
     if (isLocked) {
       playerYaw -= e.movementX * 0.002;
-      playerPitch -= e.movementY * 0.002;
-      playerPitch = Math.max(-1.2, Math.min(1.2, playerPitch));
+      playerPitch -= e.movementY * 0.001;
+      playerPitch = Math.max(-0.8, Math.min(0.8, playerPitch));
     }
   });
   
-  canvas.addEventListener('click', () => {
-    canvas.requestPointerLock();
-  });
-  
+  canvas.addEventListener('click', () => canvas.requestPointerLock());
   document.addEventListener('pointerlockchange', () => {
     isLocked = document.pointerLockElement === canvas;
   });
@@ -502,19 +781,18 @@ function setupControls(canvas) {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    composer.setSize(window.innerWidth, window.innerHeight);
   });
 }
 
 function handleInteract() {
-  // NPCs
   for (const npc of npcs) {
-    const dist = player.position.distanceTo(npc.position);
-    if (dist < 4) {
+    if (player.position.distanceTo(npc.position) < 4) {
       const dialogs = {
-        trade: '"Welcome! I have fine wares for sale."',
-        craft: '"Need something forged? I am the best smith in the land!"',
-        quest: '"Brave adventurer! The bandits threaten our village. Will you help?"',
-        heal: '"Blessings upon you. Let me tend to your wounds."'
+        trade: '"Welcome! I have the finest wares in all the land."',
+        craft: '"Need steel forged? I am the greatest smith you will find!"',
+        quest: '"Brave soul! The bandits grow bolder. Will you aid us?"',
+        heal: '"May the light bless you. Let me tend to your wounds."'
       };
       log(npc.userData.name + ': ' + dialogs[npc.userData.role], 'ai');
       if (npc.userData.role === 'heal' && hp < maxHp) {
@@ -525,16 +803,13 @@ function handleInteract() {
     }
   }
   
-  // Items
   for (const item of items) {
     if (item.userData.collected) continue;
-    const dist = player.position.distanceTo(item.position);
-    if (dist < 3) {
+    if (player.position.distanceTo(item.position) < 3) {
       item.userData.collected = true;
       item.visible = false;
       const type = item.userData.itemType;
       log('Collected: ' + type.name, 'quest');
-      
       if (type.effect === 'hunger') hunger = Math.min(100, hunger + type.value);
       if (type.effect === 'health') hp = Math.min(maxHp, hp + type.value);
       return;
@@ -545,20 +820,12 @@ function handleInteract() {
 function handleAttack() {
   for (const enemy of enemies) {
     if (enemy.userData.hp <= 0) continue;
-    const dist = player.position.distanceTo(enemy.position);
-    if (dist < 4) {
-      const dmg = cfg.dmg + Math.floor(Math.random() * 5);
+    if (player.position.distanceTo(enemy.position) < 4) {
+      const dmg = cfg.dmg + Math.floor(Math.random() * 8);
       enemy.userData.hp -= dmg;
       log('Hit ' + enemy.userData.enemyType.name + ' for ' + dmg + ' damage!', 'combat');
-      
-      // Update health bar
-      const hpPercent = Math.max(0, enemy.userData.hp / enemy.userData.maxHp);
-      enemy.userData.hpBar.scale.x = hpPercent;
-      
-      // Aggro
+      enemy.userData.hpBar.scale.x = Math.max(0, enemy.userData.hp / enemy.userData.maxHp);
       enemy.userData.state = 'chase';
-      enemy.userData.alertLevel = 100;
-      
       if (enemy.userData.hp <= 0) {
         log(enemy.userData.enemyType.name + ' defeated!', 'combat');
         heat.bandits = Math.min(100, heat.bandits + 10);
@@ -586,62 +853,60 @@ function gameLoop() {
     const angle = Math.atan2(moveX, moveZ) + playerYaw;
     player.position.x += Math.sin(angle) * speed;
     player.position.z += Math.cos(angle) * speed;
-    if (running) stamina = Math.max(0, stamina - 20 * dt);
+    if (running) stamina = Math.max(0, stamina - 18 * dt);
   }
   
-  // Stamina regen
-  if (!running) stamina = Math.min(100, stamina + 12 * dt);
-  
-  // Hunger decay
-  hunger = Math.max(0, hunger - 0.2 * dt);
+  if (!running) stamina = Math.min(100, stamina + 10 * dt);
+  hunger = Math.max(0, hunger - 0.15 * dt);
   if (hunger <= 0) hp -= dt * 3;
   
-  // Bounds
-  player.position.x = Math.max(-280, Math.min(280, player.position.x));
-  player.position.z = Math.max(-280, Math.min(280, player.position.z));
+  player.position.x = Math.max(-380, Math.min(380, player.position.x));
+  player.position.z = Math.max(-380, Math.min(380, player.position.z));
   player.rotation.y = playerYaw;
   
-  // Camera - third person
-  const camDist = 6;
-  const camHeight = 3;
+  // Camera
+  const camDist = 5;
+  const camHeight = 2.5;
   camera.position.x = player.position.x - Math.sin(playerYaw) * camDist;
-  camera.position.y = player.position.y + camHeight;
+  camera.position.y = player.position.y + camHeight - playerPitch * 2;
   camera.position.z = player.position.z - Math.cos(playerYaw) * camDist;
   camera.lookAt(player.position.x, player.position.y + 1.5, player.position.z);
+  
+  // Sun follows player
+  sun.position.set(player.position.x + 80, 120, player.position.z + 60);
+  sunTarget.position.copy(player.position);
   
   // Enemy AI
   updateEnemies(dt);
   
-  // NPC indicators bob
+  // Animate NPCs
   npcs.forEach(npc => {
     if (npc.userData.indicator) {
       npc.userData.indicator.rotation.y += dt * 2;
-      npc.userData.indicator.position.y = 2 + Math.sin(Date.now() * 0.003) * 0.1;
+      npc.userData.indicator.position.y = 2.2 + Math.sin(Date.now() * 0.004) * 0.15;
     }
   });
   
-  // Items bob and spin
+  // Animate items
   items.forEach(item => {
     if (!item.userData.collected) {
-      item.position.y = 0.5 + Math.sin(Date.now() * 0.003 + item.position.x) * 0.15;
-      item.rotation.y += dt * 1.5;
-      item.rotation.x += dt * 0.5;
+      item.position.y = 0.6 + Math.sin(Date.now() * 0.003 + item.position.x) * 0.2;
+      item.rotation.y += dt * 2;
+      item.rotation.x += dt * 0.8;
     }
   });
   
-  // Time progression
-  gameTime += dt * 0.05;
+  // Time
+  gameTime += dt * 0.03;
   if (gameTime >= 24) { gameTime = 0; day++; log('Day ' + day + ' dawns...', 'system'); }
   
   // Heat decay
-  heat.kingdom = Math.max(0, heat.kingdom - 0.15 * dt);
-  heat.bandits = Math.max(0, heat.bandits - 0.15 * dt);
+  heat.kingdom = Math.max(0, heat.kingdom - 0.1 * dt);
+  heat.bandits = Math.max(0, heat.bandits - 0.1 * dt);
   
-  // Update HUD
   updateHUD();
   updateMinimap();
   
-  // Death check
   if (hp <= 0) {
     log('You have fallen! Respawning...', 'combat');
     hp = maxHp;
@@ -649,58 +914,49 @@ function gameLoop() {
     player.position.set(0, 0, 0);
   }
   
-  renderer.render(scene, camera);
+  composer.render();
 }
 
 function updateEnemies(dt) {
   enemies.forEach(enemy => {
-    if (enemy.userData.hp <= 0) {
-      enemy.visible = false;
-      return;
-    }
+    if (enemy.userData.hp <= 0) { enemy.visible = false; return; }
     
     const data = enemy.userData;
     const type = data.enemyType;
     const dist = player.position.distanceTo(enemy.position);
     
-    // Face health bar to camera
+    // Face health bars to camera
     if (enemy.children[2]) enemy.children[2].lookAt(camera.position);
     if (enemy.children[3]) enemy.children[3].lookAt(camera.position);
     
-    // AI State machine
     if (type.hostile) {
-      if (dist < 35 && dist > 2.5) {
-        // Chase
+      if (dist < 40 && dist > 2.5) {
         const dir = player.position.clone().sub(enemy.position).normalize();
         enemy.position.x += dir.x * type.spd * dt;
         enemy.position.z += dir.z * type.spd * dt;
         enemy.lookAt(player.position.x, enemy.position.y, player.position.z);
         data.state = 'chase';
       } else if (dist <= 2.5) {
-        // Attack
-        if (Math.random() < dt * 1.5) {
+        if (Math.random() < dt * 1.2) {
           const dmg = Math.max(1, type.dmg - Math.floor(cfg.armor * type.dmg));
           hp -= dmg;
           log(type.name + ' hits you for ' + dmg + ' damage!', 'combat');
         }
-        data.state = 'attack';
       } else {
-        // Patrol
         enemy.position.x += data.vx * dt;
         enemy.position.z += data.vz * dt;
-        if (Math.abs(enemy.position.x) > 150) data.vx *= -1;
-        if (Math.abs(enemy.position.z) > 150) data.vz *= -1;
-        data.state = 'patrol';
+        if (Math.abs(enemy.position.x) > 200) data.vx *= -1;
+        if (Math.abs(enemy.position.z) > 200) data.vz *= -1;
       }
     } else {
-      // Non-hostile patrol
-      enemy.position.x += data.vx * 0.5 * dt;
-      enemy.position.z += data.vz * 0.5 * dt;
-      if (Math.abs(enemy.position.x) > 100) data.vx *= -1;
-      if (Math.abs(enemy.position.z) > 100) data.vz *= -1;
+      enemy.position.x += data.vx * 0.3 * dt;
+      enemy.position.z += data.vz * 0.3 * dt;
+      if (Math.abs(enemy.position.x) > 120) data.vx *= -1;
+      if (Math.abs(enemy.position.z) > 120) data.vz *= -1;
     }
   });
 }
+
 
 function updateHUD() {
   document.getElementById('hp').style.width = (hp / maxHp * 100) + '%';
@@ -715,14 +971,12 @@ function updateHUD() {
   document.getElementById('day').textContent = 'Day ' + day + ' | ' + 
     String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0');
   
-  // Weather based on time
   let weather = '☀️ Clear';
   if (gameTime < 6 || gameTime > 20) weather = '🌙 Night';
   else if (gameTime > 18) weather = '🌅 Sunset';
   else if (gameTime < 8) weather = '🌄 Dawn';
   document.getElementById('weather').textContent = weather + ' | 22°C';
   
-  // Heat levels
   const hk = document.getElementById('h-kingdom');
   const hb = document.getElementById('h-bandits');
   hk.textContent = heat.kingdom < 25 ? 'CALM' : heat.kingdom < 50 ? 'ALERT' : 'HUNTING';
@@ -734,40 +988,50 @@ function updateHUD() {
 function updateMinimap() {
   const canvas = document.getElementById('minimap');
   const ctx = canvas.getContext('2d');
-  const size = 180;
-  const scale = 0.35;
+  const size = 200;
+  const scale = 0.3;
+  const cx = size / 2, cy = size / 2;
+  
+  // Circular clip
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, size/2 - 3, 0, Math.PI * 2);
+  ctx.clip();
   
   // Background
-  ctx.fillStyle = '#0a0a15';
+  ctx.fillStyle = '#0a1a0a';
   ctx.fillRect(0, 0, size, size);
   
   // Grid
-  ctx.strokeStyle = '#1a1a2e';
+  ctx.strokeStyle = '#1a2a1a';
   ctx.lineWidth = 1;
-  for (let i = 0; i < size; i += 30) {
-    ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, size); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(size, i); ctx.stroke();
+  for (let i = -200; i <= 200; i += 40) {
+    const gx = cx + i * scale;
+    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, size); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, gx); ctx.lineTo(size, gx); ctx.stroke();
   }
   
   const px = player.position.x;
   const pz = player.position.z;
   
   // Buildings
-  ctx.fillStyle = '#4a4a4a';
+  ctx.fillStyle = '#4a4a3a';
   buildings.forEach(b => {
-    const x = size/2 + (b.position.x - px) * scale;
-    const z = size/2 + (b.position.z - pz) * scale;
-    if (x > 5 && x < size-5 && z > 5 && z < size-5) {
-      ctx.fillRect(x - 5, z - 5, 10, 10);
+    const x = cx + (b.position.x - px) * scale;
+    const z = cy + (b.position.z - pz) * scale;
+    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
+    if (dist < size/2 - 5) {
+      ctx.fillRect(x - 6, z - 6, 12, 12);
     }
   });
   
   // Enemies
   enemies.forEach(e => {
     if (e.userData.hp <= 0) return;
-    const x = size/2 + (e.position.x - px) * scale;
-    const z = size/2 + (e.position.z - pz) * scale;
-    if (x > 0 && x < size && z > 0 && z < size) {
+    const x = cx + (e.position.x - px) * scale;
+    const z = cy + (e.position.z - pz) * scale;
+    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
+    if (dist < size/2 - 5) {
       ctx.fillStyle = e.userData.enemyType.hostile ? '#ff4444' : '#4488ff';
       ctx.beginPath(); ctx.arc(x, z, 4, 0, Math.PI * 2); ctx.fill();
     }
@@ -776,10 +1040,11 @@ function updateMinimap() {
   // NPCs
   ctx.fillStyle = '#44ff44';
   npcs.forEach(n => {
-    const x = size/2 + (n.position.x - px) * scale;
-    const z = size/2 + (n.position.z - pz) * scale;
-    if (x > 0 && x < size && z > 0 && z < size) {
-      ctx.beginPath(); ctx.arc(x, z, 4, 0, Math.PI * 2); ctx.fill();
+    const x = cx + (n.position.x - px) * scale;
+    const z = cy + (n.position.z - pz) * scale;
+    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
+    if (dist < size/2 - 5) {
+      ctx.beginPath(); ctx.arc(x, z, 5, 0, Math.PI * 2); ctx.fill();
     }
   });
   
@@ -787,23 +1052,33 @@ function updateMinimap() {
   ctx.fillStyle = '#ffff44';
   items.forEach(i => {
     if (i.userData.collected) return;
-    const x = size/2 + (i.position.x - px) * scale;
-    const z = size/2 + (i.position.z - pz) * scale;
-    if (x > 0 && x < size && z > 0 && z < size) {
+    const x = cx + (i.position.x - px) * scale;
+    const z = cy + (i.position.z - pz) * scale;
+    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
+    if (dist < size/2 - 5) {
       ctx.fillRect(x - 2, z - 2, 4, 4);
     }
   });
   
-  // Player
+  ctx.restore();
+  
+  // Player at center
   ctx.fillStyle = '#ffd700';
-  ctx.beginPath(); ctx.arc(size/2, size/2, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI * 2); ctx.fill();
   
   // Direction
   ctx.strokeStyle = '#ffd700';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(size/2, size/2);
-  ctx.lineTo(size/2 - Math.sin(playerYaw) * 18, size/2 - Math.cos(playerYaw) * 18);
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx - Math.sin(playerYaw) * 20, cy - Math.cos(playerYaw) * 20);
+  ctx.stroke();
+  
+  // Border
+  ctx.strokeStyle = '#ffd700';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(cx, cy, size/2 - 2, 0, Math.PI * 2);
   ctx.stroke();
 }
 
@@ -815,11 +1090,11 @@ function log(msg, type = 'system') {
   const mins = Math.floor((gameTime % 1) * 60);
   div.textContent = '[' + String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0') + '] ' + msg;
   el.insertBefore(div, el.firstChild);
-  while (el.children.length > 20) el.removeChild(el.lastChild);
+  while (el.children.length > 25) el.removeChild(el.lastChild);
 }
 
-console.log('⚔️ Surviving The World™ - AAA Game Engine Loaded');
-console.log('🎮 441 Backend Tests Passing | GTA-Grade AI | Ready to Play');
+console.log('⚔️ Surviving The World™ - AAA Next-Gen Engine');
+console.log('🎮 Post-Processing: Bloom + SMAA | Dynamic Shadows | HDR Lighting');
 </script>
 </body>
 </html>
