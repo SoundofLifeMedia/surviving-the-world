@@ -12,19 +12,19 @@ body{background:#1a1a2e;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;
 display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
 .logo{font-size:3em;color:#ffd700;text-shadow:0 0 30px rgba(255,215,0,0.5);margin-bottom:10px}
 .subtitle{color:#888;margin-bottom:30px;letter-spacing:2px}
-.chars{display:flex;gap:15px;flex-wrap:wrap;justify-content:center}
+.chars{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;max-width:800px}
 .char{width:140px;padding:20px;background:#12121f;border:2px solid #333;border-radius:12px;
 cursor:pointer;text-align:center;transition:.3s}
-.char:hover{border-color:#ffd700;transform:translateY(-5px)}
+.char:hover{border-color:#ffd700;transform:translateY(-5px);box-shadow:0 10px 30px rgba(255,215,0,0.2)}
 .char .icon{font-size:3em;margin-bottom:10px}
 .char .name{font-weight:bold;margin-bottom:5px}
 .char .stats{color:#888;font-size:10px}
 .hint{color:#555;margin-top:30px;font-size:11px}
 
-#game{display:none}
-#c{position:fixed;top:0;left:0;width:100vw;height:100vh}
+#game{display:none;position:fixed;inset:0}
+#gameCanvas{width:100%;height:100%;display:block}
 
-#hud{position:fixed;top:15px;left:15px;z-index:10;font-size:13px}
+#hud{position:fixed;top:15px;left:15px;z-index:100;font-size:13px}
 .bar-wrap{margin-bottom:8px}
 .bar-label{margin-bottom:3px;font-size:11px;color:#aaa}
 .bar{width:180px;height:14px;background:#222;border-radius:7px;overflow:hidden}
@@ -33,7 +33,7 @@ cursor:pointer;text-align:center;transition:.3s}
 .st-fill{background:linear-gradient(90deg,#27ae60,#2ecc71)}
 .hu-fill{background:linear-gradient(90deg,#d35400,#e67e22)}
 
-#info{position:fixed;top:15px;right:15px;text-align:right;z-index:10}
+#info{position:fixed;top:15px;right:15px;text-align:right;z-index:100}
 #day{font-size:16px;color:#ffd700}
 #weather{font-size:12px;color:#888;margin-top:3px}
 #heat{margin-top:10px;font-size:11px}
@@ -41,19 +41,24 @@ cursor:pointer;text-align:center;transition:.3s}
 .calm{background:#27ae60}.alert{background:#f39c12;color:#000}.hunting{background:#e74c3c}.war{background:#8e44ad}
 
 #minimap{position:fixed;bottom:15px;right:15px;width:150px;height:150px;
-background:rgba(0,0,0,0.7);border:2px solid #ffd700;border-radius:8px;z-index:10}
+background:rgba(0,0,0,0.7);border:2px solid #ffd700;border-radius:8px;z-index:100}
 
 #log{position:fixed;bottom:15px;left:15px;width:300px;max-height:150px;
-background:rgba(0,0,0,0.7);border-radius:8px;padding:10px;z-index:10;overflow-y:auto;font-size:11px}
+background:rgba(0,0,0,0.7);border-radius:8px;padding:10px;z-index:100;overflow-y:auto;font-size:11px}
 #log-title{color:#ffd700;margin-bottom:5px}
 .log-entry{padding:3px 0;border-bottom:1px solid #222;color:#aaa}
 .log-combat{color:#e74c3c}.log-quest{color:#ffd700}.log-ai{color:#3498db}
 
 #controls{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);
-background:rgba(0,0,0,0.5);padding:8px 20px;border-radius:20px;z-index:10;font-size:11px;color:#666}
+background:rgba(0,0,0,0.5);padding:8px 20px;border-radius:20px;z-index:100;font-size:11px;color:#666}
+
+#error{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+background:rgba(255,0,0,0.8);padding:20px;border-radius:10px;z-index:9999;display:none}
 </style>
 </head>
 <body>
+<div id="error"></div>
+
 <div id="menu">
 <div class="logo">⚔️ SURVIVING THE WORLD™</div>
 <div class="subtitle">CLICK A CHARACTER TO START</div>
@@ -68,11 +73,11 @@ background:rgba(0,0,0,0.5);padding:8px 20px;border-radius:20px;z-index:10;font-s
 </div>
 
 <div id="game">
-<canvas id="c"></canvas>
+<canvas id="gameCanvas"></canvas>
 <div id="hud">
-<div class="bar-wrap"><div class="bar-label">❤️ Health</div><div class="bar"><div class="bar-fill hp-fill" id="hp"></div></div></div>
-<div class="bar-wrap"><div class="bar-label">⚡ Stamina</div><div class="bar"><div class="bar-fill st-fill" id="st"></div></div></div>
-<div class="bar-wrap"><div class="bar-label">🍖 Hunger</div><div class="bar"><div class="bar-fill hu-fill" id="hu"></div></div></div>
+<div class="bar-wrap"><div class="bar-label">❤️ Health</div><div class="bar"><div class="bar-fill hp-fill" id="hp" style="width:100%"></div></div></div>
+<div class="bar-wrap"><div class="bar-label">⚡ Stamina</div><div class="bar"><div class="bar-fill st-fill" id="st" style="width:100%"></div></div></div>
+<div class="bar-wrap"><div class="bar-label">🍖 Hunger</div><div class="bar"><div class="bar-fill hu-fill" id="hu" style="width:80%"></div></div></div>
 </div>
 <div id="info">
 <div id="day">Day 1 | 06:00</div>
@@ -89,310 +94,450 @@ background:rgba(0,0,0,0.5);padding:8px 20px;border-radius:20px;z-index:10;font-s
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// GAME VARIABLES
-let scene,camera,renderer,clock,player;
-let keys={},enemies=[],npcs=[],items=[];
-let yaw=0,hp=100,maxHp=100,stamina=100,hunger=80,day=1,time=6;
-let heat={kingdom:0,bandits:25};
-const CHARS=[
-{name:'Warrior',color:0xe74c3c,hp:150,spd:5,dmg:25},
-{name:'Ranger',color:0x27ae60,hp:100,spd:7,dmg:20},
-{name:'Assassin',color:0x2c3e50,hp:80,spd:9,dmg:35},
-{name:'Tank',color:0x3498db,hp:200,spd:4,dmg:15},
-{name:'Survivor',color:0x9b59b6,hp:120,spd:5,dmg:18}
+// Error handler
+window.onerror = function(msg, url, line) {
+  document.getElementById('error').style.display = 'block';
+  document.getElementById('error').textContent = 'Error: ' + msg + ' (line ' + line + ')';
+  return false;
+};
+
+// Game state
+let scene, camera, renderer, clock;
+let player, playerYaw = 0;
+let keys = {}, enemies = [], npcs = [], items = [];
+let hp = 100, maxHp = 100, stamina = 100, hunger = 80;
+let day = 1, time = 6;
+let heat = { kingdom: 0, bandits: 25 };
+
+const CHARS = [
+  { name: 'Warrior', color: 0xe74c3c, hp: 150, spd: 5, dmg: 25 },
+  { name: 'Ranger', color: 0x27ae60, hp: 100, spd: 7, dmg: 20 },
+  { name: 'Assassin', color: 0x2c3e50, hp: 80, spd: 9, dmg: 35 },
+  { name: 'Tank', color: 0x3498db, hp: 200, spd: 4, dmg: 15 },
+  { name: 'Survivor', color: 0x9b59b6, hp: 120, spd: 5, dmg: 18 }
 ];
 let cfg;
 
-window.startGame=function(i){
-cfg=CHARS[i];hp=cfg.hp;maxHp=cfg.hp;
-document.getElementById('menu').style.display='none';
-document.getElementById('game').style.display='block';
-init();
+// Start game
+window.startGame = function(i) {
+  try {
+    cfg = CHARS[i];
+    hp = cfg.hp;
+    maxHp = cfg.hp;
+    
+    document.getElementById('menu').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    
+    initGame();
+  } catch(e) {
+    alert('Error starting game: ' + e.message);
+  }
 };
 
-function init(){
-// Scene
-scene=new THREE.Scene();
-scene.background=new THREE.Color(0x87CEEB);
-scene.fog=new THREE.Fog(0x87CEEB,50,400);
-
-// Camera
-camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,500);
-
-// Renderer
-renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
-renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled=true;
-
-// Lights
-scene.add(new THREE.AmbientLight(0xffffff,0.5));
-const sun=new THREE.DirectionalLight(0xffffff,0.8);
-sun.position.set(50,100,50);
-sun.castShadow=true;
-scene.add(sun);
-
-// Ground
-const ground=new THREE.Mesh(
-new THREE.PlaneGeometry(500,500),
-new THREE.MeshLambertMaterial({color:0x3d6b2e})
-);
-ground.rotation.x=-Math.PI/2;
-ground.receiveShadow=true;
-scene.add(ground);
-
-// Roads
-addRoad(0,0,500,12,0);
-addRoad(0,0,12,500,0);
-
-// Buildings
-addBuilding(-50,-50,20,18,20,0x8B4513,'Tavern');
-addBuilding(60,-40,25,22,25,0x696969,'Blacksmith');
-addBuilding(-70,50,30,28,25,0x4a4a4a,'Castle');
-addBuilding(80,60,18,14,18,0x8B7355,'Market');
-for(let i=0;i<8;i++){
-const x=(Math.random()-.5)*300,z=(Math.random()-.5)*300;
-if(Math.abs(x)>40||Math.abs(z)>40)addBuilding(x,z,12,10,12,0x654321,'House');
+function initGame() {
+  const canvas = document.getElementById('gameCanvas');
+  
+  // Scene
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x87CEEB);
+  scene.fog = new THREE.Fog(0x87CEEB, 50, 300);
+  
+  // Camera
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 5, 10);
+  
+  // Renderer
+  renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = true;
+  
+  // Lights
+  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambient);
+  
+  const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+  sun.position.set(50, 100, 50);
+  sun.castShadow = true;
+  scene.add(sun);
+  
+  // Ground
+  const groundGeo = new THREE.PlaneGeometry(500, 500);
+  const groundMat = new THREE.MeshLambertMaterial({ color: 0x3d6b2e });
+  const ground = new THREE.Mesh(groundGeo, groundMat);
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+  
+  // Roads
+  createRoad(0, 0, 500, 12);
+  createRoad(0, 0, 12, 500);
+  
+  // Buildings
+  createBuilding(-50, -50, 20, 18, 20, 0x8B4513, 'Tavern');
+  createBuilding(60, -40, 25, 22, 25, 0x696969, 'Blacksmith');
+  createBuilding(-70, 50, 30, 28, 25, 0x4a4a4a, 'Castle');
+  createBuilding(80, 60, 18, 14, 18, 0x8B7355, 'Market');
+  
+  // Random houses
+  for (let i = 0; i < 6; i++) {
+    const x = (Math.random() - 0.5) * 300;
+    const z = (Math.random() - 0.5) * 300;
+    if (Math.abs(x) > 40 || Math.abs(z) > 40) {
+      createBuilding(x, z, 12, 10, 12, 0x654321, 'House');
+    }
+  }
+  
+  // Trees
+  for (let i = 0; i < 60; i++) {
+    const x = (Math.random() - 0.5) * 400;
+    const z = (Math.random() - 0.5) * 400;
+    if (Math.abs(x) > 25 || Math.abs(z) > 25) {
+      createTree(x, z);
+    }
+  }
+  
+  // Player
+  const playerGeo = new THREE.CapsuleGeometry(0.4, 1.2, 4, 8);
+  const playerMat = new THREE.MeshLambertMaterial({ color: cfg.color });
+  player = new THREE.Mesh(playerGeo, playerMat);
+  player.position.set(0, 1, 0);
+  player.castShadow = true;
+  scene.add(player);
+  
+  // Enemies
+  for (let i = 0; i < 8; i++) {
+    const x = (Math.random() - 0.5) * 200;
+    const z = (Math.random() - 0.5) * 200;
+    if (Math.abs(x) > 30 || Math.abs(z) > 30) {
+      createEnemy(x, z, i < 3);
+    }
+  }
+  
+  // NPCs
+  createNPC(-45, -45, 'Merchant', 0xDAA520);
+  createNPC(65, -35, 'Blacksmith', 0x708090);
+  createNPC(-65, 55, 'Quest Giver', 0x9370DB);
+  
+  // Items
+  for (let i = 0; i < 20; i++) {
+    const x = (Math.random() - 0.5) * 300;
+    const z = (Math.random() - 0.5) * 300;
+    createItem(x, z);
+  }
+  
+  // Controls
+  document.addEventListener('keydown', e => { keys[e.code] = true; });
+  document.addEventListener('keyup', e => { keys[e.code] = false; });
+  document.addEventListener('mousemove', e => {
+    if (document.pointerLockElement) {
+      playerYaw -= e.movementX * 0.002;
+    }
+  });
+  canvas.addEventListener('click', () => { canvas.requestPointerLock(); });
+  
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+  
+  clock = new THREE.Clock();
+  log('Game started as ' + cfg.name);
+  
+  // Start loop
+  gameLoop();
 }
 
-// Trees
-for(let i=0;i<80;i++){
-const x=(Math.random()-.5)*400,z=(Math.random()-.5)*400;
-if(Math.abs(x)>25||Math.abs(z)>25)addTree(x,z);
+function createRoad(x, z, w, d) {
+  const geo = new THREE.PlaneGeometry(w, d);
+  const mat = new THREE.MeshLambertMaterial({ color: 0x333333 });
+  const road = new THREE.Mesh(geo, mat);
+  road.rotation.x = -Math.PI / 2;
+  road.position.set(x, 0.05, z);
+  scene.add(road);
 }
 
-// Player
-player=new THREE.Mesh(
-new THREE.CapsuleGeometry(0.4,1.2,4,8),
-new THREE.MeshLambertMaterial({color:cfg.color})
-);
-player.position.y=1;
-player.castShadow=true;
-scene.add(player);
-
-// Enemies
-for(let i=0;i<8;i++){
-const x=(Math.random()-.5)*200,z=(Math.random()-.5)*200;
-if(Math.abs(x)>30||Math.abs(z)>30)addEnemy(x,z,i<3);
+function createBuilding(x, z, w, h, d, color, name) {
+  const group = new THREE.Group();
+  
+  const bodyGeo = new THREE.BoxGeometry(w, h, d);
+  const bodyMat = new THREE.MeshLambertMaterial({ color: color });
+  const body = new THREE.Mesh(bodyGeo, bodyMat);
+  body.position.y = h / 2;
+  body.castShadow = true;
+  group.add(body);
+  
+  const roofGeo = new THREE.ConeGeometry(Math.max(w, d) * 0.7, h * 0.3, 4);
+  const roofMat = new THREE.MeshLambertMaterial({ color: 0x8B0000 });
+  const roof = new THREE.Mesh(roofGeo, roofMat);
+  roof.position.y = h + h * 0.15;
+  roof.rotation.y = Math.PI / 4;
+  group.add(roof);
+  
+  group.position.set(x, 0, z);
+  group.userData = { name: name };
+  scene.add(group);
 }
 
-// NPCs
-addNPC(-45,-45,'Merchant',0xDAA520);
-addNPC(65,-35,'Blacksmith',0x708090);
-addNPC(-65,55,'Quest Giver',0x9370DB);
-
-// Items
-for(let i=0;i<20;i++){
-const x=(Math.random()-.5)*300,z=(Math.random()-.5)*300;
-addItem(x,z);
+function createTree(x, z) {
+  const group = new THREE.Group();
+  
+  const trunkGeo = new THREE.CylinderGeometry(0.3, 0.5, 4, 6);
+  const trunkMat = new THREE.MeshLambertMaterial({ color: 0x4a3728 });
+  const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+  trunk.position.y = 2;
+  group.add(trunk);
+  
+  const leavesGeo = new THREE.SphereGeometry(2.5, 6, 5);
+  const leavesMat = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+  const leaves = new THREE.Mesh(leavesGeo, leavesMat);
+  leaves.position.y = 5;
+  group.add(leaves);
+  
+  group.position.set(x, 0, z);
+  scene.add(group);
 }
 
-// Controls
-document.addEventListener('keydown',e=>keys[e.code]=1);
-document.addEventListener('keyup',e=>keys[e.code]=0);
-document.addEventListener('mousemove',e=>{
-if(document.pointerLockElement)yaw-=e.movementX*.002;
-});
-document.getElementById('c').onclick=()=>document.getElementById('c').requestPointerLock();
-window.onresize=()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);};
-
-clock=new THREE.Clock();
-log('Game started as '+cfg.name);
-loop();
+function createEnemy(x, z, hostile) {
+  const geo = new THREE.CapsuleGeometry(0.4, 1, 4, 6);
+  const mat = new THREE.MeshLambertMaterial({ color: hostile ? 0xB22222 : 0x4169E1 });
+  const enemy = new THREE.Mesh(geo, mat);
+  enemy.position.set(x, 1, z);
+  enemy.castShadow = true;
+  enemy.userData = {
+    hostile: hostile,
+    hp: 50,
+    state: 'patrol',
+    vx: (Math.random() - 0.5) * 2,
+    vz: (Math.random() - 0.5) * 2
+  };
+  scene.add(enemy);
+  enemies.push(enemy);
 }
 
-function addRoad(x,z,w,d,r){
-const road=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshLambertMaterial({color:0x333333}));
-road.rotation.x=-Math.PI/2;road.rotation.z=r;road.position.set(x,0.05,z);scene.add(road);
+function createNPC(x, z, name, color) {
+  const geo = new THREE.CapsuleGeometry(0.35, 1.1, 4, 6);
+  const mat = new THREE.MeshLambertMaterial({ color: color });
+  const npc = new THREE.Mesh(geo, mat);
+  npc.position.set(x, 1, z);
+  npc.castShadow = true;
+  
+  const indGeo = new THREE.SphereGeometry(0.15, 6, 6);
+  const indMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  const indicator = new THREE.Mesh(indGeo, indMat);
+  indicator.position.y = 1.5;
+  npc.add(indicator);
+  
+  npc.userData = { name: name };
+  scene.add(npc);
+  npcs.push(npc);
 }
 
-function addBuilding(x,z,w,h,d,color,name){
-const g=new THREE.Group();
-const body=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshLambertMaterial({color}));
-body.position.y=h/2;body.castShadow=true;g.add(body);
-const roof=new THREE.Mesh(new THREE.ConeGeometry(Math.max(w,d)*.7,h*.3,4),new THREE.MeshLambertMaterial({color:0x8B0000}));
-roof.position.y=h+h*.15;roof.rotation.y=Math.PI/4;g.add(roof);
-g.position.set(x,0,z);g.userData={name};scene.add(g);
+function createItem(x, z) {
+  const colors = [0xff0000, 0xdaa520, 0xff00ff, 0xffd700];
+  const types = ['Apple', 'Bread', 'Potion', 'Coin'];
+  const i = Math.floor(Math.random() * 4);
+  
+  const geo = new THREE.SphereGeometry(0.25, 8, 8);
+  const mat = new THREE.MeshBasicMaterial({ color: colors[i] });
+  const item = new THREE.Mesh(geo, mat);
+  item.position.set(x, 0.5, z);
+  item.userData = { type: types[i], collected: false };
+  scene.add(item);
+  items.push(item);
 }
 
-function addTree(x,z){
-const g=new THREE.Group();
-const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.3,.5,4,6),new THREE.MeshLambertMaterial({color:0x4a3728}));
-trunk.position.y=2;g.add(trunk);
-const leaves=new THREE.Mesh(new THREE.SphereGeometry(2.5,6,5),new THREE.MeshLambertMaterial({color:0x228B22}));
-leaves.position.y=5;g.add(leaves);
-g.position.set(x,0,z);scene.add(g);
+function gameLoop() {
+  requestAnimationFrame(gameLoop);
+  
+  const dt = Math.min(clock.getDelta(), 0.05);
+  
+  // Player movement
+  let dx = 0, dz = 0;
+  if (keys.KeyW || keys.ArrowUp) dz = -1;
+  if (keys.KeyS || keys.ArrowDown) dz = 1;
+  if (keys.KeyA || keys.ArrowLeft) dx = -1;
+  if (keys.KeyD || keys.ArrowRight) dx = 1;
+  
+  const run = keys.ShiftLeft && stamina > 0;
+  const spd = (run ? cfg.spd * 1.8 : cfg.spd) * dt;
+  
+  if (dx || dz) {
+    const angle = Math.atan2(dx, dz) + playerYaw;
+    player.position.x += Math.sin(angle) * spd;
+    player.position.z += Math.cos(angle) * spd;
+    if (run) stamina = Math.max(0, stamina - 25 * dt);
+  }
+  
+  if (!run) stamina = Math.min(100, stamina + 15 * dt);
+  hunger = Math.max(0, hunger - 0.3 * dt);
+  if (hunger <= 0) hp -= dt * 2;
+  
+  // Bounds
+  player.position.x = Math.max(-230, Math.min(230, player.position.x));
+  player.position.z = Math.max(-230, Math.min(230, player.position.z));
+  player.rotation.y = playerYaw;
+  
+  // Camera follow
+  camera.position.x = player.position.x - Math.sin(playerYaw) * 8;
+  camera.position.y = player.position.y + 4;
+  camera.position.z = player.position.z - Math.cos(playerYaw) * 8;
+  camera.lookAt(player.position.x, player.position.y + 1, player.position.z);
+  
+  // Enemy AI
+  enemies.forEach(e => {
+    if (e.userData.hp <= 0) { e.visible = false; return; }
+    
+    const dist = e.position.distanceTo(player.position);
+    
+    if (e.userData.hostile && dist < 30 && dist > 2) {
+      const dir = player.position.clone().sub(e.position).normalize();
+      e.position.x += dir.x * 4 * dt;
+      e.position.z += dir.z * 4 * dt;
+      e.userData.state = 'chase';
+    } else if (e.userData.hostile && dist <= 2) {
+      if (Math.random() < dt * 2) {
+        hp -= 10;
+        log('Enemy hit you! -10 HP', 'combat');
+      }
+    } else {
+      e.position.x += e.userData.vx * dt;
+      e.position.z += e.userData.vz * dt;
+      if (Math.abs(e.position.x) > 100) e.userData.vx *= -1;
+      if (Math.abs(e.position.z) > 100) e.userData.vz *= -1;
+      e.userData.state = 'patrol';
+    }
+  });
+  
+  // Items bob
+  items.forEach(item => {
+    if (!item.userData.collected) {
+      item.position.y = 0.5 + Math.sin(Date.now() * 0.003 + item.position.x) * 0.1;
+      item.rotation.y += dt;
+    }
+  });
+  
+  // Interact (E)
+  if (keys.KeyE) {
+    keys.KeyE = false;
+    npcs.forEach(n => {
+      if (player.position.distanceTo(n.position) < 3) {
+        log(n.userData.name + ': "Welcome, traveler!"', 'ai');
+      }
+    });
+    items.forEach(item => {
+      if (!item.userData.collected && player.position.distanceTo(item.position) < 2) {
+        item.userData.collected = true;
+        item.visible = false;
+        log('Collected ' + item.userData.type);
+        if (item.userData.type === 'Apple' || item.userData.type === 'Bread') {
+          hunger = Math.min(100, hunger + 20);
+        }
+        if (item.userData.type === 'Potion') {
+          hp = Math.min(maxHp, hp + 30);
+        }
+      }
+    });
+  }
+  
+  // Attack (Q)
+  if (keys.KeyQ) {
+    keys.KeyQ = false;
+    enemies.forEach(e => {
+      if (e.userData.hp > 0 && player.position.distanceTo(e.position) < 3) {
+        e.userData.hp -= cfg.dmg;
+        log('Hit enemy for ' + cfg.dmg + ' damage!', 'combat');
+        if (e.userData.hp <= 0) {
+          log('Enemy killed!', 'combat');
+          heat.bandits = Math.min(100, heat.bandits + 15);
+        }
+      }
+    });
+  }
+  
+  // Time
+  time += dt * 0.1;
+  if (time >= 24) { time = 0; day++; log('Day ' + day + ' begins'); }
+  
+  // Heat decay
+  heat.kingdom = Math.max(0, heat.kingdom - 0.2 * dt);
+  heat.bandits = Math.max(0, heat.bandits - 0.2 * dt);
+  
+  // Update HUD
+  document.getElementById('hp').style.width = (hp / maxHp * 100) + '%';
+  document.getElementById('st').style.width = stamina + '%';
+  document.getElementById('hu').style.width = hunger + '%';
+  document.getElementById('day').textContent = 'Day ' + day + ' | ' + 
+    String(Math.floor(time)).padStart(2, '0') + ':' + 
+    String(Math.floor((time % 1) * 60)).padStart(2, '0');
+  
+  document.getElementById('h-kingdom').textContent = heat.kingdom < 25 ? 'CALM' : heat.kingdom < 50 ? 'ALERT' : 'HUNTING';
+  document.getElementById('h-kingdom').className = 'heat-tag ' + (heat.kingdom < 25 ? 'calm' : heat.kingdom < 50 ? 'alert' : 'hunting');
+  document.getElementById('h-bandits').textContent = heat.bandits < 25 ? 'CALM' : heat.bandits < 50 ? 'ALERT' : 'HUNTING';
+  document.getElementById('h-bandits').className = 'heat-tag ' + (heat.bandits < 25 ? 'calm' : heat.bandits < 50 ? 'alert' : 'hunting');
+  
+  // Minimap
+  const ctx = document.getElementById('minimap').getContext('2d');
+  ctx.fillStyle = '#111';
+  ctx.fillRect(0, 0, 150, 150);
+  
+  ctx.fillStyle = '#ffd700';
+  ctx.beginPath();
+  ctx.arc(75, 75, 4, 0, Math.PI * 2);
+  ctx.fill();
+  
+  ctx.strokeStyle = '#ffd700';
+  ctx.beginPath();
+  ctx.moveTo(75, 75);
+  ctx.lineTo(75 - Math.sin(playerYaw) * 12, 75 - Math.cos(playerYaw) * 12);
+  ctx.stroke();
+  
+  enemies.forEach(e => {
+    if (e.userData.hp <= 0) return;
+    const ex = 75 + (e.position.x - player.position.x) * 0.3;
+    const ez = 75 + (e.position.z - player.position.z) * 0.3;
+    if (ex > 0 && ex < 150 && ez > 0 && ez < 150) {
+      ctx.fillStyle = e.userData.hostile ? '#f44' : '#48f';
+      ctx.beginPath();
+      ctx.arc(ex, ez, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+  
+  npcs.forEach(n => {
+    const nx = 75 + (n.position.x - player.position.x) * 0.3;
+    const nz = 75 + (n.position.z - player.position.z) * 0.3;
+    if (nx > 0 && nx < 150 && nz > 0 && nz < 150) {
+      ctx.fillStyle = '#0f0';
+      ctx.beginPath();
+      ctx.arc(nx, nz, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+  
+  // Death check
+  if (hp <= 0) {
+    log('YOU DIED! Respawning...', 'combat');
+    hp = maxHp;
+    player.position.set(0, 1, 0);
+  }
+  
+  // RENDER
+  renderer.render(scene, camera);
 }
 
-function addEnemy(x,z,hostile){
-const e=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1,4,6),new THREE.MeshLambertMaterial({color:hostile?0xB22222:0x4169E1}));
-e.position.set(x,1,z);e.castShadow=true;
-e.userData={hostile,hp:50,state:'patrol',vx:(Math.random()-.5)*2,vz:(Math.random()-.5)*2};
-scene.add(e);enemies.push(e);
+function log(msg, type) {
+  const el = document.getElementById('log-entries');
+  const div = document.createElement('div');
+  div.className = 'log-entry' + (type ? ' log-' + type : '');
+  div.textContent = '[' + String(Math.floor(time)).padStart(2, '0') + ':' + 
+    String(Math.floor((time % 1) * 60)).padStart(2, '0') + '] ' + msg;
+  el.insertBefore(div, el.firstChild);
+  while (el.children.length > 15) el.removeChild(el.lastChild);
 }
 
-function addNPC(x,z,name,color){
-const n=new THREE.Mesh(new THREE.CapsuleGeometry(.35,1.1,4,6),new THREE.MeshLambertMaterial({color}));
-n.position.set(x,1,z);n.castShadow=true;
-const ind=new THREE.Mesh(new THREE.SphereGeometry(.15,6,6),new THREE.MeshBasicMaterial({color:0xffff00}));
-ind.position.y=1.5;n.add(ind);
-n.userData={name};scene.add(n);npcs.push(n);
-}
-
-function addItem(x,z){
-const colors=[0xff0000,0xdaa520,0xff00ff,0xffd700];
-const types=['Apple','Bread','Potion','Coin'];
-const i=Math.floor(Math.random()*4);
-const item=new THREE.Mesh(new THREE.SphereGeometry(.25,8,8),new THREE.MeshBasicMaterial({color:colors[i]}));
-item.position.set(x,.5,z);item.userData={type:types[i],collected:false};scene.add(item);items.push(item);
-}
-
-function loop(){
-requestAnimationFrame(loop);
-const dt=Math.min(clock.getDelta(),.05);
-
-// Player movement
-let dx=0,dz=0;
-if(keys.KeyW)dz=-1;if(keys.KeyS)dz=1;
-if(keys.KeyA)dx=-1;if(keys.KeyD)dx=1;
-const run=keys.ShiftLeft&&stamina>0;
-const spd=(run?cfg.spd*1.8:cfg.spd)*dt;
-if(dx||dz){
-const a=Math.atan2(dx,dz)+yaw;
-player.position.x+=Math.sin(a)*spd;
-player.position.z+=Math.cos(a)*spd;
-if(run)stamina=Math.max(0,stamina-25*dt);
-}
-if(!run)stamina=Math.min(100,stamina+15*dt);
-hunger=Math.max(0,hunger-.3*dt);
-if(hunger<=0)hp-=dt*2;
-
-// Bounds
-player.position.x=Math.max(-230,Math.min(230,player.position.x));
-player.position.z=Math.max(-230,Math.min(230,player.position.z));
-player.rotation.y=yaw;
-
-// Camera
-camera.position.set(player.position.x-Math.sin(yaw)*8,player.position.y+4,player.position.z-Math.cos(yaw)*8);
-camera.lookAt(player.position.x,player.position.y+1,player.position.z);
-
-// Enemy AI
-enemies.forEach(e=>{
-if(e.userData.hp<=0){e.visible=false;return;}
-const d=e.position.distanceTo(player.position);
-if(e.userData.hostile){
-if(d<30&&d>2){
-const dir=player.position.clone().sub(e.position).normalize();
-e.position.x+=dir.x*4*dt;e.position.z+=dir.z*4*dt;
-e.userData.state='chase';
-}else if(d<=2){
-if(Math.random()<dt*2){hp-=10;log('Enemy hit you! -10 HP','combat');}
-}else{
-e.position.x+=e.userData.vx*dt;e.position.z+=e.userData.vz*dt;
-if(Math.abs(e.position.x)>100){e.userData.vx*=-1;}
-if(Math.abs(e.position.z)>100){e.userData.vz*=-1;}
-e.userData.state='patrol';
-}
-}else{
-e.position.x+=e.userData.vx*dt;e.position.z+=e.userData.vz*dt;
-if(Math.abs(e.position.x)>100){e.userData.vx*=-1;}
-if(Math.abs(e.position.z)>100){e.userData.vz*=-1;}
-}
-});
-
-// Items bob
-items.forEach(i=>{
-if(!i.userData.collected){
-i.position.y=.5+Math.sin(Date.now()*.003+i.position.x)*.1;
-i.rotation.y+=dt;
-}
-});
-
-// Interact (E)
-if(keys.KeyE){
-keys.KeyE=0;
-npcs.forEach(n=>{
-if(player.position.distanceTo(n.position)<3){
-log(n.userData.name+': "Welcome, traveler!"','ai');
-}
-});
-items.forEach(i=>{
-if(!i.userData.collected&&player.position.distanceTo(i.position)<2){
-i.userData.collected=true;i.visible=false;
-log('Collected '+i.userData.type);
-if(i.userData.type==='Apple'||i.userData.type==='Bread')hunger=Math.min(100,hunger+20);
-if(i.userData.type==='Potion')hp=Math.min(maxHp,hp+30);
-}
-});
-}
-
-// Attack (Q)
-if(keys.KeyQ){
-keys.KeyQ=0;
-enemies.forEach(e=>{
-if(e.userData.hp>0&&player.position.distanceTo(e.position)<3){
-e.userData.hp-=cfg.dmg;
-log('Hit enemy for '+cfg.dmg+' damage!','combat');
-if(e.userData.hp<=0){
-log('Enemy killed!','combat');
-heat.bandits=Math.min(100,heat.bandits+15);
-}
-}
-});
-}
-
-// Time
-time+=dt*.1;if(time>=24){time=0;day++;log('Day '+day+' begins');}
-
-// Heat decay
-heat.kingdom=Math.max(0,heat.kingdom-.2*dt);
-heat.bandits=Math.max(0,heat.bandits-.2*dt);
-
-// Update HUD
-document.getElementById('hp').style.width=(hp/maxHp*100)+'%';
-document.getElementById('st').style.width=stamina+'%';
-document.getElementById('hu').style.width=hunger+'%';
-document.getElementById('day').textContent='Day '+day+' | '+String(Math.floor(time)).padStart(2,'0')+':'+String(Math.floor((time%1)*60)).padStart(2,'0');
-document.getElementById('h-kingdom').textContent=heat.kingdom<25?'CALM':heat.kingdom<50?'ALERT':'HUNTING';
-document.getElementById('h-kingdom').className='heat-tag '+(heat.kingdom<25?'calm':heat.kingdom<50?'alert':'hunting');
-document.getElementById('h-bandits').textContent=heat.bandits<25?'CALM':heat.bandits<50?'ALERT':'HUNTING';
-document.getElementById('h-bandits').className='heat-tag '+(heat.bandits<25?'calm':heat.bandits<50?'alert':'hunting');
-
-// Minimap
-const ctx=document.getElementById('minimap').getContext('2d');
-ctx.fillStyle='#111';ctx.fillRect(0,0,150,150);
-ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(75,75,4,0,Math.PI*2);ctx.fill();
-ctx.strokeStyle='#ffd700';ctx.beginPath();ctx.moveTo(75,75);ctx.lineTo(75-Math.sin(yaw)*12,75-Math.cos(yaw)*12);ctx.stroke();
-enemies.forEach(e=>{
-if(e.userData.hp<=0)return;
-const ex=75+(e.position.x-player.position.x)*.3,ez=75+(e.position.z-player.position.z)*.3;
-if(ex>0&&ex<150&&ez>0&&ez<150){
-ctx.fillStyle=e.userData.hostile?'#f44':'#48f';ctx.beginPath();ctx.arc(ex,ez,3,0,Math.PI*2);ctx.fill();
-}
-});
-npcs.forEach(n=>{
-const nx=75+(n.position.x-player.position.x)*.3,nz=75+(n.position.z-player.position.z)*.3;
-if(nx>0&&nx<150&&nz>0&&nz<150){
-ctx.fillStyle='#0f0';ctx.beginPath();ctx.arc(nx,nz,3,0,Math.PI*2);ctx.fill();
-}
-});
-
-// Death check
-if(hp<=0){
-log('YOU DIED! Respawning...','combat');
-hp=maxHp;player.position.set(0,1,0);
-}
-
-renderer.render(scene,camera);
-}
-
-function log(msg,type=''){
-const el=document.getElementById('log-entries');
-const div=document.createElement('div');
-div.className='log-entry'+(type?' log-'+type:'');
-div.textContent='['+String(Math.floor(time)).padStart(2,'0')+':'+String(Math.floor((time%1)*60)).padStart(2,'0')+'] '+msg;
-el.insertBefore(div,el.firstChild);
-while(el.children.length>15)el.removeChild(el.lastChild);
-}
+console.log('Surviving The World™ - Game Engine Loaded');
 </script>
 </body>
 </html>
