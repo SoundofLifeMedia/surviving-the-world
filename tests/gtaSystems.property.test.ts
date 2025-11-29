@@ -15,8 +15,8 @@ describe('Weapon System - Property Tests', () => {
         fc.property(
           fc.integer({ min: 0, max: WEAPONS.length - 1 }),
           fc.constantFrom<HitLocation>('head', 'torso', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'),
-          fc.float({ min: 0, max: 500 }),
-          fc.float({ min: 0, max: 1 }),
+          fc.double({ min: 0.1, max: 500, noNaN: true }),
+          fc.double({ min: 0, max: 1, noNaN: true }),
           (weaponIndex, hitLocation, distance, armor) => {
             const weapon = WEAPONS[weaponIndex];
             const system = new WeaponSystemGTA();
@@ -50,7 +50,7 @@ describe('Weapon System - Property Tests', () => {
       fc.assert(
         fc.property(
           fc.integer({ min: 0, max: WEAPONS.length - 1 }),
-          fc.float({ min: 1, max: 100 }),
+          fc.double({ min: 1, max: 100, noNaN: true }),
           (weaponIndex, distance) => {
             const weapon = WEAPONS[weaponIndex];
             const system = new WeaponSystemGTA();

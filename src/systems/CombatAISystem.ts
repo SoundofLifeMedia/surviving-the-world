@@ -404,9 +404,12 @@ export class CombatAISystem {
 
     // Execute combat action based on state
     if (ctx.entity.state === 'engage' && targetId) {
-      const attackType = ctx.doctrine.prefersFlanking && ctx.entity.state === 'flank' ? 'heavy' : 'light';
+      const attackType = ctx.doctrine.prefersFlanking ? 'heavy' : 'light';
       const result = this.combatSystem.attack(entityId, targetId, attackType as 'light' | 'heavy');
       return { action: `attack_${attackType}`, targetId, success: result.hit };
+    } else if (ctx.entity.state === 'flank' && targetId) {
+      const result = this.combatSystem.attack(entityId, targetId, 'heavy');
+      return { action: 'attack_flank', targetId, success: result.hit };
     }
 
     return { action, targetId, success: true };

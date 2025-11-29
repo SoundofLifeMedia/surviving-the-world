@@ -8,7 +8,8 @@ import * as fc from 'fast-check';
 import { HeatSystem, EscalationTier, FactionHeatState, HeatConfig } from '../src/systems/HeatSystem';
 
 // Arbitraries for generating test data
-const factionIdArb = fc.string({ minLength: 1, maxLength: 20 });
+// Use alphanumeric strings to avoid __proto__ and other reserved property names
+const factionIdArb = fc.stringMatching(/^[a-zA-Z][a-zA-Z0-9_]{0,19}$/);
 
 const hostileActionArb = fc.constantFrom(
   'kill_guard', 'kill_civilian', 'steal', 'trespass', 

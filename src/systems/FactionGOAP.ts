@@ -89,7 +89,7 @@ export class FactionGOAP {
           faction.resources.manpower += 20;
           return { success: true, message: 'Recruited soldiers', stateChanges: { manpower: 20 } };
         }
-        return { success: false, message: 'Insufficient gold', stateChanges: {} };
+        return { success: false, message: 'Insufficient gold', stateChanges: { manpower: 0 } };
       }
     });
 
@@ -104,7 +104,7 @@ export class FactionGOAP {
           faction.allies.push(target);
           return { success: true, message: `Proposed alliance with ${target}`, stateChanges: { hasAlliance: true } };
         }
-        return { success: false, message: 'No target specified', stateChanges: {} };
+        return { success: false, message: 'No target specified', stateChanges: { hasAlliance: false } };
       }
     });
 
@@ -120,7 +120,7 @@ export class FactionGOAP {
           faction.relations.set(target, Math.min(1, current + 0.1));
           return { success: true, message: `Improved relations with ${target}`, stateChanges: { relationImproved: true } };
         }
-        return { success: false, message: 'Failed to improve relations', stateChanges: {} };
+        return { success: false, message: 'Failed to improve relations', stateChanges: { relationImproved: false } };
       }
     });
 
@@ -136,7 +136,7 @@ export class FactionGOAP {
           faction.relations.set(target, Math.min(1, current + 0.3));
           return { success: true, message: `Sent tribute to ${target}`, stateChanges: { tributePaid: true } };
         }
-        return { success: false, message: 'Insufficient gold for tribute', stateChanges: {} };
+        return { success: false, message: 'Insufficient gold for tribute', stateChanges: { tributePaid: false } };
       }
     });
 
@@ -151,7 +151,7 @@ export class FactionGOAP {
           faction.atWar.push(target);
           return { success: true, message: `Declared war on ${target}`, stateChanges: { atWar: true } };
         }
-        return { success: false, message: 'Cannot declare war', stateChanges: {} };
+        return { success: false, message: 'Cannot declare war', stateChanges: { atWar: false } };
       }
     });
 
@@ -189,7 +189,7 @@ export class FactionGOAP {
           if (idx >= 0) faction.atWar.splice(idx, 1);
           return { success: true, message: `Negotiated peace with ${target}`, stateChanges: { atPeace: true } };
         }
-        return { success: false, message: 'No target for peace', stateChanges: {} };
+        return { success: false, message: 'No target for peace', stateChanges: { atPeace: false } };
       }
     });
 
