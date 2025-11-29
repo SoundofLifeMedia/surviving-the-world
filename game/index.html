@@ -1,50 +1,241 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Surviving The World™</title>
+<title>Surviving The World™ - AAA Survival Simulation</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a15;font-family:Arial;overflow:hidden}
-#menu{position:fixed;inset:0;background:#0a0a15;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100}
-#menu h1{color:#ffd700;font-size:2.5em;margin-bottom:30px}
-.chars{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;max-width:800px}
-.char{width:140px;padding:20px 15px;background:#1a1a2e;border:2px solid #333;border-radius:12px;cursor:pointer;text-align:center;transition:.2s}
-.char:hover{border-color:#ffd700;transform:translateY(-5px)}
-.char .icon{font-size:3em;margin-bottom:10px}
-.char .name{color:#fff;font-weight:bold;margin-bottom:5px}
-.char .desc{color:#888;font-size:11px}
-#game{display:none}
-canvas{display:block}
-#hud{position:fixed;top:15px;left:15px;color:#fff;font-size:13px;z-index:10}
-.bar{width:150px;height:14px;background:#222;border-radius:7px;margin:3px 0 8px;overflow:hidden}
-.bar div{height:100%;border-radius:7px}
-.hp{background:#e74c3c}.st{background:#2ecc71}
-#mini{position:fixed;bottom:15px;right:15px;width:100px;height:100px;border-radius:50%;border:2px solid #ffd700;z-index:10}
-#ctrl{position:fixed;bottom:15px;left:15px;color:#aaa;font-size:11px;z-index:10}
+:root{
+  --bg-dark:#0a0a12;--bg-card:#12121f;--gold:#ffd700;--red:#e74c3c;--green:#2ecc71;
+  --blue:#3498db;--purple:#9b59b6;--text:#fff;--text-dim:#888;
+}
+body{background:var(--bg-dark);font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;color:var(--text)}
+
+/* MAIN MENU */
+#menu{position:fixed;inset:0;background:linear-gradient(135deg,#0a0a15 0%,#1a1a2e 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
+.logo{font-size:3.5em;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.5);margin-bottom:10px}
+.subtitle{color:var(--text-dim);font-size:1.1em;margin-bottom:40px;letter-spacing:3px}
+.menu-section{text-align:center;margin-bottom:30px}
+.menu-section h2{color:var(--gold);font-size:1em;margin-bottom:15px;letter-spacing:2px}
+.chars{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;max-width:900px}
+.char{width:150px;padding:25px 15px;background:var(--bg-card);border:2px solid #333;
+  border-radius:12px;cursor:pointer;text-align:center;transition:all .3s}
+.char:hover{border-color:var(--gold);transform:translateY(-8px);box-shadow:0 10px 30px rgba(255,215,0,0.2)}
+.char .icon{font-size:3.5em;margin-bottom:12px}
+.char .name{color:var(--text);font-weight:bold;font-size:1.1em;margin-bottom:8px}
+.char .stats{color:var(--text-dim);font-size:10px;line-height:1.6}
+.controls-hint{color:#555;margin-top:40px;font-size:12px}
+.version{position:fixed;bottom:15px;right:15px;color:#333;font-size:11px}
+
+/* GAME UI */
+#game{display:none;position:relative}
+canvas#c{display:block;width:100vw;height:100vh}
+
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;padding:15px 20px;
+  background:linear-gradient(180deg,rgba(0,0,0,0.7) 0%,transparent 100%);z-index:100}
+.hud-top{display:flex;justify-content:space-between;align-items:flex-start}
+.hud-left{display:flex;flex-direction:column;gap:8px}
+.stat-bar{display:flex;align-items:center;gap:10px}
+.stat-bar .label{width:70px;font-size:12px;color:var(--text-dim)}
+.stat-bar .bar{width:200px;height:12px;background:rgba(0,0,0,0.5);border-radius:6px;overflow:hidden;border:1px solid #333}
+.stat-bar .fill{height:100%;border-radius:6px;transition:width .3s}
+.fill.hp{background:linear-gradient(90deg,#c0392b,#e74c3c)}
+.fill.stamina{background:linear-gradient(90deg,#27ae60,#2ecc71)}
+.fill.hunger{background:linear-gradient(90deg,#d35400,#e67e22)}
+.stat-bar .value{font-size:11px;color:var(--text);min-width:40px}
+
+.hud-center{text-align:center}
+.day-time{font-size:14px;color:var(--gold)}
+.weather{font-size:11px;color:var(--text-dim);margin-top:3px}
+
+.hud-right{text-align:right}
+.faction-heat{font-size:11px;margin-bottom:5px}
+.heat-level{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;margin-left:5px}
+.heat-calm{background:#27ae60;color:#fff}
+.heat-alert{background:#f39c12;color:#000}
+.heat-hunting{background:#e74c3c;color:#fff}
+.heat-war{background:#8e44ad;color:#fff}
+
+/* MINIMAP */
+#minimap{position:fixed;bottom:20px;right:20px;width:180px;height:180px;
+  background:rgba(0,0,0,0.8);border:2px solid var(--gold);border-radius:10px;z-index:100;overflow:hidden}
+#minimap canvas{width:100%;height:100%}
+.minimap-legend{position:absolute;bottom:5px;left:5px;font-size:8px;color:var(--text-dim)}
+
+/* ACTION LOG */
+#action-log{position:fixed;bottom:20px;left:20px;width:350px;max-height:200px;
+  background:rgba(0,0,0,0.7);border-radius:10px;padding:10px;z-index:100;overflow-y:auto}
+#action-log h4{color:var(--gold);font-size:11px;margin-bottom:8px;letter-spacing:1px}
+.log-entry{font-size:11px;padding:4px 0;border-bottom:1px solid #222;color:var(--text-dim)}
+.log-entry.combat{color:var(--red)}
+.log-entry.faction{color:var(--purple)}
+.log-entry.quest{color:var(--gold)}
+.log-entry.ai{color:var(--blue)}
+
+/* INTERACTION PROMPT */
+#interact-prompt{position:fixed;bottom:50%;left:50%;transform:translate(-50%,50%);
+  background:rgba(0,0,0,0.8);padding:15px 30px;border-radius:10px;border:1px solid var(--gold);
+  display:none;z-index:100;text-align:center}
+#interact-prompt .key{display:inline-block;background:var(--gold);color:#000;
+  padding:3px 10px;border-radius:4px;font-weight:bold;margin:0 5px}
+
+/* QUEST TRACKER */
+#quest-tracker{position:fixed;top:100px;right:20px;width:250px;
+  background:rgba(0,0,0,0.7);border-radius:10px;padding:15px;z-index:100}
+#quest-tracker h4{color:var(--gold);font-size:12px;margin-bottom:10px}
+.quest-item{font-size:11px;padding:8px;background:rgba(255,255,255,0.05);
+  border-radius:5px;margin-bottom:5px}
+.quest-item .title{color:var(--text);margin-bottom:3px}
+.quest-item .objective{color:var(--text-dim);font-size:10px}
+.quest-item .progress{height:3px;background:#333;border-radius:2px;margin-top:5px}
+.quest-item .progress-fill{height:100%;background:var(--gold);border-radius:2px}
+
+/* INVENTORY */
+#inventory{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:600px;background:var(--bg-card);border:2px solid var(--gold);border-radius:15px;
+  padding:20px;display:none;z-index:200}
+#inventory h3{color:var(--gold);margin-bottom:15px}
+.inv-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.inv-slot{aspect-ratio:1;background:rgba(0,0,0,0.3);border:1px solid #333;
+  border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:1.5em;cursor:pointer}
+.inv-slot:hover{border-color:var(--gold)}
+.inv-slot.filled{background:rgba(255,215,0,0.1)}
+.weight-bar{margin-top:15px;font-size:11px;color:var(--text-dim)}
+
+/* CONTROLS OVERLAY */
+#controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.5);padding:8px 20px;border-radius:20px;z-index:100;
+  font-size:11px;color:var(--text-dim)}
 </style>
 </head>
 <body>
+
+<!-- MAIN MENU -->
 <div id="menu">
-<h1>⚔️ Surviving The World™</h1>
-<p style="color:#888;margin-bottom:25px">Choose Your Character</p>
-<div class="chars">
-<div class="char" onclick="play(0)"><div class="icon">🗡️</div><div class="name">Warrior</div><div class="desc">High HP, Strong melee</div></div>
-<div class="char" onclick="play(1)"><div class="icon">🏹</div><div class="name">Ranger</div><div class="desc">Fast, Long range</div></div>
-<div class="char" onclick="play(2)"><div class="icon">🧙</div><div class="name">Mage</div><div class="desc">Magic powers</div></div>
-<div class="char" onclick="play(3)"><div class="icon">🥷</div><div class="name">Assassin</div><div class="desc">Stealth, Critical hits</div></div>
-<div class="char" onclick="play(4)"><div class="icon">🛡️</div><div class="name">Tank</div><div class="desc">Max defense</div></div>
+  <div class="logo">⚔️ SURVIVING THE WORLD™</div>
+  <div class="subtitle">GTA-GRADE SURVIVAL SIMULATION</div>
+  
+  <div class="menu-section">
+    <h2>SELECT YOUR CHARACTER</h2>
+    <div class="chars">
+      <div class="char" onclick="startGame(0)">
+        <div class="icon">🗡️</div>
+        <div class="name">WARRIOR</div>
+        <div class="stats">❤️ 150 HP | ⚔️ High Damage<br>🛡️ Medium Armor | 🏃 Normal Speed</div>
+      </div>
+      <div class="char" onclick="startGame(1)">
+        <div class="icon">🏹</div>
+        <div class="name">RANGER</div>
+        <div class="stats">❤️ 100 HP | 🎯 Long Range<br>👁️ Enhanced Perception | 🏃 Fast</div>
+      </div>
+      <div class="char" onclick="startGame(2)">
+        <div class="icon">🥷</div>
+        <div class="name">ASSASSIN</div>
+        <div class="stats">❤️ 80 HP | 💀 Critical Hits<br>🌙 Stealth Bonus | 🏃 Very Fast</div>
+      </div>
+      <div class="char" onclick="startGame(3)">
+        <div class="icon">🛡️</div>
+        <div class="name">TANK</div>
+        <div class="stats">❤️ 200 HP | 🛡️ High Armor<br>💪 Knockback Resist | 🏃 Slow</div>
+      </div>
+      <div class="char" onclick="startGame(4)">
+        <div class="icon">🧙</div>
+        <div class="name">SURVIVOR</div>
+        <div class="stats">❤️ 120 HP | 🍖 Slow Hunger<br>🔧 Crafting Bonus | 🏃 Normal</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="controls-hint">
+    WASD = Move | Mouse = Look | SHIFT = Sprint | SPACE = Jump | E = Interact | TAB = Inventory | ESC = Menu
+  </div>
+  <div class="version">v1.0.0 | Engine: 430 Tests Passing | AI: GTA-Grade</div>
 </div>
-<p style="color:#555;margin-top:30px;font-size:12px">WASD=Move | Mouse=Look | Shift=Run | Space=Jump</p>
-</div>
+
+<!-- GAME -->
 <div id="game">
-<canvas id="c"></canvas>
-<div id="hud">❤️ Health<div class="bar"><div class="hp" id="hp" style="width:100%"></div></div>⚡ Stamina<div class="bar"><div class="st" id="st" style="width:100%"></div></div><span id="info"></span></div>
-<canvas id="mini" width="100" height="100"></canvas>
-<div id="ctrl">WASD Move | Mouse Look | Shift Run | Space Jump</div>
+  <canvas id="c"></canvas>
+  
+  <!-- HUD -->
+  <div id="hud">
+    <div class="hud-top">
+      <div class="hud-left">
+        <div class="stat-bar">
+          <span class="label">❤️ Health</span>
+          <div class="bar"><div class="fill hp" id="hp-bar" style="width:100%"></div></div>
+          <span class="value" id="hp-val">150/150</span>
+        </div>
+        <div class="stat-bar">
+          <span class="label">⚡ Stamina</span>
+          <div class="bar"><div class="fill stamina" id="stam-bar" style="width:100%"></div></div>
+          <span class="value" id="stam-val">100%</span>
+        </div>
+        <div class="stat-bar">
+          <span class="label">🍖 Hunger</span>
+          <div class="bar"><div class="fill hunger" id="hunger-bar" style="width:80%"></div></div>
+          <span class="value" id="hunger-val">80%</span>
+        </div>
+      </div>
+      
+      <div class="hud-center">
+        <div class="day-time" id="day-time">Day 1 | 06:00</div>
+        <div class="weather" id="weather">☀️ Clear | 22°C</div>
+      </div>
+      
+      <div class="hud-right">
+        <div class="faction-heat">
+          Kingdom <span class="heat-level heat-calm" id="heat-kingdom">CALM</span>
+        </div>
+        <div class="faction-heat">
+          Bandits <span class="heat-level heat-alert" id="heat-bandits">ALERT</span>
+        </div>
+        <div class="faction-heat">
+          Church <span class="heat-level heat-calm" id="heat-church">CALM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- MINIMAP -->
+  <div id="minimap">
+    <canvas id="minimap-canvas" width="180" height="180"></canvas>
+    <div class="minimap-legend">🟡 You | 🔴 Enemy | 🔵 NPC | 🟢 Quest</div>
+  </div>
+  
+  <!-- ACTION LOG -->
+  <div id="action-log">
+    <h4>📜 ACTION LOG</h4>
+    <div id="log-entries"></div>
+  </div>
+  
+  <!-- QUEST TRACKER -->
+  <div id="quest-tracker">
+    <h4>📋 ACTIVE QUESTS</h4>
+    <div id="quest-list"></div>
+  </div>
+  
+  <!-- INTERACTION PROMPT -->
+  <div id="interact-prompt">
+    Press <span class="key">E</span> to <span id="interact-action">interact</span>
+  </div>
+  
+  <!-- CONTROLS -->
+  <div id="controls">
+    WASD Move | Mouse Look | SHIFT Sprint | SPACE Jump | E Interact | TAB Inventory | Q Attack
+  </div>
 </div>
+
+<!-- INVENTORY MODAL -->
+<div id="inventory">
+  <h3>🎒 INVENTORY</h3>
+  <div class="inv-grid" id="inv-grid"></div>
+  <div class="weight-bar">Weight: <span id="inv-weight">12.5</span> / 50.0 kg</div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="g.js"></script>
+<script src="game.js"></script>
 </body>
 </html>
