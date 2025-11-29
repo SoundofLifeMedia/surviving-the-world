@@ -30,6 +30,7 @@ export class InventorySystem {
     const config = this.itemConfigs.get(templateId);
     if (!config) return false;
 
+    // Check if total weight would exceed max
     const newWeight = this.getTotalWeight() + config.weight * quantity;
     if (newWeight > this.maxWeight) return false;
 
@@ -39,16 +40,29 @@ export class InventorySystem {
         existing.quantity += quantity;
         return true;
       }
+      // Create new stack
+      const id = `${templateId}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      this.items.set(id, {
+        id,
+        templateId,
+        durability: config.durability,
+        quantity: quantity,
+        traits: [...config.traits]
+      });
+      return true;
     }
 
-    const id = `${templateId}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    this.items.set(id, {
-      id,
-      templateId,
-      durability: config.durability,
-      quantity: config.stackable ? quantity : 1,
-      traits: [...config.traits]
-    });
+    // Non-stackable: create separate instances for each item
+    for (let i = 0; i < quantity; i++) {
+      const id = `${templateId}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${i}`;
+      this.items.set(id, {
+        id,
+        templateId,
+        durability: config.durability,
+        quantity: 1,
+        traits: [...config.traits]
+      });
+    }
     return true;
   }
 
