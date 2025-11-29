@@ -38,6 +38,21 @@ export interface TelemetryEvent {
 }
 
 /**
+ * Telemetry incident structure for anomaly reporting
+ */
+export interface TelemetryIncident {
+  id: string;
+  type: AnomalyType;
+  severity: AnomalySeverity;
+  description: string;
+  detectedAt: number;
+  affectedEntities?: string[];
+  metrics?: Record<string, number>;
+  recentEvents?: TelemetryEvent[];
+  traceId?: string;
+}
+
+/**
  * Performance counters
  */
 export interface PerformanceCounters {

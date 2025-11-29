@@ -27,6 +27,9 @@ export interface SaveData {
   techTree: any;
   choices: any;
   conditions: any;
+  coverState?: string;    // CoverSystem serialized state
+  pursuitState?: any;     // PursuitAI state
+  movementState?: any;    // AdvancedMovementSystem state
 }
 
 export interface SaveSlot {

@@ -64,9 +64,11 @@ const DEFAULT_CONFIG: PerceptionConfig = {
 export class PerceptionLayer {
   private states: Map<string, PerceptionState> = new Map();
   private config: PerceptionConfig;
+  private telemetry?: import('../core/TelemetrySystem').TelemetrySystem;
 
-  constructor(config: Partial<PerceptionConfig> = {}) {
+  constructor(config: Partial<PerceptionConfig> = {}, telemetry?: import('../core/TelemetrySystem').TelemetrySystem) {
     this.config = { ...DEFAULT_CONFIG, ...config };
+    this.telemetry = telemetry;
   }
 
   initializePerception(enemyId: string): PerceptionState {
@@ -123,7 +125,18 @@ export class PerceptionLayer {
     if (distance > state.sightRange) return false;
 
     const angle = this.calculateAngle(enemyPos, targetPos, enemyFacing);
-    return Math.abs(angle) <= state.sightConeAngle / 2;
+    const canSee = Math.abs(angle) <= state.sightConeAngle / 2;
+
+    if (this.telemetry && canSee) {
+      this.telemetry.emit('decision_executed', {
+        decisionType: 'perception_sight',
+        entityId: enemyId,
+        distance,
+        angle
+      });
+    }
+
+    return canSee;
   }
 
   canHearTarget(enemyId: string, enemyPos: Vector3, targetPos: Vector3, noiseLevel: number): boolean {
@@ -132,7 +145,18 @@ export class PerceptionLayer {
 
     const distance = this.calculateDistance(enemyPos, targetPos);
     const effectiveRadius = state.hearingRadius * noiseLevel;
-    return distance <= effectiveRadius;
+    const canHear = distance <= effectiveRadius;
+
+    if (this.telemetry && canHear) {
+      this.telemetry.emit('decision_executed', {
+        decisionType: 'perception_sound',
+        entityId: enemyId,
+        distance,
+        noiseLevel
+      });
+    }
+
+    return canHear;
   }
 
   calculateDetectionProbability(

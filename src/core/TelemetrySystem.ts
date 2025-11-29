@@ -12,12 +12,14 @@ import {
   AnomalyReport,
   AnomalyType,
   AnomalySeverity,
+  TelemetryIncident,
   TelemetryConfig,
   AnomalyThresholds,
   DEFAULT_TELEMETRY_CONFIG,
   DEFAULT_ANOMALY_THRESHOLDS,
   ITelemetrySystem
 } from './types/TelemetryTypes';
+import { ITelemetrySink, createTelemetrySink } from './TelemetrySink';
 
 /**
  * Generate unique ID
@@ -45,13 +47,16 @@ export class TelemetrySystem implements ITelemetrySystem {
   private lastCounterReset: number = Date.now();
   private spawnCountWindow: { timestamp: number; count: number }[] = [];
   private entityStateChanges: Map<string, number> = new Map();
+  private sink: ITelemetrySink;
 
   constructor(
     config: Partial<TelemetryConfig> = {},
-    thresholds: Partial<AnomalyThresholds> = {}
+    thresholds: Partial<AnomalyThresholds> = {},
+    sink?: ITelemetrySink
   ) {
     this.config = { ...DEFAULT_TELEMETRY_CONFIG, ...config };
     this.anomalyThresholds = { ...DEFAULT_ANOMALY_THRESHOLDS, ...thresholds };
+    this.sink = sink ?? createTelemetrySink();
   }
 
   /**
@@ -62,6 +67,8 @@ export class TelemetrySystem implements ITelemetrySystem {
     if (!this.config.enabled) return;
 
     this.events.push(event);
+    // Fire-and-forget persistence to external sink
+    void this.sink.logEvent(event);
 
     // Update counters
     if (event.eventType === 'decision_executed' || event.eventType === 'decision_rejected') {
@@ -189,6 +196,7 @@ export class TelemetrySystem implements ITelemetrySystem {
         { spawnsPerSecond: spawnCount, threshold: this.anomalyThresholds.excessiveSpawningPerSecond },
         `Excessive spawning detected: ${spawnCount} spawns/second exceeds threshold of ${this.anomalyThresholds.excessiveSpawningPerSecond}`
       );
+      this.persistIncident(report);
       this.triggerAnomalyCallback(report);
       return report;
     }
@@ -204,6 +212,7 @@ export class TelemetrySystem implements ITelemetrySystem {
           { lastStateChange: lastChange, stuckDurationMs: now - lastChange },
           `AI entity ${entityId} has not changed state for ${((now - lastChange) / 1000).toFixed(1)} seconds`
         );
+        this.persistIncident(report);
         this.triggerAnomalyCallback(report);
         return report;
       }
@@ -219,6 +228,7 @@ export class TelemetrySystem implements ITelemetrySystem {
         { averageLatencyMs: avgLatency, threshold: this.anomalyThresholds.performanceDegradationMs },
         `Performance degradation detected: average latency ${avgLatency.toFixed(1)}ms exceeds threshold of ${this.anomalyThresholds.performanceDegradationMs}ms`
       );
+      this.persistIncident(report);
       this.triggerAnomalyCallback(report);
       return report;
     }
@@ -348,6 +358,30 @@ export class TelemetrySystem implements ITelemetrySystem {
       metrics,
       description
     };
+  }
+
+  /**
+   * Persist incident to sink with recent event context
+   */
+  private persistIncident(report: AnomalyReport): void {
+    const incident: TelemetryIncident = {
+      id: report.id,
+      type: report.type,
+      severity: report.severity,
+      description: report.description,
+      detectedAt: report.detectedAt,
+      affectedEntities: report.affectedEntities,
+      metrics: report.metrics,
+      recentEvents: this.getRecentEvents(25)
+    };
+
+    if (report.affectedEntities?.length) {
+      incident.traceId = report.affectedEntities[0];
+    }
+
+    if (this.sink && this.sink.logIncident) {
+      void this.sink.logIncident(incident);
+    }
   }
 
   private notifyListeners(event: TelemetryEvent): void {
