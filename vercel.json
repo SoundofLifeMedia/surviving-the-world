@@ -8,12 +8,16 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/",
+      "dest": "/game/index.html"
+    },
+    {
+      "src": "/game/(.*)",
       "dest": "/game/$1"
     },
     {
-      "src": "/",
-      "dest": "/game/index.html"
+      "src": "/(.*)",
+      "dest": "/game/$1"
     }
   ]
 }
