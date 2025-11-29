@@ -103,9 +103,14 @@ export class PerceptionLayer {
     // Apply lighting modifier
     const lightMod = 0.5 + modifiers.lighting * 0.5;
 
+    const stanceMod = this.config.stanceModifiers[modifiers.playerStance] || 1;
+    const noise = Math.min(1, Math.max(0, modifiers.playerNoise));
+    const stealthFactor = Math.max(0.35, stanceMod); // lower stanceMod = stealthier
+    const noiseHearingMultiplier = 0.5 + noise * 1.5; // quiet 0.5x → loud 2.0x
+
     // Calculate effective ranges
-    state.sightRange = this.config.baseSightRange * weatherMod.sightMultiplier * timeMod * lightMod;
-    state.hearingRadius = this.config.baseHearingRadius * weatherMod.hearingMultiplier;
+    state.sightRange = this.config.baseSightRange * weatherMod.sightMultiplier * timeMod * lightMod * (0.5 + stanceMod * 0.5);
+    state.hearingRadius = this.config.baseHearingRadius * weatherMod.hearingMultiplier * stealthFactor * noiseHearingMultiplier;
 
     return state;
   }
@@ -170,6 +175,9 @@ export class PerceptionLayer {
 
     const distance = this.calculateDistance(enemyPos, targetPos);
     const stanceMod = this.config.stanceModifiers[modifiers.playerStance] || 1;
+    const noise = Math.min(1, Math.max(0, modifiers.playerNoise));
+    const lightMod = 0.5 + modifiers.lighting * 0.5;
+    const timeMod = this.getTimeModifier(modifiers.timeOfDay);
     
     // Base probability decreases with distance
     let probability = Math.max(0, 1 - distance / state.sightRange);
@@ -178,10 +186,13 @@ export class PerceptionLayer {
     probability *= stanceMod;
     
     // Apply noise bonus
-    probability += modifiers.playerNoise * 0.3;
+    probability += noise * 0.35;
     
     // Apply alert level bonus
     probability += state.alertLevel * 0.2;
+
+    // Lighting/time dampening
+    probability *= lightMod * timeMod;
 
     return Math.min(1, Math.max(0, probability));
   }

@@ -20,7 +20,7 @@
     - Add detailed error messages for invalid data
     - _Requirements: 1.2, 1.4, 1.5_
 
-  - [ ]* 1.3 Write property test for era data loading
+  - [ ] 1.3 Write property test for era data loading
     - **Property 2: Era data loading integrity**
     - **Validates: Requirements 1.2**
 
@@ -31,7 +31,7 @@
     - Create region management with faction territories
     - _Requirements: 6.2, 14.3_
 
-  - [ ]* 2.2 Write property test for region streaming
+  - [ ] 2.2 Write property test for region streaming
     - **Property 15: Region streaming consistency**
     - **Validates: Requirements 6.1**
 
@@ -42,7 +42,7 @@
     - Add threshold penalties
     - _Requirements: 14.1, 14.2_
 
-  - [ ]* 3.2 Write property test for stat decay
+  - [ ] 3.2 Write property test for stat decay
     - **Property 30: Stat decay over time**
     - **Validates: Requirements 14.2**
 
@@ -53,7 +53,7 @@
     - Implement durability tracking
     - _Requirements: 16.1, 16.2, 16.3, 16.4_
 
-  - [ ]* 4.2 Write property tests for inventory
+  - [ ] 4.2 Write property tests for inventory
     - **Property 34: Encumbrance penalty application**
     - **Property 35: Durability reduction on use**
     - **Validates: Requirements 16.2, 16.3**
@@ -76,7 +76,7 @@
     - Add player noise level tracking
     - _Requirements: 2.2, 2.3_
 
-  - [ ]* 6.3 Write property tests for perception
+  - [ ] 6.3 Write property tests for perception
     - **Property 3: Perception state initialization**
     - **Property 4: Weather affects perception**
     - **Property 5: Time of day affects sight**
@@ -95,7 +95,7 @@
     - Add faction doctrine influence
     - _Requirements: 3.4, 3.5_
 
-  - [ ]* 7.3 Write property tests for behavior tree
+  - [ ] 7.3 Write property tests for behavior tree
     - **Property 6: Behavior tree state validity**
     - **Property 7: Detection triggers state transition**
     - **Property 8: Morale threshold triggers retreat**
@@ -108,7 +108,7 @@
     - Implement damage calculation with injuries
     - _Requirements: 13.1, 13.2, 13.3_
 
-  - [ ]* 8.2 Write property test for combat
+  - [ ] 8.2 Write property test for combat
     - **Property 29: Damage calculation produces valid injuries**
     - **Validates: Requirements 13.3**
 
@@ -130,7 +130,7 @@
     - Add combat context influence
     - _Requirements: 4.5_
 
-  - [ ]* 10.3 Write property tests for micro-agents
+  - [ ] 10.3 Write property tests for micro-agents
     - **Property 9: Micro-agent initialization completeness**
     - **Property 10: Aggression agent context sensitivity**
     - **Property 11: Micro-agent conflict resolution determinism**
@@ -154,7 +154,7 @@
     - Create counter-strategy selection
     - _Requirements: 5.5_
 
-  - [ ]* 11.4 Write property tests for ECA
+  - [ ] 11.4 Write property tests for ECA
     - **Property 12: Squad role assignment completeness**
     - **Property 13: Difficulty adaptation responsiveness**
     - **Property 14: Flanking route safety**
@@ -173,7 +173,7 @@
     - Implement collective decision participation
     - _Requirements: 7.3, 7.4, 7.5_
 
-  - [ ]* 12.3 Write property tests for NPC intelligence
+  - [ ] 12.3 Write property tests for NPC intelligence
     - **Property 17: NPC intelligence engine initialization**
     - **Property 18: Interaction memory recording**
     - **Property 19: Rumor propagation through networks**
@@ -197,7 +197,7 @@
     - Implement revenge mission planning
     - _Requirements: 8.2_
 
-  - [ ]* 14.3 Write property tests for heat system
+  - [ ] 14.3 Write property tests for heat system
     - **Property 20: Heat level increases on hostile actions**
     - **Property 21: Escalation tier transitions at thresholds**
     - **Validates: Requirements 8.1, 8.2**
@@ -225,7 +225,7 @@
     - Create progression bonuses application
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-  - [ ]* 16.2 Write property tests for progression
+  - [ ] 16.2 Write property tests for progression
     - **Property 22: Stat gains from actions**
     - **Property 23: Unlock triggers at thresholds**
     - **Validates: Requirements 9.1, 9.5**
@@ -243,7 +243,7 @@
     - Implement faction war price impacts
     - _Requirements: 10.2, 10.5_
 
-  - [ ]* 17.3 Write property tests for economy
+  - [ ] 17.3 Write property tests for economy
     - **Property 24: Crafting affects economy**
     - **Property 25: Price reflects supply and demand**
     - **Validates: Requirements 10.1, 10.3**
@@ -255,7 +255,7 @@
     - Create quest outcome application
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-  - [ ]* 18.2 Write property test for quest generation
+  - [ ] 18.2 Write property test for quest generation
     - **Property 26: Quest generation from world conditions**
     - **Validates: Requirements 11.1**
 
@@ -266,7 +266,7 @@
     - Create patrol route and ambush point data
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ]* 19.2 Write property test for territories
+  - [ ] 19.2 Write property test for territories
     - **Property 16: Faction territory integrity**
     - **Validates: Requirements 6.2**
 
@@ -293,7 +293,7 @@
     - Create modifier effect application
     - _Requirements: 12.3_
 
-  - [ ]* 21.4 Write property tests for replayability
+  - [ ] 21.4 Write property tests for replayability
     - **Property 27: Procedural squad generation validity**
     - **Property 28: Enemy evolution from player patterns**
     - **Validates: Requirements 12.1, 12.2**
@@ -305,7 +305,7 @@
     - Create player-impact history tracking
     - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5_
 
-  - [ ]* 22.2 Write property tests for save system
+  - [ ] 22.2 Write property tests for save system
     - **Property 32: Save/load round-trip integrity**
     - **Property 33: Faction memory persistence**
     - **Validates: Requirements 15.1, 15.3**
@@ -317,7 +317,7 @@
     - Implement mod data merging
     - _Requirements: 19.1, 19.2, 19.3, 19.4, 19.5_
 
-  - [ ]* 23.2 Write property test for mod loading
+  - [ ] 23.2 Write property test for mod loading
     - **Property 36: Mod data loading and merging**
     - **Validates: Requirements 19.1**
 
@@ -333,7 +333,7 @@
     - Add performance monitoring
     - _Requirements: 1.1_
 
-  - [ ]* 25.2 Write property test for game loop
+  - [ ] 25.2 Write property test for game loop
     - **Property 1: Game loop phase ordering**
     - **Validates: Requirements 1.1**
 
@@ -344,7 +344,7 @@
     - Create weather-based enemy behavior changes
     - _Requirements: 14.3, 14.4_
 
-  - [ ]* 26.2 Write property test for weather
+  - [ ] 26.2 Write property test for weather
     - **Property 31: Weather effects application**
     - **Validates: Requirements 14.3**
 
