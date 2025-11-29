@@ -7,12 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;color:#fff}
-#loading{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000}
-#loading .logo{font-size:4em;color:#ffd700;text-shadow:0 0 60px rgba(255,215,0,0.8);margin-bottom:20px}
-#loading .bar{width:300px;height:4px;background:#222;border-radius:2px;overflow:hidden}
-#loading .fill{width:0%;height:100%;background:linear-gradient(90deg,#ffd700,#ffaa00);transition:width 0.3s}
-#loading .text{color:#666;margin-top:15px;font-size:12px;letter-spacing:2px}
-#menu{position:fixed;inset:0;background:linear-gradient(135deg,#0a0a15 0%,#1a1a2e 50%,#0a0a15 100%);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
+#menu{position:fixed;inset:0;background:linear-gradient(135deg,#0a0a15 0%,#1a1a2e 50%,#0a0a15 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
 .logo{font-size:3.5em;color:#ffd700;text-shadow:0 0 40px rgba(255,215,0,0.6),0 4px 8px rgba(0,0,0,0.8);margin-bottom:10px;font-weight:bold}
 .subtitle{color:#888;margin-bottom:40px;letter-spacing:3px;font-size:14px}
 .chars{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:900px}
@@ -27,28 +22,35 @@ body{background:#000;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;col
 #hud{position:fixed;top:20px;left:20px;z-index:100}
 .stat{margin-bottom:10px;display:flex;align-items:center;gap:10px}
 .stat-icon{font-size:18px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
-.stat-bar{width:180px;height:20px;background:rgba(0,0,0,0.7);border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,0.2);box-shadow:inset 0 2px 4px rgba(0,0,0,0.5)}
+.stat-bar{width:180px;height:20px;background:rgba(0,0,0,0.7);border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,0.2)}
 .stat-fill{height:100%;border-radius:8px;transition:width .3s;box-shadow:0 0 10px currentColor}
 .hp-fill{background:linear-gradient(90deg,#8B0000,#dc3545,#ff6b6b);color:#ff6b6b}
 .st-fill{background:linear-gradient(90deg,#0d5016,#28a745,#5dd879);color:#5dd879}
 .hu-fill{background:linear-gradient(90deg,#8B4513,#fd7e14,#ffc107);color:#ffc107}
 .stat-text{font-size:12px;color:#fff;min-width:60px;text-shadow:0 1px 2px rgba(0,0,0,0.8)}
-#info{position:fixed;top:20px;right:20px;text-align:right;z-index:100;background:rgba(0,0,0,0.5);padding:15px;border-radius:10px;border:1px solid rgba(255,255,255,0.1)}
-#day{font-size:22px;color:#ffd700;font-weight:bold;text-shadow:0 2px 4px rgba(0,0,0,0.5)}
+#info{position:fixed;top:20px;right:20px;text-align:right;z-index:100;background:rgba(0,0,0,0.5);padding:15px;border-radius:10px}
+#day{font-size:22px;color:#ffd700;font-weight:bold}
 #weather{font-size:14px;color:#ccc;margin-top:5px}
 #heat{margin-top:12px;font-size:12px}
 .heat-row{margin:6px 0;display:flex;align-items:center;justify-content:flex-end;gap:10px}
-.heat-tag{padding:5px 14px;border-radius:15px;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px}
-.calm{background:linear-gradient(135deg,#1a5f2a,#28a745);color:#fff;box-shadow:0 0 10px rgba(40,167,69,0.5)}
-.alert{background:linear-gradient(135deg,#c77600,#fd7e14);color:#fff;box-shadow:0 0 10px rgba(253,126,20,0.5)}
-.hunting{background:linear-gradient(135deg,#8B0000,#dc3545);color:#fff;box-shadow:0 0 10px rgba(220,53,69,0.5)}
+.heat-tag{padding:5px 14px;border-radius:15px;font-size:11px;font-weight:bold;text-transform:uppercase}
+.calm{background:#28a745;color:#fff}.alert{background:#fd7e14;color:#fff}.hunting{background:#dc3545;color:#fff}
+#minimap{position:fixed;bottom:20px;right:20px;width:180px;height:180px;background:rgba(0,0,0,0.8);border:3px solid #ffd700;border-radius:50%;z-index:100}
+#log{position:fixed;bottom:20px;left:20px;width:320px;max-height:180px;background:rgba(0,0,0,0.8);border-radius:12px;padding:12px;z-index:100;overflow-y:auto}
+#log-title{color:#ffd700;margin-bottom:8px;font-weight:bold;font-size:13px}
+.log-entry{padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.1);color:#aaa;font-size:11px}
+.log-combat{color:#ff6b6b}.log-quest{color:#ffd700}.log-ai{color:#5bc0de}.log-system{color:#5dd879}
+#controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:10px 25px;border-radius:25px;z-index:100;font-size:11px;color:#888}
+#crosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:100;pointer-events:none;width:24px;height:24px}
+#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(255,255,255,0.8)}
+#crosshair::before{width:2px;height:24px;left:11px;top:0}
+#crosshair::after{width:24px;height:2px;top:11px;left:0}
 </style>
 </head>
 <body>
-<div id="loading"><div class="logo">⚔️ SURVIVING THE WORLD™</div><div class="bar"><div class="fill" id="loadFill"></div></div><div class="text">LOADING AAA ENGINE...</div></div>
 <div id="menu">
 <div class="logo">⚔️ SURVIVING THE WORLD™</div>
-<div class="subtitle">NEXT-GEN OPEN WORLD SURVIVAL</div>
+<div class="subtitle">MODERN WARFARE QUALITY ENGINE</div>
 <div class="chars">
 <div class="char" onclick="startGame(0)"><div class="icon">⚔️</div><div class="name">Warrior</div><div class="stats">HP: 150 | DMG: 25<br>Speed: 5 | Armor: High</div></div>
 <div class="char" onclick="startGame(1)"><div class="icon">🏹</div><div class="name">Ranger</div><div class="stats">HP: 100 | DMG: 20<br>Speed: 7 | Perception+</div></div>
@@ -66,86 +68,45 @@ body{background:#000;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;col
 <div class="stat"><span class="stat-icon">⚡</span><div class="stat-bar"><div class="stat-fill st-fill" id="st"></div></div><span class="stat-text" id="st-text">100%</span></div>
 <div class="stat"><span class="stat-icon">🍖</span><div class="stat-bar"><div class="stat-fill hu-fill" id="hu"></div></div><span class="stat-text" id="hu-text">80%</span></div>
 </div>
-<div id="info">
-<div id="day">Day 1 | 06:00</div>
-<div id="weather">☀️ Clear | 22°C</div>
-<div id="heat">
-<div class="heat-row">Kingdom <span class="heat-tag calm" id="h-kingdom">CALM</span></div>
-<div class="heat-row">Bandits <span class="heat-tag alert" id="h-bandits">ALERT</span></div>
+<div id="info"><div id="day">Day 1 | 06:00</div><div id="weather">☀️ Clear | 22°C</div>
+<div id="heat"><div class="heat-row">Kingdom <span class="heat-tag calm" id="h-kingdom">CALM</span></div>
+<div class="heat-row">Bandits <span class="heat-tag alert" id="h-bandits">ALERT</span></div></div></div>
+<canvas id="minimap" width="180" height="180"></canvas>
+<div id="log"><div id="log-title">📜 Adventure Log</div><div id="log-entries"></div></div>
+<div id="controls">WASD Move | Mouse Look | SHIFT Sprint | SPACE Jump | E Interact | Q Attack</div>
 </div>
-</div>
-<canvas id="minimap" width="200" height="200" style="position:fixed;bottom:20px;right:20px;width:200px;height:200px;background:rgba(0,0,0,0.8);border:3px solid #ffd700;border-radius:50%;z-index:100;box-shadow:0 0 20px rgba(255,215,0,0.3)"></canvas>
-<div id="log" style="position:fixed;bottom:20px;left:20px;width:350px;max-height:200px;background:rgba(0,0,0,0.8);border-radius:12px;padding:15px;z-index:100;overflow-y:auto;border:1px solid rgba(255,255,255,0.1)"><div id="log-title" style="color:#ffd700;margin-bottom:10px;font-weight:bold;font-size:14px;text-transform:uppercase;letter-spacing:1px">📜 Adventure Log</div><div id="log-entries"></div></div>
-<div id="controls" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:12px 30px;border-radius:30px;z-index:100;font-size:12px;color:#888;border:1px solid rgba(255,255,255,0.1)">WASD Move | Mouse Look | SHIFT Sprint | SPACE Jump | E Interact | Q Attack</div>
-</div>
-<style>
-#crosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:100;pointer-events:none}
-#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(255,255,255,0.5)}
-#crosshair::before{width:2px;height:24px;left:11px;top:0}
-#crosshair::after{width:24px;height:2px;top:11px;left:0}
-.log-entry{padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.1);color:#aaa;font-size:12px}
-.log-combat{color:#ff6b6b}.log-quest{color:#ffd700}.log-ai{color:#5bc0de}.log-system{color:#5dd879}
-</style>
 
-<script type="importmap">
-{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
-</script>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
 import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
-import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
-import { Water } from 'three/addons/objects/Water.js';
-import { Sky } from 'three/addons/objects/Sky.js';
 
-// ═══════════════════════════════════════════════════════════════
-// SURVIVING THE WORLD™ - GTA5-LEVEL AAA ENGINE
-// ═══════════════════════════════════════════════════════════════
-
+// SURVIVING THE WORLD™ - OPTIMIZED AAA ENGINE
 let scene, camera, renderer, composer, clock;
 let player, playerYaw = 0, playerPitch = 0;
-let keys = {}, enemies = [], npcs = [], items = [], buildings = [], trees = [], particles = [];
+let keys = {}, enemies = [], npcs = [], items = [], buildings = [];
 let hp = 100, maxHp = 100, stamina = 100, hunger = 80;
 let day = 1, gameTime = 8;
 let heat = { kingdom: 0, bandits: 25 };
 let isLocked = false;
-let sun, sky, water;
-let groundMesh, raycaster;
+let sun, groundMesh, raycaster;
 let playerVelocityY = 0, isGrounded = true;
-const GRAVITY = 35;
-const JUMP_FORCE = 12;
-let textureLoader, pmremGenerator;
-let envMap;
+const GRAVITY = 30, JUMP_FORCE = 10;
 
 const CHARS = [
-  { name: 'Warrior', color: 0xc0392b, hp: 150, spd: 5, dmg: 25, armor: 0.3 },
-  { name: 'Ranger', color: 0x27ae60, hp: 100, spd: 7, dmg: 20, armor: 0.1 },
-  { name: 'Assassin', color: 0x8e44ad, hp: 80, spd: 9, dmg: 35, armor: 0.05 },
-  { name: 'Tank', color: 0x2980b9, hp: 200, spd: 4, dmg: 15, armor: 0.5 },
-  { name: 'Survivor', color: 0xd35400, hp: 120, spd: 5, dmg: 18, armor: 0.2 }
+  { name: 'Warrior', color: 0xc0392b, hp: 150, spd: 6, dmg: 25, armor: 0.3 },
+  { name: 'Ranger', color: 0x27ae60, hp: 100, spd: 8, dmg: 20, armor: 0.1 },
+  { name: 'Assassin', color: 0x8e44ad, hp: 80, spd: 10, dmg: 35, armor: 0.05 },
+  { name: 'Tank', color: 0x2980b9, hp: 200, spd: 5, dmg: 15, armor: 0.5 },
+  { name: 'Survivor', color: 0xd35400, hp: 120, spd: 6, dmg: 18, armor: 0.2 }
 ];
 let cfg;
 
-// Loading simulation
-let loadProgress = 0;
-const loadInterval = setInterval(() => {
-  loadProgress += Math.random() * 15;
-  document.getElementById('loadFill').style.width = Math.min(loadProgress, 100) + '%';
-  if (loadProgress >= 100) {
-    clearInterval(loadInterval);
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('menu').style.display = 'flex';
-  }
-}, 150);
-
 window.startGame = function(i) {
-  cfg = CHARS[i];
-  hp = cfg.hp;
-  maxHp = cfg.hp;
+  cfg = CHARS[i]; hp = cfg.hp; maxHp = cfg.hp;
   document.getElementById('menu').style.display = 'none';
   document.getElementById('game').style.display = 'block';
   initGame();
@@ -154,235 +115,100 @@ window.startGame = function(i) {
 function initGame() {
   const canvas = document.getElementById('gameCanvas');
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x87CEEB);
+  scene.fog = new THREE.Fog(0x87CEEB, 100, 500);
   
-  // Camera with cinematic FOV
-  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 2000);
+  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
   
-  // High-end renderer
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance', logarithmicDepthBuffer: true });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.5;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMappingExposure = 1.2;
   
-  textureLoader = new THREE.TextureLoader();
-  pmremGenerator = new THREE.PMREMGenerator(renderer);
-  pmremGenerator.compileEquirectangularShader();
-  
-  // Initialize raycaster
   raycaster = new THREE.Raycaster();
   clock = new THREE.Clock();
   
-  // Create world
-  createSky();
   createLighting();
   createTerrain();
-  createWater();
   createWorld();
-  createPlayer();
-  createParticleSystem();
+  createMWPlayer();
   setupPostProcessing();
   setupControls(canvas);
   
-  log('Welcome, ' + cfg.name + '! Your epic adventure begins...', 'system');
+  log('Welcome, ' + cfg.name + '! Your adventure begins...', 'system');
   gameLoop();
 }
 
-function createSky() {
-  sky = new Sky();
-  sky.scale.setScalar(10000);
-  scene.add(sky);
-  
-  const skyUniforms = sky.material.uniforms;
-  skyUniforms['turbidity'].value = 10;
-  skyUniforms['rayleigh'].value = 2;
-  skyUniforms['mieCoefficient'].value = 0.005;
-  skyUniforms['mieDirectionalG'].value = 0.8;
-  
-  updateSunPosition();
-}
-
-function updateSunPosition() {
-  const phi = THREE.MathUtils.degToRad(90 - getSunElevation());
-  const theta = THREE.MathUtils.degToRad(getSunAzimuth());
-  
-  const sunPosition = new THREE.Vector3();
-  sunPosition.setFromSphericalCoords(1, phi, theta);
-  
-  sky.material.uniforms['sunPosition'].value.copy(sunPosition);
-  
-  if (sun) {
-    sun.position.copy(sunPosition.multiplyScalar(400));
-    sun.position.add(player ? player.position : new THREE.Vector3());
-  }
-}
-
-function getSunElevation() {
-  // Sun elevation based on time of day
-  const hour = gameTime;
-  if (hour < 6) return -20;
-  if (hour < 12) return (hour - 6) * 15;
-  if (hour < 18) return 90 - (hour - 12) * 15;
-  return -20;
-}
-
-function getSunAzimuth() {
-  return (gameTime / 24) * 360 - 90;
-}
-
 function createLighting() {
-  // Ambient with sky color influence
-  const ambient = new THREE.AmbientLight(0x404080, 0.4);
-  scene.add(ambient);
+  scene.add(new THREE.AmbientLight(0x6688aa, 0.6));
   
-  // Main sun light - ultra high quality shadows
-  sun = new THREE.DirectionalLight(0xffffee, 3);
-  sun.position.set(100, 200, 100);
+  sun = new THREE.DirectionalLight(0xffffee, 2.5);
+  sun.position.set(50, 100, 50);
   sun.castShadow = true;
-  sun.shadow.mapSize.width = 4096;
-  sun.shadow.mapSize.height = 4096;
-  sun.shadow.camera.near = 1;
-  sun.shadow.camera.far = 800;
-  sun.shadow.camera.left = -200;
-  sun.shadow.camera.right = 200;
-  sun.shadow.camera.top = 200;
-  sun.shadow.camera.bottom = -200;
-  sun.shadow.bias = -0.0001;
-  sun.shadow.normalBias = 0.02;
-  sun.shadow.radius = 2;
+  sun.shadow.mapSize.width = 2048;
+  sun.shadow.mapSize.height = 2048;
+  sun.shadow.camera.near = 10;
+  sun.shadow.camera.far = 300;
+  sun.shadow.camera.left = -100;
+  sun.shadow.camera.right = 100;
+  sun.shadow.camera.top = 100;
+  sun.shadow.camera.bottom = -100;
+  sun.shadow.bias = -0.0002;
   scene.add(sun);
   
-  // Hemisphere light for natural ambient
-  const hemi = new THREE.HemisphereLight(0x87CEEB, 0x3d5c2e, 0.6);
-  scene.add(hemi);
-  
-  // Fog for atmosphere
-  scene.fog = new THREE.FogExp2(0x88aacc, 0.0008);
+  scene.add(new THREE.HemisphereLight(0x87CEEB, 0x3d5c2e, 0.5));
 }
 
 function createTerrain() {
-  // Large detailed terrain
-  const terrainSize = 1200;
-  const segments = 256;
-  const groundGeo = new THREE.PlaneGeometry(terrainSize, terrainSize, segments, segments);
-  
-  // Procedural height map
+  const groundGeo = new THREE.PlaneGeometry(600, 600, 64, 64);
   const vertices = groundGeo.attributes.position.array;
   for (let i = 0; i < vertices.length; i += 3) {
-    const x = vertices[i];
-    const y = vertices[i + 1];
-    // Multi-octave noise for realistic terrain
-    let height = 0;
-    height += Math.sin(x * 0.008) * Math.cos(y * 0.008) * 8;
-    height += Math.sin(x * 0.02) * Math.cos(y * 0.02) * 3;
-    height += Math.sin(x * 0.05) * Math.cos(y * 0.05) * 1;
-    height += (Math.random() - 0.5) * 0.5;
-    // Flatten center for village
-    const distFromCenter = Math.sqrt(x*x + y*y);
-    if (distFromCenter < 150) {
-      height *= distFromCenter / 150;
-    }
-    vertices[i + 2] = height;
+    const x = vertices[i], y = vertices[i + 1];
+    let h = Math.sin(x * 0.015) * Math.cos(y * 0.015) * 4;
+    const dist = Math.sqrt(x*x + y*y);
+    if (dist < 100) h *= dist / 100;
+    vertices[i + 2] = h;
   }
   groundGeo.computeVertexNormals();
   
-  // PBR grass material
-  const groundMat = new THREE.MeshStandardMaterial({
-    color: 0x3d6b35,
-    roughness: 0.85,
-    metalness: 0.0,
-    flatShading: false,
-    envMapIntensity: 0.5
-  });
-  
-  groundMesh = new THREE.Mesh(groundGeo, groundMat);
+  groundMesh = new THREE.Mesh(groundGeo, new THREE.MeshStandardMaterial({ color: 0x4a7c3f, roughness: 0.9 }));
   groundMesh.rotation.x = -Math.PI / 2;
   groundMesh.receiveShadow = true;
   scene.add(groundMesh);
   
-  // Dirt paths with better materials
-  createPath(0, 0, 1000, 12);
-  createPath(0, 0, 12, 1000);
-  createPath(-150, 150, 300, 8);
-  createPath(150, -150, 8, 300);
-}
-
-function createPath(x, z, w, d) {
-  const geo = new THREE.PlaneGeometry(w, d, Math.floor(w/4), Math.floor(d/4));
-  const mat = new THREE.MeshStandardMaterial({ 
-    color: 0x6b5344,
-    roughness: 0.95,
-    metalness: 0.0
+  // Paths
+  [[0,0,500,10],[0,0,10,500]].forEach(([x,z,w,d]) => {
+    const path = new THREE.Mesh(new THREE.PlaneGeometry(w,d), new THREE.MeshStandardMaterial({color:0x6b5344,roughness:0.95}));
+    path.rotation.x = -Math.PI/2; path.position.set(x,0.05,z); path.receiveShadow = true;
+    scene.add(path);
   });
-  const path = new THREE.Mesh(geo, mat);
-  path.rotation.x = -Math.PI / 2;
-  path.position.set(x, 0.08, z);
-  path.receiveShadow = true;
-  scene.add(path);
-}
-
-function createWater() {
-  const waterGeometry = new THREE.PlaneGeometry(400, 400);
-  water = new Water(waterGeometry, {
-    textureWidth: 512,
-    textureHeight: 512,
-    waterNormals: new THREE.TextureLoader().load('https://threejs.org/examples/textures/waternormals.jpg', function(texture) {
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    }),
-    sunDirection: new THREE.Vector3(),
-    sunColor: 0xffffff,
-    waterColor: 0x001e0f,
-    distortionScale: 3.7,
-    fog: scene.fog !== undefined
-  });
-  water.rotation.x = -Math.PI / 2;
-  water.position.set(-350, -2, 0);
-  scene.add(water);
 }
 
 function createWorld() {
-  // Major buildings with detailed architecture
-  createAABuilding(-80, -80, 40, 28, 40, 0x8B4513, 'The Golden Tavern', 'tavern');
-  createAABuilding(100, -70, 45, 32, 45, 0x4a4a4a, 'Ironforge Smithy', 'smithy');
-  createAABuilding(-100, 90, 60, 55, 55, 0x3d4f5f, 'Castle Keep', 'castle');
-  createAABuilding(120, 100, 35, 22, 35, 0x8B7355, 'Market Hall', 'market');
-  createAABuilding(0, -160, 35, 45, 50, 0x5a5a6a, 'Church of Light', 'church');
+  // Buildings - optimized count
+  createBuilding(-60, -60, 30, 20, 30, 0x8B4513, 'tavern');
+  createBuilding(70, -50, 35, 24, 35, 0x4a4a4a, 'smithy');
+  createBuilding(-80, 70, 50, 40, 45, 0x3d4f5f, 'castle');
+  createBuilding(90, 70, 28, 16, 28, 0x8B7355, 'market');
+  createBuilding(0, -120, 28, 30, 35, 0x5a5a6a, 'church');
   
-  // Village houses
-  const housePositions = [
-    [-160, -50], [160, -40], [-60, 160], [60, -200], [-200, 0],
-    [200, 50], [-40, 200], [180, 180], [-180, -160], [0, 100],
-    [-220, 80], [220, -80], [-120, -180], [140, 200], [-200, 160]
-  ];
-  housePositions.forEach(([hx, hz]) => {
-    createAABuilding(hx, hz, 18 + Math.random() * 10, 16 + Math.random() * 6, 18 + Math.random() * 10, 0x6d5c4a, 'Village House', 'house');
+  [[-120,-40],[120,-30],[-40,120],[40,-150],[-150,0],[150,30],[-20,150],[130,130],[-130,-120],[0,70]].forEach(([x,z]) => {
+    createBuilding(x, z, 14+Math.random()*6, 12+Math.random()*4, 14+Math.random()*6, 0x6d5c4a, 'house');
   });
   
-  // Dense forest with varied trees
-  for (let i = 0; i < 300; i++) {
-    const x = (Math.random() - 0.5) * 1000;
-    const z = (Math.random() - 0.5) * 1000;
-    const distFromCenter = Math.sqrt(x*x + z*z);
-    if (distFromCenter > 80) {
-      createDetailedTree(x, z);
-    }
+  // Trees - reduced for performance (80 instead of 300)
+  for (let i = 0; i < 80; i++) {
+    const x = (Math.random() - 0.5) * 500, z = (Math.random() - 0.5) * 500;
+    if (Math.sqrt(x*x + z*z) > 60) createTree(x, z);
   }
   
-  // Rocks and boulders
-  for (let i = 0; i < 100; i++) {
-    const x = (Math.random() - 0.5) * 900;
-    const z = (Math.random() - 0.5) * 900;
+  // Rocks - reduced (30 instead of 100)
+  for (let i = 0; i < 30; i++) {
+    const x = (Math.random() - 0.5) * 400, z = (Math.random() - 0.5) * 400;
     createRock(x, z);
-  }
-  
-  // Grass clusters
-  for (let i = 0; i < 500; i++) {
-    const x = (Math.random() - 0.5) * 800;
-    const z = (Math.random() - 0.5) * 800;
-    createGrassCluster(x, z);
   }
   
   // Enemies
@@ -390,722 +216,353 @@ function createWorld() {
     { name: 'Bandit Scout', color: 0x8B0000, hp: 50, dmg: 8, spd: 4, hostile: true },
     { name: 'Bandit Raider', color: 0xB22222, hp: 80, dmg: 12, spd: 3.5, hostile: true },
     { name: 'Kingdom Guard', color: 0x4169E1, hp: 100, dmg: 10, spd: 3, hostile: false },
-    { name: 'Wild Wolf', color: 0x444444, hp: 40, dmg: 15, spd: 6, hostile: true },
-    { name: 'Forest Bear', color: 0x5c4033, hp: 120, dmg: 20, spd: 4, hostile: true }
+    { name: 'Wild Wolf', color: 0x444444, hp: 40, dmg: 15, spd: 5, hostile: true }
   ];
   
-  for (let i = 0; i < 30; i++) {
-    const x = (Math.random() - 0.5) * 600;
-    const z = (Math.random() - 0.5) * 600;
-    if (Math.abs(x) > 60 || Math.abs(z) > 60) {
-      createEnemy(x, z, enemyTypes[Math.floor(Math.random() * enemyTypes.length)]);
-    }
+  for (let i = 0; i < 15; i++) {
+    const x = (Math.random() - 0.5) * 350, z = (Math.random() - 0.5) * 350;
+    if (Math.abs(x) > 50 || Math.abs(z) > 50) createMWEnemy(x, z, enemyTypes[Math.floor(Math.random() * enemyTypes.length)]);
   }
   
   // NPCs
-  createNPC(-75, -75, 'Merchant Aldric', 0xDAA520, 'trade');
-  createNPC(105, -65, 'Blacksmith Gorn', 0x708090, 'craft');
-  createNPC(-95, 95, 'Lord Commander', 0x9370DB, 'quest');
-  createNPC(5, -155, 'Healer Miriam', 0x98FB98, 'heal');
-  createNPC(125, 105, 'Trader Marcus', 0xDEB887, 'trade');
-  createNPC(-55, 165, 'Wandering Sage', 0x6495ED, 'quest');
+  createMWNPC(-55, -55, 'Merchant Aldric', 0xDAA520, 'trade');
+  createMWNPC(75, -45, 'Blacksmith Gorn', 0x708090, 'craft');
+  createMWNPC(-75, 75, 'Lord Commander', 0x9370DB, 'quest');
+  createMWNPC(5, -115, 'Healer Miriam', 0x98FB98, 'heal');
   
-  // Items
-  for (let i = 0; i < 60; i++) {
-    const x = (Math.random() - 0.5) * 700;
-    const z = (Math.random() - 0.5) * 700;
+  // Items - reduced (25 instead of 60)
+  for (let i = 0; i < 25; i++) {
+    const x = (Math.random() - 0.5) * 400, z = (Math.random() - 0.5) * 400;
     createItem(x, z);
   }
 }
 
-function createAABuilding(x, z, w, h, d, color, name, type) {
-  const group = new THREE.Group();
+function createBuilding(x, z, w, h, d, color, type) {
+  const g = new THREE.Group();
   
-  // Stone foundation
-  const foundGeo = new THREE.BoxGeometry(w + 3, 1.5, d + 3);
-  const foundMat = new THREE.MeshStandardMaterial({ color: 0x4a4a4a, roughness: 0.95, metalness: 0.1 });
-  const foundation = new THREE.Mesh(foundGeo, foundMat);
-  foundation.position.y = 0.75;
-  foundation.castShadow = true;
-  foundation.receiveShadow = true;
-  group.add(foundation);
+  // Foundation
+  const found = new THREE.Mesh(new THREE.BoxGeometry(w+2, 1, d+2), new THREE.MeshStandardMaterial({color:0x4a4a4a,roughness:0.95}));
+  found.position.y = 0.5; found.castShadow = true; found.receiveShadow = true; g.add(found);
   
-  // Main structure with better materials
-  const bodyGeo = new THREE.BoxGeometry(w, h, d);
-  const bodyMat = new THREE.MeshStandardMaterial({ 
-    color: color, 
-    roughness: 0.8,
-    metalness: 0.05
+  // Body
+  const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({color,roughness:0.8}));
+  body.position.y = h/2 + 1; body.castShadow = true; body.receiveShadow = true; g.add(body);
+  
+  // Roof
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(Math.max(w,d)*0.75, h*0.5, 4), new THREE.MeshStandardMaterial({color:type==='castle'?0x2c3e50:0x6b2020,roughness:0.7}));
+  roof.position.y = h + h*0.25 + 1; roof.rotation.y = Math.PI/4; roof.castShadow = true; g.add(roof);
+  
+  // Door
+  const door = new THREE.Mesh(new THREE.BoxGeometry(w*0.18, h*0.4, 0.3), new THREE.MeshStandardMaterial({color:0x2d1f14}));
+  door.position.set(0, h*0.2+1, d/2+0.1); g.add(door);
+  
+  // Windows
+  const winMat = new THREE.MeshStandardMaterial({color:0xffeedd,emissive:0xffaa44,emissiveIntensity:0.4});
+  [-1,1].forEach(s => {
+    const win = new THREE.Mesh(new THREE.BoxGeometry(w*0.1, h*0.15, 0.2), winMat);
+    win.position.set(s*w*0.3, h*0.6+1, d/2+0.05); g.add(win);
   });
-  const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.y = h / 2 + 1.5;
-  body.castShadow = true;
-  body.receiveShadow = true;
-  group.add(body);
-  
-  // Timber frame details
-  const timberMat = new THREE.MeshStandardMaterial({ color: 0x2d1f14, roughness: 0.9 });
-  
-  // Corner beams
-  const beamPositions = [
-    [w/2 - 0.5, d/2 - 0.5], [-w/2 + 0.5, d/2 - 0.5],
-    [w/2 - 0.5, -d/2 + 0.5], [-w/2 + 0.5, -d/2 + 0.5]
-  ];
-  beamPositions.forEach(([bx, bz]) => {
-    const beam = new THREE.Mesh(new THREE.BoxGeometry(1, h, 1), timberMat);
-    beam.position.set(bx, h/2 + 1.5, bz);
-    beam.castShadow = true;
-    group.add(beam);
-  });
-  
-  // Horizontal beams
-  const hBeam1 = new THREE.Mesh(new THREE.BoxGeometry(w, 0.8, 0.8), timberMat);
-  hBeam1.position.set(0, h * 0.5 + 1.5, d/2);
-  group.add(hBeam1);
-  const hBeam2 = new THREE.Mesh(new THREE.BoxGeometry(w, 0.8, 0.8), timberMat);
-  hBeam2.position.set(0, h * 0.5 + 1.5, -d/2);
-  group.add(hBeam2);
-
-  // Detailed roof
-  const roofHeight = h * 0.6;
-  const roofGeo = new THREE.ConeGeometry(Math.max(w, d) * 0.85, roofHeight, 4);
-  const roofColor = type === 'castle' ? 0x2c3e50 : type === 'church' ? 0x1a1a2a : 0x6b2020;
-  const roofMat = new THREE.MeshStandardMaterial({ color: roofColor, roughness: 0.7, metalness: 0.1 });
-  const roof = new THREE.Mesh(roofGeo, roofMat);
-  roof.position.y = h + roofHeight/2 + 1.5;
-  roof.rotation.y = Math.PI / 4;
-  roof.castShadow = true;
-  group.add(roof);
-  
-  // Detailed door
-  const doorH = h * 0.5;
-  const doorW = w * 0.2;
-  const doorGeo = new THREE.BoxGeometry(doorW, doorH, 0.5);
-  const doorMat = new THREE.MeshStandardMaterial({ color: 0x2d1f14, roughness: 0.8, metalness: 0.2 });
-  const door = new THREE.Mesh(doorGeo, doorMat);
-  door.position.set(0, doorH/2 + 1.5, d/2 + 0.2);
-  group.add(door);
-  
-  // Door frame
-  const frameMat = new THREE.MeshStandardMaterial({ color: 0x1a1108, roughness: 0.9 });
-  const frameTop = new THREE.Mesh(new THREE.BoxGeometry(doorW + 1, 0.5, 0.6), frameMat);
-  frameTop.position.set(0, doorH + 1.7, d/2 + 0.25);
-  group.add(frameTop);
-  
-  // Windows with warm glow
-  const winMat = new THREE.MeshStandardMaterial({ 
-    color: 0xffeedd, 
-    emissive: 0xffaa44,
-    emissiveIntensity: 0.5,
-    roughness: 0.2,
-    metalness: 0.3
-  });
-  
-  const winW = w * 0.12;
-  const winH = h * 0.18;
-  [-1, 1].forEach(side => {
-    // Front windows
-    const win = new THREE.Mesh(new THREE.BoxGeometry(winW, winH, 0.4), winMat);
-    win.position.set(side * w * 0.32, h * 0.65 + 1.5, d/2 + 0.15);
-    group.add(win);
-    // Side windows
-    const winSide = new THREE.Mesh(new THREE.BoxGeometry(0.4, winH, winW), winMat);
-    winSide.position.set(side * w/2 + side * 0.15, h * 0.65 + 1.5, 0);
-    group.add(winSide);
-  });
-  
-  // Window light sources
-  const windowLight = new THREE.PointLight(0xffaa44, 1, 15);
-  windowLight.position.set(0, h * 0.6 + 1.5, d/2 + 2);
-  group.add(windowLight);
-  
-  // Chimney for tavern/houses
-  if (type === 'tavern' || type === 'house') {
-    const chimney = new THREE.Mesh(
-      new THREE.BoxGeometry(2.5, 10, 2.5),
-      new THREE.MeshStandardMaterial({ color: 0x4a4a4a, roughness: 0.9 })
-    );
-    chimney.position.set(w * 0.3, h + 5, -d * 0.3);
-    chimney.castShadow = true;
-    group.add(chimney);
-    
-    // Smoke particles would go here
-  }
   
   // Castle towers
   if (type === 'castle') {
-    [-1, 1].forEach(sx => {
-      [-1, 1].forEach(sz => {
-        const tower = new THREE.Mesh(
-          new THREE.CylinderGeometry(5, 6, h * 1.3, 12),
-          new THREE.MeshStandardMaterial({ color: 0x3d4f5f, roughness: 0.85 })
-        );
-        tower.position.set(sx * (w/2 + 3), h * 0.65 + 1.5, sz * (d/2 + 3));
-        tower.castShadow = true;
-        group.add(tower);
-        
-        const towerRoof = new THREE.Mesh(
-          new THREE.ConeGeometry(6, 8, 12),
-          new THREE.MeshStandardMaterial({ color: 0x2c3e50, roughness: 0.7 })
-        );
-        towerRoof.position.set(sx * (w/2 + 3), h * 1.3 + 5.5, sz * (d/2 + 3));
-        towerRoof.castShadow = true;
-        group.add(towerRoof);
-      });
+    [[-1,-1],[-1,1],[1,-1],[1,1]].forEach(([sx,sz]) => {
+      const tower = new THREE.Mesh(new THREE.CylinderGeometry(4,5,h*1.2,8), new THREE.MeshStandardMaterial({color:0x3d4f5f,roughness:0.85}));
+      tower.position.set(sx*(w/2+2), h*0.6+1, sz*(d/2+2)); tower.castShadow = true; g.add(tower);
+      const tRoof = new THREE.Mesh(new THREE.ConeGeometry(5,6,8), new THREE.MeshStandardMaterial({color:0x2c3e50}));
+      tRoof.position.set(sx*(w/2+2), h*1.2+4, sz*(d/2+2)); tRoof.castShadow = true; g.add(tRoof);
     });
   }
   
-  // Church spire
-  if (type === 'church') {
-    const spire = new THREE.Mesh(
-      new THREE.ConeGeometry(3, 25, 8),
-      new THREE.MeshStandardMaterial({ color: 0x3a3a4a, roughness: 0.6, metalness: 0.3 })
-    );
-    spire.position.y = h + roofHeight + 12;
-    spire.castShadow = true;
-    group.add(spire);
-  }
-  
-  group.position.set(x, 0, z);
-  group.userData = { type: 'building', name };
-  scene.add(group);
-  buildings.push(group);
+  g.position.set(x, 0, z);
+  scene.add(g);
+  buildings.push(g);
 }
 
-function createDetailedTree(x, z) {
-  const group = new THREE.Group();
-  const scale = 0.8 + Math.random() * 1.2;
-  const treeType = Math.random();
+function createTree(x, z) {
+  const g = new THREE.Group();
+  const s = 0.8 + Math.random() * 0.6;
   
-  // Detailed trunk with bark-like appearance
-  const trunkGeo = new THREE.CylinderGeometry(0.5 * scale, 0.8 * scale, 8 * scale, 16);
-  const trunkMat = new THREE.MeshStandardMaterial({ 
-    color: 0x3d2817, 
-    roughness: 0.95,
-    metalness: 0.0
-  });
-  const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-  trunk.position.y = 4 * scale;
-  trunk.castShadow = true;
-  trunk.receiveShadow = true;
-  group.add(trunk);
+  // Trunk
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.4*s, 0.6*s, 5*s, 8), new THREE.MeshStandardMaterial({color:0x4a3520,roughness:0.95}));
+  trunk.position.y = 2.5*s; trunk.castShadow = true; g.add(trunk);
   
-  // Root flares
-  for (let i = 0; i < 4; i++) {
-    const root = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.15 * scale, 0.4 * scale, 1.5 * scale, 6),
-      trunkMat
-    );
-    root.position.set(
-      Math.cos(i * Math.PI / 2) * 0.6 * scale,
-      0.5 * scale,
-      Math.sin(i * Math.PI / 2) * 0.6 * scale
-    );
-    root.rotation.z = Math.PI / 6;
-    root.rotation.y = i * Math.PI / 2;
-    group.add(root);
-  }
+  // Foliage - simplified
+  const foliage = new THREE.Mesh(new THREE.SphereGeometry(3*s, 8, 6), new THREE.MeshStandardMaterial({color:0x2d5a27,roughness:0.85}));
+  foliage.position.y = 6*s; foliage.castShadow = true; g.add(foliage);
   
-  // Branches
-  for (let i = 0; i < 5; i++) {
-    const branch = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08 * scale, 0.18 * scale, 3 * scale, 6),
-      trunkMat
-    );
-    branch.position.set(
-      Math.cos(i * 1.3) * 1 * scale,
-      (5 + i * 0.8) * scale,
-      Math.sin(i * 1.3) * 1 * scale
-    );
-    branch.rotation.z = Math.PI / 3.5;
-    branch.rotation.y = i * 1.3;
-    group.add(branch);
-  }
-  
-  // Foliage colors for variety
-  const foliageColors = [0x2d5a27, 0x3d7a37, 0x4d8a47, 0x1d4a1d, 0x3a6a32];
-  
-  if (treeType < 0.6) {
-    // Deciduous tree with layered foliage
-    for (let i = 0; i < 6; i++) {
-      const foliageGeo = new THREE.SphereGeometry((4 - i * 0.3) * scale, 12, 10);
-      const foliageMat = new THREE.MeshStandardMaterial({ 
-        color: foliageColors[i % foliageColors.length], 
-        roughness: 0.85
-      });
-      const foliage = new THREE.Mesh(foliageGeo, foliageMat);
-      foliage.position.set(
-        Math.cos(i * 1.2) * 0.8 * scale,
-        (8 + i * 1.5) * scale,
-        Math.sin(i * 1.2) * 0.8 * scale
-      );
-      foliage.castShadow = true;
-      group.add(foliage);
-    }
-  } else if (treeType < 0.85) {
-    // Pine tree
-    for (let i = 0; i < 7; i++) {
-      const coneGeo = new THREE.ConeGeometry((4 - i * 0.4) * scale, 4 * scale, 12);
-      const coneMat = new THREE.MeshStandardMaterial({ 
-        color: 0x1a4a1a, 
-        roughness: 0.85 
-      });
-      const cone = new THREE.Mesh(coneGeo, coneMat);
-      cone.position.y = (5 + i * 2.5) * scale;
-      cone.castShadow = true;
-      group.add(cone);
-    }
-  } else {
-    // Oak tree with wide canopy
-    const canopyGeo = new THREE.SphereGeometry(6 * scale, 16, 12);
-    canopyGeo.scale(1.3, 0.8, 1.3);
-    const canopyMat = new THREE.MeshStandardMaterial({ 
-      color: 0x2d5a27, 
-      roughness: 0.85 
-    });
-    const canopy = new THREE.Mesh(canopyGeo, canopyMat);
-    canopy.position.y = 10 * scale;
-    canopy.castShadow = true;
-    group.add(canopy);
-  }
-  
-  group.position.set(x, 0, z);
-  scene.add(group);
-  trees.push(group);
+  g.position.set(x, 0, z);
+  scene.add(g);
 }
 
 function createRock(x, z) {
-  const size = 1 + Math.random() * 3;
-  const geo = new THREE.DodecahedronGeometry(size, 2);
-  
-  // Deform for natural look
-  const vertices = geo.attributes.position.array;
-  for (let i = 0; i < vertices.length; i += 3) {
-    vertices[i] += (Math.random() - 0.5) * 0.4;
-    vertices[i + 1] += (Math.random() - 0.5) * 0.4;
-    vertices[i + 2] += (Math.random() - 0.5) * 0.4;
-  }
-  geo.computeVertexNormals();
-  
-  const colors = [0x5a5a5a, 0x6a6a6a, 0x4a4a4a, 0x7a7a7a];
-  const mat = new THREE.MeshStandardMaterial({ 
-    color: colors[Math.floor(Math.random() * colors.length)], 
-    roughness: 0.95,
-    metalness: 0.1
-  });
-  const rock = new THREE.Mesh(geo, mat);
-  rock.position.set(x, size * 0.4, z);
-  rock.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-  rock.castShadow = true;
-  rock.receiveShadow = true;
+  const size = 0.8 + Math.random() * 1.5;
+  const geo = new THREE.DodecahedronGeometry(size, 0);
+  const rock = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color:0x6a6a6a,roughness:0.95}));
+  rock.position.set(x, size*0.4, z);
+  rock.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+  rock.castShadow = true; rock.receiveShadow = true;
   scene.add(rock);
 }
 
-function createGrassCluster(x, z) {
-  const group = new THREE.Group();
-  const grassColors = [0x4a8a3a, 0x3d7a2d, 0x5a9a4a];
+// MODERN WARFARE QUALITY CHARACTER - Detailed humanoid with proper proportions
+function createMWPlayer() {
+  const g = new THREE.Group();
+  const skin = 0xd4a574, cloth = cfg.color, dark = 0x1a1a1a;
   
-  for (let i = 0; i < 8; i++) {
-    const grassMat = new THREE.MeshStandardMaterial({ 
-      color: grassColors[Math.floor(Math.random() * grassColors.length)], 
-      roughness: 0.9,
-      side: THREE.DoubleSide
-    });
-    const blade = new THREE.Mesh(
-      new THREE.PlaneGeometry(0.15, 0.6 + Math.random() * 0.4),
-      grassMat
-    );
-    blade.position.set(
-      (Math.random() - 0.5) * 0.8,
-      0.3,
-      (Math.random() - 0.5) * 0.8
-    );
-    blade.rotation.y = Math.random() * Math.PI;
-    blade.rotation.x = -0.15 + Math.random() * 0.3;
-    group.add(blade);
-  }
+  // PELVIS/HIPS
+  const pelvis = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.2, 0.25), new THREE.MeshStandardMaterial({color:dark,roughness:0.7}));
+  pelvis.position.y = 0.95; pelvis.castShadow = true; g.add(pelvis);
   
-  group.position.set(x, 0, z);
-  scene.add(group);
-}
-
-function createPlayer() {
-  const group = new THREE.Group();
+  // TORSO - Detailed chest with muscle definition
+  const torsoGeo = new THREE.BoxGeometry(0.55, 0.6, 0.3);
+  const torso = new THREE.Mesh(torsoGeo, new THREE.MeshStandardMaterial({color:cloth,roughness:0.6,metalness:0.1}));
+  torso.position.y = 1.35; torso.castShadow = true; g.add(torso);
   
-  // Detailed humanoid character
-  const skinColor = 0xffdbac;
-  const clothColor = cfg.color;
+  // CHEST PLATE / ARMOR DETAIL
+  const chestPlate = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.35, 0.08), new THREE.MeshStandardMaterial({color:0x2a2a2a,roughness:0.4,metalness:0.3}));
+  chestPlate.position.set(0, 1.4, 0.18); g.add(chestPlate);
   
-  // Torso
-  const torsoGeo = new THREE.BoxGeometry(0.6, 0.9, 0.35);
-  const torsoMat = new THREE.MeshStandardMaterial({ color: clothColor, roughness: 0.6, metalness: 0.1 });
-  const torso = new THREE.Mesh(torsoGeo, torsoMat);
-  torso.position.y = 1.1;
-  torso.castShadow = true;
-  group.add(torso);
+  // SHOULDERS - Tactical shoulder pads
+  [-1, 1].forEach(side => {
+    const shoulder = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.2), new THREE.MeshStandardMaterial({color:0x2a2a2a,roughness:0.5,metalness:0.2}));
+    shoulder.position.set(side * 0.35, 1.55, 0); shoulder.castShadow = true; g.add(shoulder);
+  });
   
-  // Shoulders
-  const shoulderGeo = new THREE.BoxGeometry(0.8, 0.2, 0.4);
-  const shoulders = new THREE.Mesh(shoulderGeo, torsoMat);
-  shoulders.position.y = 1.5;
-  shoulders.castShadow = true;
-  group.add(shoulders);
+  // NECK
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.12, 12), new THREE.MeshStandardMaterial({color:skin,roughness:0.7}));
+  neck.position.y = 1.72; g.add(neck);
   
-  // Head
-  const headGeo = new THREE.SphereGeometry(0.22, 20, 16);
-  const headMat = new THREE.MeshStandardMaterial({ color: skinColor, roughness: 0.7 });
-  const head = new THREE.Mesh(headGeo, headMat);
-  head.position.y = 1.85;
-  head.castShadow = true;
-  group.add(head);
+  // HEAD - Detailed with facial features
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.14, 24, 18), new THREE.MeshStandardMaterial({color:skin,roughness:0.6}));
+  head.position.y = 1.9; head.castShadow = true; g.add(head);
   
-  // Hair
-  const hairGeo = new THREE.SphereGeometry(0.24, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2);
-  const hairMat = new THREE.MeshStandardMaterial({ color: 0x2a1a0a, roughness: 0.9 });
-  const hair = new THREE.Mesh(hairGeo, hairMat);
-  hair.position.y = 1.9;
-  hair.castShadow = true;
-  group.add(hair);
+  // FACE DETAILS
+  const facePlate = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.12, 0.08), new THREE.MeshStandardMaterial({color:skin,roughness:0.6}));
+  facePlate.position.set(0, 1.87, 0.1); g.add(facePlate);
   
-  // Arms
-  const armMat = new THREE.MeshStandardMaterial({ color: clothColor, roughness: 0.6 });
-  const handMat = new THREE.MeshStandardMaterial({ color: skinColor, roughness: 0.7 });
+  // EYES
+  [-1, 1].forEach(side => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 8), new THREE.MeshStandardMaterial({color:0x2a4a6a,roughness:0.3}));
+    eye.position.set(side * 0.045, 1.9, 0.13); g.add(eye);
+  });
+  
+  // HAIR/HELMET
+  const hair = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 12, 0, Math.PI*2, 0, Math.PI*0.6), new THREE.MeshStandardMaterial({color:0x1a1008,roughness:0.9}));
+  hair.position.y = 1.95; hair.castShadow = true; g.add(hair);
+  
+  // ARMS - Upper and Lower with proper joints
   [-1, 1].forEach(side => {
     // Upper arm
-    const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.45, 10), armMat);
-    upperArm.position.set(side * 0.5, 1.3, 0);
+    const upperArm = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.35, 10), new THREE.MeshStandardMaterial({color:cloth,roughness:0.6}));
+    upperArm.position.set(side * 0.38, 1.4, 0);
     upperArm.rotation.z = side * 0.15;
-    upperArm.castShadow = true;
-    group.add(upperArm);
+    upperArm.castShadow = true; g.add(upperArm);
+    
+    // Elbow joint
+    const elbow = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 8), new THREE.MeshStandardMaterial({color:cloth,roughness:0.6}));
+    elbow.position.set(side * 0.42, 1.2, 0); g.add(elbow);
     
     // Lower arm
-    const lowerArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.4, 10), armMat);
-    lowerArm.position.set(side * 0.55, 0.95, 0);
+    const lowerArm = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.055, 0.32, 10), new THREE.MeshStandardMaterial({color:skin,roughness:0.7}));
+    lowerArm.position.set(side * 0.45, 1.0, 0);
     lowerArm.rotation.z = side * 0.1;
-    lowerArm.castShadow = true;
-    group.add(lowerArm);
+    lowerArm.castShadow = true; g.add(lowerArm);
+    
+    // Wrist
+    const wrist = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshStandardMaterial({color:skin,roughness:0.7}));
+    wrist.position.set(side * 0.47, 0.82, 0); g.add(wrist);
     
     // Hand
-    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 8), handMat);
-    hand.position.set(side * 0.58, 0.72, 0);
-    hand.castShadow = true;
-    group.add(hand);
+    const hand = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.04), new THREE.MeshStandardMaterial({color:skin,roughness:0.7}));
+    hand.position.set(side * 0.48, 0.72, 0); hand.castShadow = true; g.add(hand);
+    
+    // Fingers (simplified)
+    for (let f = 0; f < 4; f++) {
+      const finger = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.012, 0.06, 6), new THREE.MeshStandardMaterial({color:skin,roughness:0.7}));
+      finger.position.set(side * 0.48, 0.64, -0.015 + f * 0.012);
+      finger.rotation.x = Math.PI/2; g.add(finger);
+    }
   });
   
-  // Legs
-  const legMat = new THREE.MeshStandardMaterial({ color: 0x2a2a3a, roughness: 0.7 });
-  const bootMat = new THREE.MeshStandardMaterial({ color: 0x3d2817, roughness: 0.8 });
+  // LEGS - Upper and Lower with proper joints
   [-1, 1].forEach(side => {
-    // Upper leg
-    const upperLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 0.5, 10), legMat);
-    upperLeg.position.set(side * 0.15, 0.45, 0);
-    upperLeg.castShadow = true;
-    group.add(upperLeg);
+    // Upper leg/thigh
+    const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.4, 10), new THREE.MeshStandardMaterial({color:dark,roughness:0.7}));
+    thigh.position.set(side * 0.12, 0.7, 0);
+    thigh.castShadow = true; g.add(thigh);
     
-    // Lower leg
-    const lowerLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.45, 10), legMat);
-    lowerLeg.position.set(side * 0.15, 0.05, 0);
-    lowerLeg.castShadow = true;
-    group.add(lowerLeg);
+    // Knee joint
+    const knee = new THREE.Mesh(new THREE.SphereGeometry(0.065, 8, 8), new THREE.MeshStandardMaterial({color:dark,roughness:0.7}));
+    knee.position.set(side * 0.12, 0.48, 0); g.add(knee);
+    
+    // Knee pad
+    const kneePad = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.06), new THREE.MeshStandardMaterial({color:0x2a2a2a,roughness:0.5,metalness:0.2}));
+    kneePad.position.set(side * 0.12, 0.48, 0.05); g.add(kneePad);
+    
+    // Lower leg/shin
+    const shin = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 0.38, 10), new THREE.MeshStandardMaterial({color:dark,roughness:0.7}));
+    shin.position.set(side * 0.12, 0.25, 0);
+    shin.castShadow = true; g.add(shin);
+    
+    // Ankle
+    const ankle = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 8), new THREE.MeshStandardMaterial({color:0x3d2817,roughness:0.8}));
+    ankle.position.set(side * 0.12, 0.05, 0); g.add(ankle);
     
     // Boot
-    const boot = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.15, 0.22), bootMat);
-    boot.position.set(side * 0.15, -0.1, 0.03);
-    boot.castShadow = true;
-    group.add(boot);
+    const boot = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.18), new THREE.MeshStandardMaterial({color:0x2a1a0a,roughness:0.8}));
+    boot.position.set(side * 0.12, 0.0, 0.03);
+    boot.castShadow = true; g.add(boot);
   });
   
-  // Belt
-  const beltGeo = new THREE.BoxGeometry(0.65, 0.1, 0.4);
-  const beltMat = new THREE.MeshStandardMaterial({ color: 0x4a3020, roughness: 0.7, metalness: 0.2 });
-  const belt = new THREE.Mesh(beltGeo, beltMat);
-  belt.position.y = 0.7;
-  group.add(belt);
+  // BELT with pouches
+  const belt = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.08, 0.28), new THREE.MeshStandardMaterial({color:0x3a2a1a,roughness:0.7,metalness:0.1}));
+  belt.position.y = 1.0; g.add(belt);
   
   // Belt buckle
-  const buckleMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.3, metalness: 0.8 });
-  const buckle = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.08, 0.05), buckleMat);
-  buckle.position.set(0, 0.7, 0.2);
-  group.add(buckle);
+  const buckle = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.06, 0.04), new THREE.MeshStandardMaterial({color:0xc0a000,roughness:0.3,metalness:0.7}));
+  buckle.position.set(0, 1.0, 0.15); g.add(buckle);
   
-  player = group;
-  player.position.set(0, 5, 0);
+  // Pouches
+  [-1, 1].forEach(side => {
+    const pouch = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.06), new THREE.MeshStandardMaterial({color:0x3a2a1a,roughness:0.8}));
+    pouch.position.set(side * 0.2, 0.95, 0.12); g.add(pouch);
+  });
+  
+  player = g;
+  player.position.set(0, 3, 0);
   scene.add(player);
 }
 
-function createEnemy(x, z, type) {
-  const group = new THREE.Group();
+// MODERN WARFARE QUALITY ENEMY
+function createMWEnemy(x, z, type) {
+  const g = new THREE.Group();
+  const skin = type.hostile ? 0x8a6a5a : 0xd4a574;
   
   // Body
-  const bodyGeo = new THREE.CylinderGeometry(0.4, 0.5, 1.5, 14);
-  const bodyMat = new THREE.MeshStandardMaterial({ 
-    color: type.color, 
-    roughness: 0.7,
-    metalness: 0.1
-  });
-  const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.y = 0.75;
-  body.castShadow = true;
-  group.add(body);
+  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.55, 0.28), new THREE.MeshStandardMaterial({color:type.color,roughness:0.6}));
+  torso.position.y = 1.3; torso.castShadow = true; g.add(torso);
+  
+  // Armor plate
+  const armor = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.3, 0.06), new THREE.MeshStandardMaterial({color:0x2a2a2a,roughness:0.4,metalness:0.3}));
+  armor.position.set(0, 1.35, 0.16); g.add(armor);
   
   // Head
-  const headGeo = new THREE.SphereGeometry(0.28, 14, 12);
-  const headMat = new THREE.MeshStandardMaterial({ 
-    color: type.hostile ? 0x5a2a2a : 0x4a5a7a, 
-    roughness: 0.7 
-  });
-  const head = new THREE.Mesh(headGeo, headMat);
-  head.position.y = 1.7;
-  head.castShadow = true;
-  group.add(head);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 12), new THREE.MeshStandardMaterial({color:skin,roughness:0.6}));
+  head.position.y = 1.75; head.castShadow = true; g.add(head);
+  
+  // Hood/helmet for hostile
+  if (type.hostile) {
+    const hood = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 10, 0, Math.PI*2, 0, Math.PI*0.7), new THREE.MeshStandardMaterial({color:0x2a1a1a,roughness:0.9}));
+    hood.position.y = 1.78; g.add(hood);
+  }
   
   // Arms
   [-1, 1].forEach(side => {
-    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.7, 8), bodyMat);
-    arm.position.set(side * 0.5, 1.1, 0);
-    arm.rotation.z = side * 0.2;
-    arm.castShadow = true;
-    group.add(arm);
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.055, 0.5, 8), new THREE.MeshStandardMaterial({color:type.color,roughness:0.6}));
+    arm.position.set(side * 0.32, 1.15, 0);
+    arm.rotation.z = side * 0.15;
+    arm.castShadow = true; g.add(arm);
+    
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshStandardMaterial({color:skin,roughness:0.7}));
+    hand.position.set(side * 0.38, 0.85, 0); g.add(hand);
   });
   
-  // Health bar background
-  const hpBgGeo = new THREE.PlaneGeometry(1.6, 0.18);
-  const hpBgMat = new THREE.MeshBasicMaterial({ color: 0x222222, side: THREE.DoubleSide });
-  const hpBg = new THREE.Mesh(hpBgGeo, hpBgMat);
-  hpBg.position.y = 2.3;
-  group.add(hpBg);
+  // Legs
+  [-1, 1].forEach(side => {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 0.7, 8), new THREE.MeshStandardMaterial({color:0x1a1a1a,roughness:0.7}));
+    leg.position.set(side * 0.1, 0.55, 0);
+    leg.castShadow = true; g.add(leg);
+    
+    const boot = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.08, 0.14), new THREE.MeshStandardMaterial({color:0x2a1a0a,roughness:0.8}));
+    boot.position.set(side * 0.1, 0.15, 0.02); g.add(boot);
+  });
   
   // Health bar
-  const hpGeo = new THREE.PlaneGeometry(1.5, 0.14);
-  const hpMat = new THREE.MeshBasicMaterial({ 
-    color: type.hostile ? 0xff3333 : 0x3388ff, 
-    side: THREE.DoubleSide 
-  });
-  const hpBar = new THREE.Mesh(hpGeo, hpMat);
-  hpBar.position.y = 2.3;
-  hpBar.position.z = 0.01;
-  group.add(hpBar);
+  const hpBg = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.12), new THREE.MeshBasicMaterial({color:0x222222,side:THREE.DoubleSide}));
+  hpBg.position.y = 2.1; g.add(hpBg);
+  const hpBar = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 0.08), new THREE.MeshBasicMaterial({color:type.hostile?0xff3333:0x3388ff,side:THREE.DoubleSide}));
+  hpBar.position.set(0, 2.1, 0.01); g.add(hpBar);
   
-  group.position.set(x, 0, z);
-  group.userData = {
-    type: 'enemy',
-    enemyType: type,
-    hp: type.hp,
-    maxHp: type.hp,
-    state: 'patrol',
-    vx: (Math.random() - 0.5) * 2,
-    vz: (Math.random() - 0.5) * 2,
-    hpBar: hpBar
-  };
-  
-  scene.add(group);
-  enemies.push(group);
+  g.position.set(x, 0, z);
+  g.userData = { type:'enemy', enemyType:type, hp:type.hp, maxHp:type.hp, state:'patrol', vx:(Math.random()-0.5)*2, vz:(Math.random()-0.5)*2, hpBar };
+  scene.add(g);
+  enemies.push(g);
 }
 
-function createNPC(x, z, name, color, role) {
-  const group = new THREE.Group();
+// MODERN WARFARE QUALITY NPC
+function createMWNPC(x, z, name, color, role) {
+  const g = new THREE.Group();
   
   // Body
-  const bodyGeo = new THREE.CylinderGeometry(0.35, 0.42, 1.5, 16);
-  const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.1 });
-  const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.y = 0.75;
-  body.castShadow = true;
-  group.add(body);
+  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.55, 0.26), new THREE.MeshStandardMaterial({color,roughness:0.5,metalness:0.1}));
+  torso.position.y = 1.3; torso.castShadow = true; g.add(torso);
   
   // Head
-  const headGeo = new THREE.SphereGeometry(0.25, 16, 12);
-  const headMat = new THREE.MeshStandardMaterial({ color: 0xffdbac, roughness: 0.7 });
-  const head = new THREE.Mesh(headGeo, headMat);
-  head.position.y = 1.7;
-  head.castShadow = true;
-  group.add(head);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 20, 14), new THREE.MeshStandardMaterial({color:0xd4a574,roughness:0.6}));
+  head.position.y = 1.75; head.castShadow = true; g.add(head);
   
-  // Quest indicator with glow
-  const indGeo = new THREE.OctahedronGeometry(0.22, 0);
-  const indMat = new THREE.MeshStandardMaterial({ 
-    color: 0xffff00, 
-    emissive: 0xffaa00,
-    emissiveIntensity: 1,
-    roughness: 0.2
+  // Hair
+  const hair = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 10, 0, Math.PI*2, 0, Math.PI*0.5), new THREE.MeshStandardMaterial({color:0x3a2a1a,roughness:0.9}));
+  hair.position.y = 1.8; g.add(hair);
+  
+  // Arms
+  [-1, 1].forEach(side => {
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 0.5, 8), new THREE.MeshStandardMaterial({color,roughness:0.5}));
+    arm.position.set(side * 0.3, 1.15, 0);
+    arm.rotation.z = side * 0.12;
+    arm.castShadow = true; g.add(arm);
   });
-  const indicator = new THREE.Mesh(indGeo, indMat);
-  indicator.position.y = 2.4;
-  group.add(indicator);
-  group.userData.indicator = indicator;
   
-  // Point light for NPC
-  const light = new THREE.PointLight(0xffaa44, 0.8, 8);
-  light.position.y = 2.2;
-  group.add(light);
+  // Legs
+  [-1, 1].forEach(side => {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.65, 8), new THREE.MeshStandardMaterial({color:0x2a2a3a,roughness:0.7}));
+    leg.position.set(side * 0.1, 0.55, 0);
+    leg.castShadow = true; g.add(leg);
+  });
   
-  group.position.set(x, 0, z);
-  group.userData.type = 'npc';
-  group.userData.name = name;
-  group.userData.role = role;
+  // Quest indicator
+  const ind = new THREE.Mesh(new THREE.OctahedronGeometry(0.18, 0), new THREE.MeshStandardMaterial({color:0xffff00,emissive:0xffaa00,emissiveIntensity:1,roughness:0.2}));
+  ind.position.y = 2.2; g.add(ind);
+  g.userData.indicator = ind;
   
-  scene.add(group);
-  npcs.push(group);
+  // Light
+  const light = new THREE.PointLight(0xffaa44, 0.6, 6);
+  light.position.y = 2; g.add(light);
+  
+  g.position.set(x, 0, z);
+  g.userData.type = 'npc';
+  g.userData.name = name;
+  g.userData.role = role;
+  scene.add(g);
+  npcs.push(g);
 }
 
 function createItem(x, z) {
   const types = [
-    { name: 'Apple', color: 0xff2222, effect: 'hunger', value: 15, emissive: 0x440000 },
-    { name: 'Bread', color: 0xdaa520, effect: 'hunger', value: 25, emissive: 0x442200 },
-    { name: 'Health Potion', color: 0xff44ff, effect: 'health', value: 40, emissive: 0x440044 },
-    { name: 'Gold Coin', color: 0xffd700, effect: 'gold', value: 10, emissive: 0x444400 },
-    { name: 'Iron Sword', color: 0xcccccc, effect: 'weapon', value: 5, emissive: 0x333333 },
-    { name: 'Emerald', color: 0x00ff88, effect: 'gold', value: 25, emissive: 0x004422 }
+    { name: 'Apple', color: 0xff2222, effect: 'hunger', value: 15 },
+    { name: 'Bread', color: 0xdaa520, effect: 'hunger', value: 25 },
+    { name: 'Health Potion', color: 0xff44ff, effect: 'health', value: 40 },
+    { name: 'Gold Coin', color: 0xffd700, effect: 'gold', value: 10 }
   ];
   const type = types[Math.floor(Math.random() * types.length)];
   
-  const geo = new THREE.OctahedronGeometry(0.4, 0);
-  const mat = new THREE.MeshStandardMaterial({ 
-    color: type.color, 
-    emissive: type.emissive,
-    emissiveIntensity: 0.8,
-    roughness: 0.15,
-    metalness: 0.7
-  });
-  const item = new THREE.Mesh(geo, mat);
-  item.position.set(x, 0.8, z);
+  const item = new THREE.Mesh(new THREE.OctahedronGeometry(0.35, 0), new THREE.MeshStandardMaterial({color:type.color,emissive:type.color,emissiveIntensity:0.4,roughness:0.2,metalness:0.6}));
+  item.position.set(x, 0.7, z);
   item.castShadow = true;
   item.userData = { type: 'item', itemType: type, collected: false };
   
-  // Glow light
-  const glow = new THREE.PointLight(type.color, 0.6, 4);
-  glow.position.y = 0;
+  const glow = new THREE.PointLight(type.color, 0.4, 3);
   item.add(glow);
   
   scene.add(item);
   items.push(item);
 }
 
-function createParticleSystem() {
-  // Dust particles in the air
-  const particleCount = 500;
-  const particleGeo = new THREE.BufferGeometry();
-  const positions = new Float32Array(particleCount * 3);
-  
-  for (let i = 0; i < particleCount * 3; i += 3) {
-    positions[i] = (Math.random() - 0.5) * 400;
-    positions[i + 1] = Math.random() * 50;
-    positions[i + 2] = (Math.random() - 0.5) * 400;
-  }
-  
-  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  
-  const particleMat = new THREE.PointsMaterial({
-    color: 0xffffff,
-    size: 0.3,
-    transparent: true,
-    opacity: 0.4,
-    sizeAttenuation: true
-  });
-  
-  const particleSystem = new THREE.Points(particleGeo, particleMat);
-  scene.add(particleSystem);
-  particles.push(particleSystem);
-}
-
 function setupPostProcessing() {
   composer = new EffectComposer(renderer);
-  
-  // Main render pass
-  const renderPass = new RenderPass(scene, camera);
-  composer.addPass(renderPass);
-  
-  // SSAO for ambient occlusion
-  try {
-    const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight);
-    ssaoPass.kernelRadius = 16;
-    ssaoPass.minDistance = 0.005;
-    ssaoPass.maxDistance = 0.1;
-    composer.addPass(ssaoPass);
-  } catch(e) { console.log('SSAO not available'); }
-  
-  // Bloom for glow effects
-  const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.4, 0.4, 0.85
-  );
-  composer.addPass(bloomPass);
-  
-  // SMAA anti-aliasing
-  const smaaPass = new SMAAPass(window.innerWidth, window.innerHeight);
-  composer.addPass(smaaPass);
-  
-  // Color correction shader
-  const colorCorrectionShader = {
-    uniforms: {
-      tDiffuse: { value: null },
-      contrast: { value: 1.1 },
-      saturation: { value: 1.15 },
-      brightness: { value: 0.02 }
-    },
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      uniform sampler2D tDiffuse;
-      uniform float contrast;
-      uniform float saturation;
-      uniform float brightness;
-      varying vec2 vUv;
-      
-      vec3 adjustSaturation(vec3 color, float sat) {
-        float grey = dot(color, vec3(0.2126, 0.7152, 0.0722));
-        return mix(vec3(grey), color, sat);
-      }
-      
-      void main() {
-        vec4 color = texture2D(tDiffuse, vUv);
-        color.rgb += brightness;
-        color.rgb = (color.rgb - 0.5) * contrast + 0.5;
-        color.rgb = adjustSaturation(color.rgb, saturation);
-        gl_FragColor = color;
-      }
-    `
-  };
-  
-  const colorPass = new ShaderPass(colorCorrectionShader);
-  composer.addPass(colorPass);
-  
-  // Vignette shader
-  const vignetteShader = {
-    uniforms: {
-      tDiffuse: { value: null },
-      darkness: { value: 0.5 },
-      offset: { value: 1.0 }
-    },
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      uniform sampler2D tDiffuse;
-      uniform float darkness;
-      uniform float offset;
-      varying vec2 vUv;
-      void main() {
-        vec4 color = texture2D(tDiffuse, vUv);
-        vec2 uv = (vUv - vec2(0.5)) * vec2(offset);
-        float vignette = 1.0 - dot(uv, uv);
-        color.rgb *= mix(1.0 - darkness, 1.0, vignette);
-        gl_FragColor = color;
-      }
-    `
-  };
-  
-  const vignettePass = new ShaderPass(vignetteShader);
-  composer.addPass(vignettePass);
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.25, 0.3, 0.9));
+  composer.addPass(new SMAAPass(window.innerWidth, window.innerHeight));
 }
 
 function setupControls(canvas) {
@@ -1113,10 +570,7 @@ function setupControls(canvas) {
     keys[e.code] = true;
     if (e.code === 'KeyE') handleInteract();
     if (e.code === 'KeyQ') handleAttack();
-    if (e.code === 'Space' && isGrounded) {
-      playerVelocityY = JUMP_FORCE;
-      isGrounded = false;
-    }
+    if (e.code === 'Space' && isGrounded) { playerVelocityY = JUMP_FORCE; isGrounded = false; }
   });
   document.addEventListener('keyup', e => { keys[e.code] = false; });
   
@@ -1124,14 +578,12 @@ function setupControls(canvas) {
     if (isLocked) {
       playerYaw -= e.movementX * 0.002;
       playerPitch -= e.movementY * 0.0015;
-      playerPitch = Math.max(-1.2, Math.min(1.2, playerPitch));
+      playerPitch = Math.max(-1, Math.min(1, playerPitch));
     }
   });
   
   canvas.addEventListener('click', () => canvas.requestPointerLock());
-  document.addEventListener('pointerlockchange', () => {
-    isLocked = document.pointerLockElement === canvas;
-  });
+  document.addEventListener('pointerlockchange', () => { isLocked = document.pointerLockElement === canvas; });
   
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -1144,30 +596,20 @@ function setupControls(canvas) {
 function handleInteract() {
   for (const npc of npcs) {
     if (player.position.distanceTo(npc.position) < 4) {
-      const dialogs = {
-        trade: '"Welcome, traveler! I have the finest wares in all the realm."',
-        craft: '"Need steel forged? I am the greatest smith you will find!"',
-        quest: '"Brave soul! The bandits grow bolder each day. Will you aid us?"',
-        heal: '"May the light bless you. Let me tend to your wounds."'
-      };
+      const dialogs = { trade: '"Welcome! I have the finest wares."', craft: '"Need steel forged? I am the best!"', quest: '"The bandits grow bolder. Will you help?"', heal: '"Let me tend to your wounds."' };
       log(npc.userData.name + ': ' + dialogs[npc.userData.role], 'ai');
-      if (npc.userData.role === 'heal' && hp < maxHp) {
-        hp = Math.min(maxHp, hp + 50);
-        log('You feel rejuvenated! +50 HP', 'system');
-      }
+      if (npc.userData.role === 'heal' && hp < maxHp) { hp = Math.min(maxHp, hp + 50); log('Healed! +50 HP', 'system'); }
       return;
     }
   }
-  
   for (const item of items) {
     if (item.userData.collected) continue;
-    if (player.position.distanceTo(item.position) < 3.5) {
-      item.userData.collected = true;
-      item.visible = false;
-      const type = item.userData.itemType;
-      log('Collected: ' + type.name, 'quest');
-      if (type.effect === 'hunger') hunger = Math.min(100, hunger + type.value);
-      if (type.effect === 'health') hp = Math.min(maxHp, hp + type.value);
+    if (player.position.distanceTo(item.position) < 3) {
+      item.userData.collected = true; item.visible = false;
+      const t = item.userData.itemType;
+      log('Collected: ' + t.name, 'quest');
+      if (t.effect === 'hunger') hunger = Math.min(100, hunger + t.value);
+      if (t.effect === 'health') hp = Math.min(maxHp, hp + t.value);
       return;
     }
   }
@@ -1176,228 +618,139 @@ function handleInteract() {
 function handleAttack() {
   for (const enemy of enemies) {
     if (enemy.userData.hp <= 0) continue;
-    if (player.position.distanceTo(enemy.position) < 4.5) {
-      const dmg = cfg.dmg + Math.floor(Math.random() * 10);
+    if (player.position.distanceTo(enemy.position) < 4) {
+      const dmg = cfg.dmg + Math.floor(Math.random() * 8);
       enemy.userData.hp -= dmg;
       log('Hit ' + enemy.userData.enemyType.name + ' for ' + dmg + ' damage!', 'combat');
       enemy.userData.hpBar.scale.x = Math.max(0, enemy.userData.hp / enemy.userData.maxHp);
       enemy.userData.state = 'chase';
-      if (enemy.userData.hp <= 0) {
-        log(enemy.userData.enemyType.name + ' defeated!', 'combat');
-        heat.bandits = Math.min(100, heat.bandits + 10);
-      }
+      if (enemy.userData.hp <= 0) { log(enemy.userData.enemyType.name + ' defeated!', 'combat'); heat.bandits = Math.min(100, heat.bandits + 10); }
       return;
     }
   }
 }
 
 function getGroundHeight(x, z) {
-  raycaster.set(new THREE.Vector3(x, 100, z), new THREE.Vector3(0, -1, 0));
-  const intersects = raycaster.intersectObject(groundMesh);
-  if (intersects.length > 0) {
-    return intersects[0].point.y;
-  }
-  return 0;
+  raycaster.set(new THREE.Vector3(x, 50, z), new THREE.Vector3(0, -1, 0));
+  const hits = raycaster.intersectObject(groundMesh);
+  return hits.length > 0 ? hits[0].point.y : 0;
 }
 
 function gameLoop() {
   requestAnimationFrame(gameLoop);
   const dt = Math.min(clock.getDelta(), 0.05);
   
-  // Player movement
-  let moveX = 0, moveZ = 0;
-  if (keys.KeyW || keys.ArrowUp) moveZ = -1;
-  if (keys.KeyS || keys.ArrowDown) moveZ = 1;
-  if (keys.KeyA || keys.ArrowLeft) moveX = -1;
-  if (keys.KeyD || keys.ArrowRight) moveX = 1;
+  // Movement
+  let mx = 0, mz = 0;
+  if (keys.KeyW || keys.ArrowUp) mz = -1;
+  if (keys.KeyS || keys.ArrowDown) mz = 1;
+  if (keys.KeyA || keys.ArrowLeft) mx = -1;
+  if (keys.KeyD || keys.ArrowRight) mx = 1;
   
   const running = keys.ShiftLeft && stamina > 0;
   const speed = (running ? cfg.spd * 2 : cfg.spd) * dt;
   
-  if (moveX || moveZ) {
-    const angle = Math.atan2(moveX, moveZ) + playerYaw;
+  if (mx || mz) {
+    const angle = Math.atan2(mx, mz) + playerYaw;
     player.position.x += Math.sin(angle) * speed;
     player.position.z += Math.cos(angle) * speed;
     if (running) stamina = Math.max(0, stamina - 20 * dt);
   }
   
-  if (!running) stamina = Math.min(100, stamina + 12 * dt);
-  hunger = Math.max(0, hunger - 0.12 * dt);
+  if (!running) stamina = Math.min(100, stamina + 15 * dt);
+  hunger = Math.max(0, hunger - 0.1 * dt);
   if (hunger <= 0) hp -= dt * 3;
   
-  player.position.x = Math.max(-550, Math.min(550, player.position.x));
-  player.position.z = Math.max(-550, Math.min(550, player.position.z));
+  player.position.x = Math.max(-280, Math.min(280, player.position.x));
+  player.position.z = Math.max(-280, Math.min(280, player.position.z));
   player.rotation.y = playerYaw;
   
-  // Ground collision with gravity
+  // Gravity
   const groundY = getGroundHeight(player.position.x, player.position.z);
   playerVelocityY -= GRAVITY * dt;
   player.position.y += playerVelocityY * dt;
+  if (player.position.y <= groundY) { player.position.y = groundY; playerVelocityY = 0; isGrounded = true; }
+  else isGrounded = false;
   
-  if (player.position.y <= groundY) {
-    player.position.y = groundY;
-    playerVelocityY = 0;
-    isGrounded = true;
-  } else {
-    isGrounded = false;
-  }
+  // Camera
+  camera.position.x = player.position.x - Math.sin(playerYaw) * 5;
+  camera.position.y = player.position.y + 2.5 - playerPitch * 2;
+  camera.position.z = player.position.z - Math.cos(playerYaw) * 5;
+  camera.lookAt(player.position.x, player.position.y + 1.6, player.position.z);
   
-  // Camera - cinematic third person
-  const camDist = 6;
-  const camHeight = 3;
-  camera.position.x = player.position.x - Math.sin(playerYaw) * camDist;
-  camera.position.y = player.position.y + camHeight - playerPitch * 2.5;
-  camera.position.z = player.position.z - Math.cos(playerYaw) * camDist;
-  camera.lookAt(player.position.x, player.position.y + 1.8, player.position.z);
+  // Sun follows player
+  sun.position.set(player.position.x + 50, 100, player.position.z + 50);
+  sun.target.position.copy(player.position);
   
-  // Update sun position based on time
-  updateSunPosition();
-  
-  // Update water
-  if (water) {
-    water.material.uniforms['time'].value += dt * 0.5;
-  }
-  
-  // Update lighting based on time of day
-  updateDayNightCycle();
-  
-  // Enemy AI
+  // Enemies
   updateEnemies(dt);
   
-  // Animate NPCs
+  // NPCs
   npcs.forEach(npc => {
-    const groundY = getGroundHeight(npc.position.x, npc.position.z);
-    npc.position.y = groundY;
+    npc.position.y = getGroundHeight(npc.position.x, npc.position.z);
     if (npc.userData.indicator) {
-      npc.userData.indicator.rotation.y += dt * 2.5;
-      npc.userData.indicator.position.y = 2.4 + Math.sin(Date.now() * 0.004) * 0.2;
+      npc.userData.indicator.rotation.y += dt * 2;
+      npc.userData.indicator.position.y = 2.2 + Math.sin(Date.now() * 0.004) * 0.15;
     }
   });
   
-  // Animate items
+  // Items
   items.forEach(item => {
     if (!item.userData.collected) {
-      const groundY = getGroundHeight(item.position.x, item.position.z);
-      item.position.y = groundY + 0.8 + Math.sin(Date.now() * 0.003 + item.position.x) * 0.25;
-      item.rotation.y += dt * 2.5;
-      item.rotation.x += dt;
+      item.position.y = getGroundHeight(item.position.x, item.position.z) + 0.7 + Math.sin(Date.now() * 0.003) * 0.15;
+      item.rotation.y += dt * 2;
     }
   });
   
-  // Animate particles
-  particles.forEach(p => {
-    const positions = p.geometry.attributes.position.array;
-    for (let i = 1; i < positions.length; i += 3) {
-      positions[i] -= dt * 2;
-      if (positions[i] < 0) positions[i] = 50;
-    }
-    p.geometry.attributes.position.needsUpdate = true;
-  });
-  
-  // Time progression
+  // Time
   gameTime += dt * 0.02;
   if (gameTime >= 24) { gameTime = 0; day++; log('Day ' + day + ' dawns...', 'system'); }
   
-  // Heat decay
   heat.kingdom = Math.max(0, heat.kingdom - 0.1 * dt);
   heat.bandits = Math.max(0, heat.bandits - 0.1 * dt);
   
   updateHUD();
   updateMinimap();
   
-  if (hp <= 0) {
-    log('You have fallen! Respawning...', 'combat');
-    hp = maxHp;
-    stamina = 100;
-    const spawnGroundY = getGroundHeight(0, 0);
-    player.position.set(0, spawnGroundY + 1, 0);
-    playerVelocityY = 0;
-  }
+  if (hp <= 0) { log('Respawning...', 'combat'); hp = maxHp; stamina = 100; player.position.set(0, getGroundHeight(0,0)+1, 0); playerVelocityY = 0; }
   
   composer.render();
-}
-
-function updateDayNightCycle() {
-  const hour = gameTime;
-  let intensity, ambientIntensity, exposure;
-  
-  if (hour >= 6 && hour < 8) {
-    // Dawn
-    intensity = THREE.MathUtils.lerp(0.3, 2.5, (hour - 6) / 2);
-    ambientIntensity = THREE.MathUtils.lerp(0.2, 0.4, (hour - 6) / 2);
-    exposure = THREE.MathUtils.lerp(0.3, 0.5, (hour - 6) / 2);
-    sun.color.setHex(0xffaa66);
-  } else if (hour >= 8 && hour < 17) {
-    // Day
-    intensity = 2.5;
-    ambientIntensity = 0.4;
-    exposure = 0.5;
-    sun.color.setHex(0xffffee);
-  } else if (hour >= 17 && hour < 20) {
-    // Sunset
-    intensity = THREE.MathUtils.lerp(2.5, 0.5, (hour - 17) / 3);
-    ambientIntensity = THREE.MathUtils.lerp(0.4, 0.2, (hour - 17) / 3);
-    exposure = THREE.MathUtils.lerp(0.5, 0.35, (hour - 17) / 3);
-    sun.color.setHex(0xff6633);
-  } else {
-    // Night
-    intensity = 0.3;
-    ambientIntensity = 0.15;
-    exposure = 0.25;
-    sun.color.setHex(0x4466aa);
-  }
-  
-  sun.intensity = intensity;
-  renderer.toneMappingExposure = exposure;
-  
-  // Update fog color based on time
-  if (hour >= 6 && hour < 20) {
-    scene.fog.color.setHex(0x88aacc);
-  } else {
-    scene.fog.color.setHex(0x1a1a2e);
-  }
 }
 
 function updateEnemies(dt) {
   enemies.forEach(enemy => {
     if (enemy.userData.hp <= 0) { enemy.visible = false; return; }
-    
-    const data = enemy.userData;
-    const type = data.enemyType;
+    const data = enemy.userData, type = data.enemyType;
     const dist = player.position.distanceTo(enemy.position);
     
-    // Face health bars to camera
-    if (enemy.children[3]) enemy.children[3].lookAt(camera.position);
-    if (enemy.children[4]) enemy.children[4].lookAt(camera.position);
+    // Face HP bars to camera
+    const hpBg = enemy.children.find(c => c.geometry?.parameters?.width === 1.2);
+    if (hpBg) hpBg.lookAt(camera.position);
+    if (data.hpBar) data.hpBar.lookAt(camera.position);
     
     if (type.hostile) {
-      if (dist < 50 && dist > 2.5) {
+      if (dist < 35 && dist > 2) {
         const dir = player.position.clone().sub(enemy.position).normalize();
         enemy.position.x += dir.x * type.spd * dt;
         enemy.position.z += dir.z * type.spd * dt;
         enemy.lookAt(player.position.x, enemy.position.y, player.position.z);
-        data.state = 'chase';
-      } else if (dist <= 2.5) {
-        if (Math.random() < dt * 1.5) {
-          const dmg = Math.max(1, type.dmg - Math.floor(cfg.armor * type.dmg));
-          hp -= dmg;
-          log(type.name + ' hits you for ' + dmg + ' damage!', 'combat');
-        }
-      } else {
+      } else if (dist <= 2 && Math.random() < dt * 1.5) {
+        const dmg = Math.max(1, type.dmg - Math.floor(cfg.armor * type.dmg));
+        hp -= dmg;
+        log(type.name + ' hits you for ' + dmg + '!', 'combat');
+      } else if (dist >= 35) {
         enemy.position.x += data.vx * dt;
         enemy.position.z += data.vz * dt;
-        if (Math.abs(enemy.position.x) > 250) data.vx *= -1;
-        if (Math.abs(enemy.position.z) > 250) data.vz *= -1;
+        if (Math.abs(enemy.position.x) > 150) data.vx *= -1;
+        if (Math.abs(enemy.position.z) > 150) data.vz *= -1;
       }
     } else {
       enemy.position.x += data.vx * 0.3 * dt;
       enemy.position.z += data.vz * 0.3 * dt;
-      if (Math.abs(enemy.position.x) > 150) data.vx *= -1;
-      if (Math.abs(enemy.position.z) > 150) data.vz *= -1;
+      if (Math.abs(enemy.position.x) > 100) data.vx *= -1;
+      if (Math.abs(enemy.position.z) > 100) data.vz *= -1;
     }
-    
-    const groundY = getGroundHeight(enemy.position.x, enemy.position.z);
-    enemy.position.y = groundY;
+    enemy.position.y = getGroundHeight(enemy.position.x, enemy.position.z);
   });
 }
 
@@ -1409,10 +762,8 @@ function updateHUD() {
   document.getElementById('st-text').textContent = Math.floor(stamina) + '%';
   document.getElementById('hu-text').textContent = Math.floor(hunger) + '%';
   
-  const hours = Math.floor(gameTime);
-  const mins = Math.floor((gameTime % 1) * 60);
-  document.getElementById('day').textContent = 'Day ' + day + ' | ' + 
-    String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0');
+  const h = Math.floor(gameTime), m = Math.floor((gameTime % 1) * 60);
+  document.getElementById('day').textContent = 'Day ' + day + ' | ' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
   
   let weather = '☀️ Clear';
   if (gameTime < 6 || gameTime > 20) weather = '🌙 Night';
@@ -1420,8 +771,7 @@ function updateHUD() {
   else if (gameTime < 8) weather = '🌄 Dawn';
   document.getElementById('weather').textContent = weather + ' | 22°C';
   
-  const hk = document.getElementById('h-kingdom');
-  const hb = document.getElementById('h-bandits');
+  const hk = document.getElementById('h-kingdom'), hb = document.getElementById('h-bandits');
   hk.textContent = heat.kingdom < 25 ? 'CALM' : heat.kingdom < 50 ? 'ALERT' : 'HUNTING';
   hk.className = 'heat-tag ' + (heat.kingdom < 25 ? 'calm' : heat.kingdom < 50 ? 'alert' : 'hunting');
   hb.textContent = heat.bandits < 25 ? 'CALM' : heat.bandits < 50 ? 'ALERT' : 'HUNTING';
@@ -1431,113 +781,69 @@ function updateHUD() {
 function updateMinimap() {
   const canvas = document.getElementById('minimap');
   const ctx = canvas.getContext('2d');
-  const size = 200;
-  const scale = 0.2;
-  const cx = size / 2, cy = size / 2;
+  const size = 180, scale = 0.25, cx = size/2, cy = size/2;
   
   ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, cy, size/2 - 3, 0, Math.PI * 2);
-  ctx.clip();
+  ctx.beginPath(); ctx.arc(cx, cy, size/2-3, 0, Math.PI*2); ctx.clip();
+  ctx.fillStyle = '#0a1a0a'; ctx.fillRect(0, 0, size, size);
   
-  // Dark background
-  ctx.fillStyle = '#0a1a0a';
-  ctx.fillRect(0, 0, size, size);
-  
-  // Grid
-  ctx.strokeStyle = '#1a2a1a';
-  ctx.lineWidth = 1;
-  for (let i = -300; i <= 300; i += 50) {
+  ctx.strokeStyle = '#1a2a1a'; ctx.lineWidth = 1;
+  for (let i = -200; i <= 200; i += 50) {
     const gx = cx + i * scale;
     ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, size); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(0, gx); ctx.lineTo(size, gx); ctx.stroke();
   }
   
-  const px = player.position.x;
-  const pz = player.position.z;
+  const px = player.position.x, pz = player.position.z;
   
-  // Buildings
   ctx.fillStyle = '#4a4a3a';
   buildings.forEach(b => {
-    const x = cx + (b.position.x - px) * scale;
-    const z = cy + (b.position.z - pz) * scale;
-    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
-    if (dist < size/2 - 5) {
-      ctx.fillRect(x - 5, z - 5, 10, 10);
-    }
+    const x = cx + (b.position.x - px) * scale, z = cy + (b.position.z - pz) * scale;
+    if (Math.sqrt((x-cx)**2 + (z-cy)**2) < size/2-5) ctx.fillRect(x-4, z-4, 8, 8);
   });
   
-  // Enemies
   enemies.forEach(e => {
     if (e.userData.hp <= 0) return;
-    const x = cx + (e.position.x - px) * scale;
-    const z = cy + (e.position.z - pz) * scale;
-    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
-    if (dist < size/2 - 5) {
+    const x = cx + (e.position.x - px) * scale, z = cy + (e.position.z - pz) * scale;
+    if (Math.sqrt((x-cx)**2 + (z-cy)**2) < size/2-5) {
       ctx.fillStyle = e.userData.enemyType.hostile ? '#ff4444' : '#4488ff';
-      ctx.beginPath(); ctx.arc(x, z, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, z, 3, 0, Math.PI*2); ctx.fill();
     }
   });
   
-  // NPCs
   ctx.fillStyle = '#44ff44';
   npcs.forEach(n => {
-    const x = cx + (n.position.x - px) * scale;
-    const z = cy + (n.position.z - pz) * scale;
-    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
-    if (dist < size/2 - 5) {
-      ctx.beginPath(); ctx.arc(x, z, 5, 0, Math.PI * 2); ctx.fill();
-    }
+    const x = cx + (n.position.x - px) * scale, z = cy + (n.position.z - pz) * scale;
+    if (Math.sqrt((x-cx)**2 + (z-cy)**2) < size/2-5) { ctx.beginPath(); ctx.arc(x, z, 4, 0, Math.PI*2); ctx.fill(); }
   });
   
-  // Items
   ctx.fillStyle = '#ffff44';
   items.forEach(i => {
     if (i.userData.collected) return;
-    const x = cx + (i.position.x - px) * scale;
-    const z = cy + (i.position.z - pz) * scale;
-    const dist = Math.sqrt((x-cx)**2 + (z-cy)**2);
-    if (dist < size/2 - 5) {
-      ctx.fillRect(x - 2, z - 2, 4, 4);
-    }
+    const x = cx + (i.position.x - px) * scale, z = cy + (i.position.z - pz) * scale;
+    if (Math.sqrt((x-cx)**2 + (z-cy)**2) < size/2-5) ctx.fillRect(x-2, z-2, 4, 4);
   });
   
   ctx.restore();
   
-  // Player
-  ctx.fillStyle = '#ffd700';
-  ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI * 2); ctx.fill();
-  
-  // Direction indicator
-  ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(cx - Math.sin(playerYaw) * 22, cy - Math.cos(playerYaw) * 22);
-  ctx.stroke();
-  
-  // Border
-  ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.arc(cx, cy, size/2 - 2, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.fillStyle = '#ffd700'; ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx - Math.sin(playerYaw)*18, cy - Math.cos(playerYaw)*18); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, size/2-2, 0, Math.PI*2); ctx.stroke();
 }
 
 function log(msg, type = 'system') {
   const el = document.getElementById('log-entries');
   const div = document.createElement('div');
   div.className = 'log-entry log-' + type;
-  const hours = Math.floor(gameTime);
-  const mins = Math.floor((gameTime % 1) * 60);
-  div.textContent = '[' + String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0') + '] ' + msg;
+  const h = Math.floor(gameTime), m = Math.floor((gameTime % 1) * 60);
+  div.textContent = '[' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + '] ' + msg;
   el.insertBefore(div, el.firstChild);
-  while (el.children.length > 30) el.removeChild(el.lastChild);
+  while (el.children.length > 20) el.removeChild(el.lastChild);
 }
 
-console.log('⚔️ Surviving The World™ - GTA5-Level AAA Engine');
-console.log('🎮 Features: Physically-Based Sky | SSAO | Bloom | Dynamic Day/Night | Water Simulation');
-console.log('🎮 Post-Processing: Color Grading | Vignette | SMAA Anti-Aliasing');
+console.log('⚔️ Surviving The World™ - Modern Warfare Quality Engine');
+console.log('🎮 Optimized: 60 FPS | Detailed Characters | PBR Materials');
 </script>
 </body>
 </html>
