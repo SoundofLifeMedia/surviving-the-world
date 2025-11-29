@@ -1,43 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Surviving The World™</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{overflow:hidden;background:#1a1a2e;font-family:Arial,sans-serif}
-    #c{width:100vw;height:100vh;display:block}
-    #ui{position:fixed;top:20px;left:20px;color:#fff;font-size:14px;z-index:10;pointer-events:none}
-    .bar{width:180px;height:16px;background:rgba(0,0,0,.6);border-radius:8px;margin:4px 0;border:1px solid #333}
-    .fill{height:100%;border-radius:7px;transition:width .2s}
-    .hp{background:linear-gradient(90deg,#e74c3c,#c0392b)}
-    .sp{background:linear-gradient(90deg,#2ecc71,#27ae60)}
-    #info{margin-top:10px;font-size:12px;color:#aaa}
-    #start{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;cursor:pointer}
-    #start h1{color:#ffd700;font-size:3em;margin-bottom:10px}
-    #start p{color:#888;margin:5px}
-    #start .play{background:#ffd700;color:#000;padding:20px 60px;font-size:1.5em;border-radius:10px;margin-top:30px;font-weight:bold}
-    #ctrl{position:fixed;bottom:20px;left:20px;color:#fff;font-size:12px;background:rgba(0,0,0,.7);padding:12px;border-radius:8px;z-index:10}
-    #mini{position:fixed;bottom:20px;right:20px;width:120px;height:120px;background:rgba(0,0,0,.8);border:2px solid #ffd700;border-radius:50%;z-index:10}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surviving The World™</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a15;font-family:Arial;overflow:hidden}
+#menu{position:fixed;inset:0;background:#0a0a15;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100}
+#menu h1{color:#ffd700;font-size:2.5em;margin-bottom:30px}
+.chars{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;max-width:800px}
+.char{width:140px;padding:20px 15px;background:#1a1a2e;border:2px solid #333;border-radius:12px;cursor:pointer;text-align:center;transition:.2s}
+.char:hover{border-color:#ffd700;transform:translateY(-5px)}
+.char .icon{font-size:3em;margin-bottom:10px}
+.char .name{color:#fff;font-weight:bold;margin-bottom:5px}
+.char .desc{color:#888;font-size:11px}
+#game{display:none}
+canvas{display:block}
+#hud{position:fixed;top:15px;left:15px;color:#fff;font-size:13px;z-index:10}
+.bar{width:150px;height:14px;background:#222;border-radius:7px;margin:3px 0 8px;overflow:hidden}
+.bar div{height:100%;border-radius:7px}
+.hp{background:#e74c3c}.st{background:#2ecc71}
+#mini{position:fixed;bottom:15px;right:15px;width:100px;height:100px;border-radius:50%;border:2px solid #ffd700;z-index:10}
+#ctrl{position:fixed;bottom:15px;left:15px;color:#aaa;font-size:11px;z-index:10}
+</style>
 </head>
 <body>
-  <div id="start" onclick="startGame()">
-    <h1>⚔️ Surviving The World™</h1>
-    <p>3D Open World Survival</p>
-    <p style="color:#666;font-size:12px">WASD to move • Mouse to look • Shift to run • Space to jump</p>
-    <div class="play">▶ CLICK TO PLAY</div>
-  </div>
-  <canvas id="c"></canvas>
-  <div id="ui">
-    <div>❤️ Health</div><div class="bar"><div class="fill hp" id="hp" style="width:100%"></div></div>
-    <div>⚡ Stamina</div><div class="bar"><div class="fill sp" id="sp" style="width:100%"></div></div>
-    <div id="info">FPS: <span id="fps">0</span> | Pos: <span id="pos">0,0</span></div>
-  </div>
-  <div id="ctrl">WASD: Move | Mouse: Look<br>Shift: Sprint | Space: Jump</div>
-  <canvas id="mini" width="120" height="120"></canvas>
-  <script type="module" src="game.js"></script>
+<div id="menu">
+<h1>⚔️ Surviving The World™</h1>
+<p style="color:#888;margin-bottom:25px">Choose Your Character</p>
+<div class="chars">
+<div class="char" onclick="play(0)"><div class="icon">🗡️</div><div class="name">Warrior</div><div class="desc">High HP, Strong melee</div></div>
+<div class="char" onclick="play(1)"><div class="icon">🏹</div><div class="name">Ranger</div><div class="desc">Fast, Long range</div></div>
+<div class="char" onclick="play(2)"><div class="icon">🧙</div><div class="name">Mage</div><div class="desc">Magic powers</div></div>
+<div class="char" onclick="play(3)"><div class="icon">🥷</div><div class="name">Assassin</div><div class="desc">Stealth, Critical hits</div></div>
+<div class="char" onclick="play(4)"><div class="icon">🛡️</div><div class="name">Tank</div><div class="desc">Max defense</div></div>
+</div>
+<p style="color:#555;margin-top:30px;font-size:12px">WASD=Move | Mouse=Look | Shift=Run | Space=Jump</p>
+</div>
+<div id="game">
+<canvas id="c"></canvas>
+<div id="hud">❤️ Health<div class="bar"><div class="hp" id="hp" style="width:100%"></div></div>⚡ Stamina<div class="bar"><div class="st" id="st" style="width:100%"></div></div><span id="info"></span></div>
+<canvas id="mini" width="100" height="100"></canvas>
+<div id="ctrl">WASD Move | Mouse Look | Shift Run | Space Jump</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="g.js"></script>
 </body>
 </html>
